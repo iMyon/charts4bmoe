@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ title }}</title>
+</head>
+<body>
+    <h3>b萌每小时数据 年-月-日-时</h3>
+    <div id="list">
+      <ul>
+        {% for file in files %}
+          <li>
+            <a href="{{file}}">{{file}}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+
+  "name": "bMoeChart",
+  "version": "0.0.1",
+  "author" : "Myon<myon.cn@gmail.com>",
+  "description" : "B萌曲线图",
+  "dependencies": {
+    "express": "",
+    "array.prototype.find" : "",
+    "swig": ""
+  }
+}
