@@ -16,7 +16,7 @@ files.forEach(function(item) {
     var datasLines = datas.split('\n');
     var voteAddStash = [];      //票仓
     var voteAddStashIndex = 0; //票仓下标
-    var time_flag;//最后一次时间标识
+    var time_flag;						//最后一次领票时间标识
     datasLines.forEach(function(datasLine){
       var matches = datasLine.match(/^(\d+-\d+-\d+)-(\d+:\d+)\s+({.*})$/);
       if(matches){
@@ -29,7 +29,7 @@ files.forEach(function(item) {
         if(json.state == 200){//票仓增加
           var token;  //当前总共领取票数
           var data = json.data;
-          if(data[1].time != time_flag){
+          if(data[1].time != time_flag){ //领票时间发生变化
             time_flag = data[1].time;
             voteAddStash.push({
               time: time,
@@ -37,19 +37,19 @@ files.forEach(function(item) {
               voteCount:data[1].number
             });
 
-            if(time > voteAddStash[voteAddStashIndex].voteRefreshTime.match(/\d+-\d+-\d+\s+(\d+:\d+):/)[1])
+            var vrt = voteAddStash[voteAddStashIndex].voteRefreshTime;
+            if(vrt && time > vrt.match(/\d+-\d+-\d+\s+(\d+:\d+):/)[1])
             {//当前时间超过发票时间
               sumVote+=~~voteAddStash[voteAddStashIndex].voteCount; 
               voteAddStashIndex++;
             }
-            if(time == voteAddStash[voteAddStashIndex].voteRefreshTime.match(/\d+-\d+-\d+\s+(\d+:\d+):/)[1])
+            if(vrt && time == vrt.match(/\d+-\d+-\d+\s+(\d+:\d+):/)[1])
             {//当前等于超过发票时间
               token = sumVote-~~data[0].total;
               sumVote+=~~voteAddStash[voteAddStashIndex].voteCount; 
               voteAddStashIndex++;
             }
           }
-
           if(hourTime < time_h){   //过一小时统计一次
             hourTime = time_h;
             var data = json.data;

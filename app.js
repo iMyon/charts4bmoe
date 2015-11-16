@@ -1,9 +1,13 @@
 var express = require("express");
 var swig = require("swig");
 var fs = require("fs");
+var path = require("path");
 
 var app = express();
 
+var bmoePath = "/home/Myon/bmoe/";
+var dataPath = path.join(bmoePath, "data");
+var voteDataPath = path.join(bmoePath, "voteData");
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
@@ -11,7 +15,9 @@ app.set('views', __dirname + '/views');
 
 //静态文件目录
 app.use('/public', express.static(__dirname+'/public'));
-app.use('/data', express.static("/home/Myon/bmoe/data")); 
+app.use('/', express.static(__dirname+'/static'));
+app.use('/data', express.static(dataPath)); 
+app.use('/voteData', express.static(voteDataPath)); 
 
 
 app.get('/', function(req, res){
@@ -39,7 +45,31 @@ app.get('/', function(req, res){
   });
 });
 app.get('/data/', function(req, res){
-  var files = fs.readdirSync("/home/Myon/bmoe/data/");
+  var files = fs.readdirSync(dataPath);
+  res.render('data', {
+    title: "数据备份",
+    files:files
+  });
+});
+/**
+ * 根据日期返回json数据
+ * @param  {string} date			日期
+ */
+app.get('/api/data', function(req, res){
+	var war = require("./public/data.json", 'utf-8');
+	war = war.filter(function(w) {
+		return w.date == req.query.date;
+	});
+	var resStr = JSON.stringify(war);
+	res.header( 'content-type', 'application/json;charset=utf-8');
+	res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
+	res.send(resStr);
+});
+/*
+投票数据文件列表
+ */
+app.get('/voteData/', function(req, res){
+  var files = fs.readdirSync(voteDataPath);
   res.render('data', {
     title: "数据备份",
     files:files

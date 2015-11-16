@@ -3,63 +3,66 @@
 <head>
   <title>{{ title }}</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <script src="http://echarts.baidu.com/doc/asset/js/jquery.min.js"></script>
-  <style>
-    @media only all and (max-height: 900px) {
-    #main{height:600px;}
-    }
-    @media only all and (min-height: 1000px) {
-      #main{height:700px;}
-    }
-  </style>
+  <link rel="icon" href="/favicon.ico" mce_href="/favicon.ico" type="image/x-icon">  
+  <link rel="shortcut icon" href="/favicon.ico" mce_href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/jquery-1.9.0.min.js"></script>
 </head>
 <body>
-    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-    <div id="main" style="height:600px;">
-    <center>数据大小{{dataSize}}，加载中..</center>
-    <center>长时间不响应尝试刷新</center>
+  <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+  <div id="main" style="height:600px;">
+  
+  </div>
+  <div class="condition" align="center">
+    <select name="date-or-bangumi" id="date-or-bangumi">
+      <option value="0" checked>按日期</option>
+      <option value="1">按阵营</option>
+      <option value="2">票仓图</option>
+    </select>
+    <select name="sex" id="sel-sex">
+      <option value="0" checked>萌</option>
+      <option value="1">燃</option>
+      <option value="any">萌燃</option>
+    </select>
+    <select name="bangumi" id="sel-bangumi">
+    {% for bangumi in bangumis %}
+      <option value="{{bangumi}}">{{bangumi}}</option>
+    {% endfor %}
+    </select>
+    <select name="date" id="sel-date">
+    {% for date in dates %}
+        <option value="{{date}}">{{date}}</option>
+    {% endfor %}
+        <option value="any">全部日期</option>
+    </select>
+    <select name="chart" id="sel-chart">
+      <option value="0">总票数折线图</option>
+      <option value="1">每小时票数折线图</option>
+      <option value="2">每小时票率折线图</option>
+      <option value="3">总得票率折线图</option>
+    </select>
+    <span id="sp-range">
+      <input type="number" style="width: 40px;" title="曲线绘制开始名次" id="sliceStart" name="sliceStart" min="1" max="50" value="1" />
+      -
+      <input type="number" style="width: 40px;" title="曲线绘制结束名次" id="sliceEnd" name="sliceEnd" min="1" max="50" value="8" />
+    </span>
+    
+    <div><button id="submit">绘制图形</button></div>
+  </div>
+  <div id="cup">
+    <div id="beforeDraw">
+      <div id="data-tip">数据大小<span class="num"></span>kb，加载中..</div>
+      <div id="progressBar">
+        <span class="bar"></span><span class="decorator"></span>
+      </div>
     </div>
-    <div class="condition" align="center">
-      <select name="date-or-bangumi" id="date-or-bangumi">
-        <option value="0" checked>按日期</option>
-        <option value="1">按动画</option>
-        <option value="2">票仓图</option>
-      </select>
-      <select name="sex" id="sel-sex">
-        <option value="0" checked>萌</option>
-        <option value="1">燃</option>
-        <option value="2">萌燃</option>
-      </select>
-      <select name="bangumi" id="sel-bangumi">
-      {% for bangumi in bangumis %}
-        <option value="{{bangumi}}">{{bangumi}}</option>
-      {% endfor %}
-      </select>
-      <select name="date" id="sel-date">
-      {% for date in dates %}
-          <option value="{{date}}">{{date}}</option>
-      {% endfor %}
-          <option value="any">全部日期</option>
-      </select>
-      <select name="chart" id="sel-chart">
-        <option value="0">总票数折线图</option>
-        <option value="1">每小时票数折线图</option>
-        <option value="2">每小时票率折线图</option>
-        <option value="3">总得票率折线图</option>
-      </select>
-      <span id="sp-range">
-        <input type="number" style="width: 40px;" title="曲线绘制开始名次" id="sliceStart" name="sliceStart" min="1" max="50" value="1" />
-        -
-        <input type="number" style="width: 40px;" title="曲线绘制结束名次" id="sliceEnd" name="sliceEnd" min="1" max="50" value="8" />
-      </span>
-      
-      <button id="submit">绘制图形</button>
-    </div>
+  </div>
+  
 </body>
 <script>
-  var dates = JSON.parse('{{JSON.stringify(dates)}}');
+  var dates = {{JSON.stringify(dates)}};
 </script>
 <!-- ECharts单文件引入 -->
 <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
-<script src="public/main.js"></script>
+<script src="js/main.js"></script>
 </html>
