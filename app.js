@@ -45,7 +45,7 @@ app.get('/', function(req, res){
     else break;
   }
   res.render('index', {
-  	title:"b萌战况曲线",
+    title:"b萌战况曲线",
     dates:dates,
     bangumis:bangumis
   });
@@ -59,70 +59,70 @@ app.get('/data/', function(req, res){
 });
 /**
  * 根据参数返回角色得票数据，api参数列表如下：
- * @param  {string} date			日期
- * @param  {string} name			角色名称
- * @param  {string} bangumi		动画名称
- * @param  {string} sex				性别，0女1男
- * @param  {string} format		格式，默认json，table为使用网页表格显示
- * @param  {string} id				b站标识id
+ * @param  {string} date      日期
+ * @param  {string} name      角色名称
+ * @param  {string} bangumi   动画名称
+ * @param  {string} sex       性别，0女1男
+ * @param  {string} format    格式，默认json，table为使用网页表格显示
+ * @param  {string} id        b站标识id
  */
 app.get('/api/data/role', function(req, res){
-	var war = require("./public/data.json", 'utf-8');
-	//根据参数筛选
-	war = war.filter(function(w) {
-		for(var key in req.query){
-			if(w[key] != undefined && w[key] != req.query[key]) return false;
-		}
-		return true;
-	});
-	//使用表格视图渲染数据
-	if(req.query.format == "table"){
-		res.render("role",{
-			roles: war
-		});
-	}
-	else{
-		var resStr = JSON.stringify(war);
-		res.header( 'content-type', 'application/json;charset=utf-8');
-		// res.header( 'Transfer-Encoding', 'gzip');
-		res.header( 'Access-Control-Allow-Origin', '*');	//允许跨域请求
-		res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
-		res.send(resStr);
-	}
-	
+  var war = require("./public/data.json", 'utf-8');
+  //根据参数筛选
+  war = war.filter(function(w) {
+    for(var key in req.query){
+      if(w[key] != undefined && w[key] != req.query[key]) return false;
+    }
+    return true;
+  });
+  //使用表格视图渲染数据
+  if(req.query.format == "table"){
+    res.render("role",{
+      roles: war
+    });
+  }
+  else{
+    var resStr = JSON.stringify(war);
+    res.header( 'content-type', 'application/json;charset=utf-8');
+    // res.header( 'Transfer-Encoding', 'gzip');
+    res.header( 'Access-Control-Allow-Origin', '*');  //允许跨域请求
+    res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
+    res.send(resStr);
+  }
+  
 });
 
 /**
  * 根据参数返回票仓数据，api参数列表如下：
- * @param  {string} date			日期
- * @param  {string} format		格式，默认json，table为使用网页表格显示
+ * @param  {string} date      日期
+ * @param  {string} format    格式，默认json，table为使用网页表格显示
  */
 app.get('/api/data/ballot', function(req, res){
-	var ballots = require("./public/voteData.json", 'utf-8');
-	//根据参数筛选
-	ballots = ballots.filter(function(w) {
-		for(var key in req.query){
-			if(w[key] != undefined && w[key] != req.query[key]) return false;
-		}
-		return true;
-	});
+  var ballots = require("./public/voteData.json", 'utf-8');
+  //根据参数筛选
+  ballots = ballots.filter(function(w) {
+    for(var key in req.query){
+      if(w[key] != undefined && w[key] != req.query[key]) return false;
+    }
+    return true;
+  });
 
-	//使用表格视图渲染数据
-	if(req.query.format == "table"){
-		res.render("ballot",{
-			ballots: ballots
-		});
-	}
-	//json
-	else{
-		var resStr = JSON.stringify(ballots);
-		res.header( 'content-type', 'application/json;charset=utf-8');
-		// res.header( 'Transfer-Encoding', 'gzip');
-		res.header( 'Access-Control-Allow-Origin', '*');
-		res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
-		res.send(resStr);
-	}
-	
+  //使用表格视图渲染数据
+  if(req.query.format == "table"){
+    res.render("ballot",{
+      ballots: ballots
+    });
+  }
+  //json
+  else{
+    var resStr = JSON.stringify(ballots);
+    res.header( 'content-type', 'application/json;charset=utf-8');
+    // res.header( 'Transfer-Encoding', 'gzip');
+    res.header( 'Access-Control-Allow-Origin', '*');
+    res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
+    res.send(resStr);
+  }
+  
 });
 /*
 投票数据文件列表
