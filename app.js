@@ -84,7 +84,7 @@ app.get('/api/data/role', function(req, res){
 	else{
 		var resStr = JSON.stringify(war);
 		res.header( 'content-type', 'application/json;charset=utf-8');
-		res.header( 'Transfer-Encoding', 'gzip');
+		// res.header( 'Transfer-Encoding', 'gzip');
 		res.header( 'Access-Control-Allow-Origin', '*');	//允许跨域请求
 		res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
 		res.send(resStr);
@@ -117,7 +117,7 @@ app.get('/api/data/ballot', function(req, res){
 	else{
 		var resStr = JSON.stringify(ballots);
 		res.header( 'content-type', 'application/json;charset=utf-8');
-		res.header( 'Transfer-Encoding', 'gzip');
+		// res.header( 'Transfer-Encoding', 'gzip');
 		res.header( 'Access-Control-Allow-Origin', '*');
 		res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
 		res.send(resStr);
