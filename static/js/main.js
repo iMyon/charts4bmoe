@@ -5,8 +5,9 @@ require.config({
   }
 });
 
-var war;        //比赛数据（json获取
-var voteData;   //投票数据（json获取
+var war;                  //比赛数据（json获取
+var voteData;             //投票数据（json获取
+var requestDatas = [];    //保存每次请求数据避免重复请求
 //b萌事件
 var Events = [
 {
@@ -19,16 +20,34 @@ var Events = [
   day: "15-11-06",
   time: "21",
   name: "私信推送",
-  desc: "私信推送"
+  desc: "私信推送，一大波散票袭来"
+},
+{
+  day: "15-11-16",
+  time: "20",
+  name: "保鸭战争",
+  desc: "鸭子被影姐首次超过，战吧愤慨，不择手段拉票"
+},
+{
+  day: "15-11-17",
+  time: "22",
+  name: "黄前久美子票数之谜",
+  desc: "由于战吧拉票+未知厨团影响，久美子打出目前最强海底"
 }
 ];
 
 /**
  * 根据筛选条件获取数据
  * 
+ * @param  {object} war				人物原数据
  * @param  {object} condition 筛选条件，例{bangumi:"咲日和","sex":0}
  * @param  {string} chartType 图表类型：0总票数 1每小时票数 2每小时票率 3 总票率
  * @return {object} 返回echarts图形数据
+ *
+ * condition参数列表：
+ * bangumi		动画名称
+ * sex				性别0女1男
+ * id					角色id
  */
 function getDataByCondition(war, condition,chartType){
   var AllCharDatas;
@@ -64,12 +83,36 @@ function getDataByCondition(war, condition,chartType){
 }
 
 /**
+ * 获取指定列表的人物数据
+ * 
+ * @param  {object} war				人物原数据
+ * @param  {Array} 	ids		 		角色id数组
+ * @param  {string} chartType 图表类型：0总票数 1每小时票数 2每小时票率 3 总票率
+ * @return {object} 返回echarts图形数据
+ *
+ */
+function getDataByNames(war, ids, chartType){
+	var datas;
+	ids.forEach(function(id){
+		if(datas == undefined) datas = getDataByCondition(war, {id: id}, chartType);
+		else datas.series = datas.series.concat(getDataByCondition(war, {id: id}, chartType).series);
+	});
+	var roles = [];
+	datas.series.forEach(function(sery){
+		roles.push(sery.name);
+	});
+	datas.subtext = roles.join("、");
+	return datas;
+}
+
+/**
  * 根据日期和性别得到当前时间人物获得的总票数曲线图信息
  * 
  * @param  {object} war 萌战比赛json原始数据
  * @param  {string} day 比赛日期，any为任意日期
  * @param  {string} sex 性别：0女 1男 any任意
  * @return {object} echarts总票数图形数据
+ * 
  */
 function getChartData(war, day, sex){
   if(day=="any") return getDataByCondition(war, {bangumi: "any", sex: sex}, $("#sel-chart").val());
@@ -156,6 +199,7 @@ function getChartData(war, day, sex){
  * 
  * @param  {object} chartData echarts的总票数图形数据
  * @return {object} 返回echarts图形数据
+ * 
  */
 function getGradChartData(chartData){
   chartData.tooltip_formatter = function (params,ticket,callback) {
@@ -193,6 +237,7 @@ function getGradChartData(chartData){
  * 
  * @param  {object} chartData echarts图形数据
  * @return {object} 每小时得票率echarts数据
+ * 
  */
 function getRatePerHChartData(chartData){
   //获取每小时票数数据
@@ -210,6 +255,7 @@ function getRatePerHChartData(chartData){
  * 
  * @param  {object} chartData echarts图形数据
  * @return {object} 总得票率echarts数据
+ * 
  */
 function getTotalRateChart(chartData){
   var totalRateChart = getRateChartData(chartData);
@@ -229,6 +275,7 @@ function getTotalRateChart(chartData){
  * 
  * @param  {object} chartData echarts图形数据
  * @return {object} 数据占比echarts数据
+ * 
  */
 function getRateChartData(chartData){
   chartData.formatter = '{value}%';
@@ -280,9 +327,11 @@ function getRateChartData(chartData){
 
 /**
  * 领票数曲线
+ * 
  * @param  {object} voteData  领票数原始json数据
  * @param  {string} day       日期 
  * @return {object} echarts图形数据
+ * 
  */
 function getTicketChartData(voteData, day){
   // $.getJSON("public/voteData.json", function(data){
@@ -327,9 +376,11 @@ function getTicketChartData(voteData, day){
 
 /**
  * 绘制图形
+ * 
  * @param  {object} chartData                        echarts图形数据
  * @param  {int}    [sliceStart=1]                   绘制数据的首元素坐标+1
  * @param  {int}    [sliceEnd=chartData.length-1]    绘制数据的末元素-2
+ * 
  */
 function draw(chartData, sliceStart, sliceEnd){
   //初始化开始坐标和结束坐标参数
@@ -534,7 +585,7 @@ function startDraw(condition){
   }
   else if(condition.dob == 2){
     if(["0","1"].indexOf(condition.chart) != -1){   //票仓只能画总票数和每小时票数折线图
-      getVoteDataJson(function(voteData){
+      getVoteData(function(voteData){
         var chartData;
         if(condition.date == "any"){
           //合并data
@@ -560,47 +611,62 @@ function startDraw(condition){
  * 
  * @param  {Function} callback  获取json后的回调函数
  * @return none
+ * 
  */
-function getVoteDataJson(callback){
+function getVoteData(callback){
   //先取全局变量，否则ajax请求
   if(voteData) callback(voteData);
   else{
     $.get("public/voteData.json", function(data){
       voteData = data;
       callback(voteData);
-    })
+    });
   }
 }
 
+/**
+ * 获取萌战角色票数数据，回调函数形式
+ * 使用全局变量存放请求过的数据，避免重复请求
+ * @param  {object}   condition 已选择的画图条件
+ * @param  {Function} callback  回调函数，参数为war数据
+ * @return none
+ */
 function getWarData(condition, callback){
+  //有总数据
   if(war) callback(war);
+  //按日期画图，且有对应日期的数据
+  else if(requestDatas[condition.date] != undefined && condition.dob == 0)
+    callback(requestDatas[condition.date]);
+  //
   else{
-    $("#cup").show();
+    $("#cup").show();       //显示遮罩层
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
       if(xhr.readyState==4 && xhr.status==200){
         if(condition.dob == 1 || condition.sex == "any" || condition.date == "any")
           war = JSON.parse(xhr.responseText);
+        else
+          requestDatas[condition.date] = JSON.parse(xhr.responseText);
         //获取数据后画图
         setTimeout(function(){
           callback(JSON.parse(xhr.responseText));
-          $("#cup").hide();
+          $("#cup").hide(); //隐藏遮罩层
         },100);
       }
     }
-    //进度条处理
+    //进度条处理(gzip压缩后下无法获取进度了，未解决)
     xhr.onprogress = function(evt){
-        var loaded = evt.loaded;
-        var tot = evt.total;
-        var per = Math.floor(100*loaded/tot);
-        var son =  document.getElementById('son');
-        $("#data-tip .num").html(~~(this.getResponseHeader("Content-Length")/1024));
-        progress(per, $('#progressBar'));
+      var loaded = evt.loaded;
+      var tot = evt.total;
+      var per = Math.floor(100*loaded/tot);
+      var son =  document.getElementById('son');
+      $("#data-tip .num").html(~~(this.getResponseHeader("Content-Length")/1024));
+      progress(per, $('#progressBar'));
     }
     if(condition.dob == 1 || condition.sex == "any" || condition.date == "any")
-      xhr.open("get","public/data.json");
+      xhr.open("get","api/data/role");
     else
-      xhr.open("get","api/data?date="+condition.date);
+      xhr.open("get","api/data/role?date="+condition.date);
     xhr.send();
   }
 }
@@ -611,6 +677,7 @@ function getWarData(condition, callback){
  * @param  {int}        percent   百分比
  * @param  {$document}  $element  jq元素
  * @return none
+ * 
  */
 function progress(percent, $element) {
   var progressBarWidth = percent * $element.width() / 100;

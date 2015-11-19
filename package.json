@@ -7,6 +7,8 @@
   "dependencies": {
     "express": "",
     "array.prototype.find" : "",
-    "swig": ""
+    "swig": "",
+    "compression":"",
+    "body-parser":""
   }
 }

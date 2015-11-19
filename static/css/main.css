@@ -4,7 +4,9 @@
 @media only all and (min-height: 1000px) {
   #main{height:700px;}
 }
-
+html,body{
+  height: 100%;
+}
 /*遮罩*/
 #cup{
   display: none;
@@ -16,7 +18,7 @@
   left: 0;  
   opacity: 0.7;  
   overflow: hidden;  
-  background-color: #000;  
+  background-color: white;  
 }
 #beforeDraw{
   text-align: center;
@@ -112,8 +114,19 @@
   background-position: right;
   background-size: 80px 70px;
   top: -50px;
-  /*left: 15px;*/
   z-index: 9999;
   position: relative;
   display: inline-block;
 }*/
+
+.footer{
+  display: block;
+  height: 50px;
+  margin-top: 20px;
+}
+.footer p, .footer a {
+  color: #D8CFDA;
+}
+.footer p{
+  margin:0;
+}

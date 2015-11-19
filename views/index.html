@@ -42,22 +42,26 @@
       <option value="3">总得票率折线图</option>
     </select>
     <span id="sp-range">
-      <input type="number" style="width: 40px;" title="曲线绘制开始名次" id="sliceStart" name="sliceStart" min="1" max="50" value="1" />
+      <input type="number" style="width: 40px;" title="开始名次" id="sliceStart" name="sliceStart" min="1" max="50" value="1" />
       -
-      <input type="number" style="width: 40px;" title="曲线绘制结束名次" id="sliceEnd" name="sliceEnd" min="1" max="50" value="8" />
+      <input type="number" style="width: 40px;" title="结束名次" id="sliceEnd" name="sliceEnd" min="1" max="50" value="8" />
     </span>
     
     <div><button id="submit">绘制图形</button></div>
   </div>
   <div id="cup">
     <div id="beforeDraw">
-      <div id="data-tip">数据大小<span class="num"></span>kb，加载中..</div>
-      <div id="progressBar">
+      <div id="data-tip" style="display:none">数据大小<span class="num"></span>kb，加载中..</div>
+      <div id="progressBar" style="display:none">
         <span class="bar"></span><span class="decorator"></span>
       </div>
+      数据加载中...
     </div>
   </div>
-  
+  <div class="footer">
+    <center><p>power by echarts.</p></center>
+    <center><p>Contact information: <a href="mailto:Myon&lt;myon.cn@gmail.com&gt;?Subject=b萌曲线图反馈">Myon&lt;myon.cn@gmail.com&gt;</a>.</p></center>
+  </div>
 </body>
 <script>
   var dates = {{JSON.stringify(dates)}};

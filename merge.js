@@ -1,5 +1,5 @@
 /**
-合并数据
+合并定时任务获取的角色得票数据
 **/
 
 /*阵营归类 用于合并*/
@@ -12,7 +12,7 @@ require('array.prototype.find');
 var fs = require("fs");
 var path = require("path");
 
-var dir = "/home/Myon/bmoe/data/";
+var dir = "../data/";
 
 var war = [];
 var files = fs.readdirSync(dir);
@@ -22,11 +22,11 @@ files.forEach(function(item) {
     var dataJson = require(path.join(dir,item));
     var data = dataJson.data;
     for(var k in data)
-      data[k].forEach(function(role)
+      data[k].forEach(function(role, index)
       {
         var info = {};
-        info.count = role.votes_count;
         info.time = item.replace(/.*-(\d+).json/,"$1");
+        info.count = role.votes_count;
         var r_data = war.find(function(e){ return e.id==role.id;});
         if(r_data == undefined){
           war.push({
@@ -60,4 +60,4 @@ war.forEach(function(w, index){
   }
 });
 
-fs.writeFileSync(path.join("/home/Myon/bmoe/chart/public","data.json"),JSON.stringify(war)); 
+fs.writeFileSync(path.join("public","data.json"),JSON.stringify(war)); 
