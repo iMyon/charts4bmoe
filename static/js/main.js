@@ -128,7 +128,7 @@ function getChartData(war, day, sex){
   chartData.tooltip_formatter = function (params,ticket,callback) {
     var res = params[0].name + ' 总共获得票数: ';
     params.sort(function(a,b){
-      return b.value - a.value;
+      return ~~b.value > ~~a.value;
     });
     for (var i = 0, l = params.length; i < l; i++) {
       res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value;
@@ -205,7 +205,7 @@ function getGradChartData(chartData){
   chartData.tooltip_formatter = function (params,ticket,callback) {
     var res = '时间段得票数: <br/>' + params[0].name;
     params.sort(function(a,b){
-      return b.value - a.value;
+      return ~~b.value > ~~a.value;
     });
     for (var i = 0, l = params.length; i < l; i++) {
       res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value;
@@ -282,7 +282,7 @@ function getRateChartData(chartData){
   chartData.tooltip_formatter = function (params,ticket,callback) {
       var res = '时间段得票率: <br/>' + params[0].name;
       params.sort(function(a,b){
-        return b.value - a.value;
+        return ~~b.value > ~~a.value;
       });
       for (var i = 0, l = params.length; i < l; i++) {
         res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value + " %";
@@ -364,7 +364,7 @@ function getTicketChartData(voteData, day){
   ticketChartData.tooltip_formatter = function (params,ticket,callback) {
     var res = params[0].name + ' 总共领取票数: ';
     params.sort(function(a,b){
-      return b.value - a.value;
+      return ~~b.value > ~~a.value;
     });
     for (var i = 0, l = params.length; i < l; i++) {
       res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value;
@@ -418,7 +418,7 @@ function draw(chartData, sliceStart, sliceEnd){
       var option = {
         title: {
           text: chartData.text,
-          subtext: chartData.subtext + " | " + (sliceStart+1) + "-" + sliceEnd + "名"
+          subtext: chartData.subtext + " | " + (sliceStart+1) + "-" + sliceEnd + "位"
         },
         grid:{
           x2:x2
