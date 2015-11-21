@@ -263,7 +263,8 @@ function getTotalRateChart(chartData){
   var v_times = totalRateChart.v_times;
   totalRateChart.v_times = [];
   for(var i=0;i<v_times.length-1;i++)
-    totalRateChart.v_times.push((v_times[i]+"-"+v_times[i+1]).replace(/:00/g, ""));
+    totalRateChart.v_times.push((v_times[i+1]));
+    // totalRateChart.v_times.push((v_times[i]+"-"+v_times[i+1]).replace(/:00/g, ""));
   totalRateChart.series.forEach(function(sery, index){
     totalRateChart.series[index].data.shift();
   });
