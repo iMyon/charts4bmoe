@@ -91,7 +91,7 @@ function getDataByCondition(war, condition,chartType){
  * @return {object} 返回echarts图形数据
  *
  */
-function getDataByNames(war, ids, chartType){
+function getDataByIds(war, ids, chartType){
 	var datas;
 	ids.forEach(function(id){
 		if(datas == undefined) datas = getDataByCondition(war, {id: id}, chartType);
