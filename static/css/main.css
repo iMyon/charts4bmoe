@@ -130,3 +130,15 @@ html,body{
 .footer p{
   margin:0;
 }
+
+/*通知信息*/
+div.warn{
+  text-align: center;
+  background: #CC4B00;
+  color: white;
+}
+div.notice{
+  text-align: center;
+  background: #3A99D8;
+  color: white;
+}

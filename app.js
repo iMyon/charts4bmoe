@@ -30,6 +30,13 @@ app.use('/voteData', express.static(voteDataPath));
 app.get('/', function(req, res){
   var bangumis = [];
   var dataJson = require("./public/data.json");
+  var notice;
+  try{
+    var notice = require("./public/notice.json");
+  }
+  catch(e){
+    console.log(e);
+  }
   dataJson.forEach(function(role){
     if(bangumis.indexOf(role.bangumi) == -1)
       bangumis.push(role.bangumi);
@@ -47,6 +54,7 @@ app.get('/', function(req, res){
   res.render('index', {
     title:"b萌战况曲线",
     dates:dates,
+    notice:notice,
     bangumis:bangumis
   });
 });
