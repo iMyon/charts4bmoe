@@ -6,14 +6,18 @@
   <link rel="icon" href="/favicon.ico" mce_href="/favicon.ico" type="image/x-icon">  
   <link rel="shortcut icon" href="/favicon.ico" mce_href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/main.css">
-  <script src="js/jquery-1.9.0.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
+  <script src="js/jquery-2.1.4.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap-datepicker.min.js"></script>
 </head>
 <body>
   <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
   <div id="main" style="height:600px;">
   
   </div>
-  <div class="condition" align="center">
+  <div class="condition" align="center" id="#sandbox-container">
     <select name="date-or-bangumi" id="date-or-bangumi">
       <option value="0" checked>按日期</option>
       <option value="1">按阵营</option>
@@ -29,12 +33,7 @@
       <option value="{{bangumi}}">{{bangumi}}</option>
     {% endfor %}
     </select>
-    <select name="date" id="sel-date">
-    {% for date in dates %}
-        <option value="{{date}}">{{date}}</option>
-    {% endfor %}
-        <option value="any">全部日期</option>
-    </select>
+    <input type="text" id="input-date" value="{{dates[0]}}" placeholder="选择日期" style="width:100px;">
     <select name="chart" id="sel-chart">
       <option value="0">总票数折线图</option>
       <option value="1">每小时票数折线图</option>

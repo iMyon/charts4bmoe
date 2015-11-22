@@ -52,8 +52,11 @@ var Events = [
 function getDataByCondition(war, condition,chartType){
   var AllCharDatas;
   var v_times = ["00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"];
-  for(var i=0; i<dates.length;i++){
-    var tdata = getChartData(war, dates[i], "any");
+  var _dates = dates;
+  //如果参数中有日期，则按照参数中的筛选
+  if(condition.day) _dates = condition.day.split(",");
+  for(var i=0; i<_dates.length;i++){
+    var tdata = getChartData(war, _dates[i], "any");
     tdata.series.forEach(function(sery,index){
       for(var i=0,j=0;i<v_times.length;i++){
         if(tdata.v_times[j] != v_times[i]){
@@ -71,6 +74,10 @@ function getDataByCondition(war, condition,chartType){
     }
     else AllCharDatas.series = AllCharDatas.series.concat(tdata.series);
   }
+  if(condition.bangumi) AllCharDatas.subtext = condition.bangumi;
+  // if(condition.day) AllCharDatas.subtext = condition.day;
+  if(condition.sex) AllCharDatas.subtext = AllCharDatas.subtext+" | "+ (condition.sex==1?"男子组":condition.sex==0?"女子组":"男女");
+  condition.day = undefined;//重置day，以便后面筛选
   AllCharDatas.series = AllCharDatas.series.filter(function(e) {
     for(var key in condition){
       if(condition[key] == "any") continue;
@@ -78,7 +85,6 @@ function getDataByCondition(war, condition,chartType){
     }
     return true;
   });
-  if(condition.bangumi) AllCharDatas.subtext = condition.bangumi;
   return AllCharDatas;
 }
 
@@ -109,13 +115,14 @@ function getDataByIds(war, ids, chartType){
  * 根据日期和性别得到当前时间人物获得的总票数曲线图信息
  * 
  * @param  {object} war 萌战比赛json原始数据
- * @param  {string} day 比赛日期，any为任意日期
+ * @param  {string} day 比赛日期，逗号分隔
  * @param  {string} sex 性别：0女 1男 any任意
  * @return {object} echarts总票数图形数据
  * 
  */
 function getChartData(war, day, sex){
-  if(day=="any") return getDataByCondition(war, {bangumi: "any", sex: sex}, $("#sel-chart").val());
+  var days = day.split(",");
+  if(days.length>1) return getDataByCondition(war, {bangumi: "any", sex: sex, day:day}, $("#sel-chart").val());
   var dayData = war.filter(function(e) {
     return (e.date==day) && (sex==e.sex || sex=="any" );
   });
@@ -503,63 +510,6 @@ function draw(chartData, sliceStart, sliceEnd){
 }
 
 /**
- * 页面加载完处理
- */
-$(document).ready(function() {
-  /**
-   * 下拉框change事件
-   * 控制下拉框的隐藏和显示
-   */
-  function setShowAndHidden(){
-    var dob = $("#date-or-bangumi").val();
-    //按日期
-    if(dob == 0){
-      $("#sel-date").show();
-      $("#sel-sex").show();
-      $("#sp-range").show();
-      $("#sel-bangumi").hide();
-    }
-    //按阵营
-    else if(dob == 1){
-      $("#sel-date").hide();
-      $("#sel-sex").show();
-      $("#sp-range").hide();
-      $("#sel-bangumi").show();
-    }
-    //票仓图
-    else if(dob == 2){
-      $("#sel-date").show();
-      $("#sel-sex").hide();
-      $("#sp-range").hide();
-      $("#sel-bangumi").hide();
-    }
-  }
-  setShowAndHidden();
-  $("#date-or-bangumi").change(setShowAndHidden);
-  $("#submit").click(function(){
-    var condition = {};
-    condition.dob = $("#date-or-bangumi").val();
-    condition.sex = $("#sel-sex").val();
-    condition.date = $("#sel-date").val();
-    condition.chart = $("#sel-chart").val();
-    condition.bangumi = $("#sel-bangumi").val();
-    condition.sliceStart = ~~$("#sliceStart").val();
-    condition.sliceEnd = ~~$("#sliceEnd").val();
-    startDraw(condition);
-  });
-
-  var condition = {};
-  condition.dob = $("#date-or-bangumi").val();
-  condition.sex = $("#sel-sex").val();
-  condition.date = $("#sel-date").val();
-  condition.chart = $("#sel-chart").val();
-  condition.bangumi = $("#sel-bangumi").val();
-  condition.sliceStart = ~~$("#sliceStart").val();
-  condition.sliceEnd = ~~$("#sliceEnd").val();
-  startDraw(condition);
-});
-
-/**
  * 绘制图形按钮点击事件
  * 根据条件调用draw方法画图
  * @return none
@@ -568,7 +518,7 @@ function startDraw(condition){
   if(condition.dob == 0){
     getWarData(condition, function(war){
       var chartData = getChartData(war, condition.date, condition.sex);
-      if(condition.date != "any"){
+      if(condition.date.indexOf(",") == -1){
         if(condition.chart == 1) chartData = getGradChartData(chartData);
         else if(condition.chart == 2) chartData = getRatePerHChartData(chartData);
         else if(condition.chart == 3) chartData = getTotalRateChart(chartData);
@@ -588,9 +538,9 @@ function startDraw(condition){
     if(["0","1"].indexOf(condition.chart) != -1){   //票仓只能画总票数和每小时票数折线图
       getVoteData(function(voteData){
         var chartData;
-        if(condition.date == "any"){
+        if(condition.date.indexOf(",") != -1){
           //合并data
-          dates.forEach(function(date){
+          condition.date.split(",").forEach(function(date){
             var d = getTicketChartData(voteData, date);
             if(chartData == undefined) chartData = d;
             else chartData.series = chartData.series.concat(d.series);
@@ -644,15 +594,22 @@ function getWarData(condition, callback){
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
       if(xhr.readyState==4 && xhr.status==200){
-        if(condition.dob == 1 || condition.sex == "any" || condition.date == "any")
-          war = JSON.parse(xhr.responseText);
-        else
-          requestDatas[condition.date] = JSON.parse(xhr.responseText);
-        //获取数据后画图
-        setTimeout(function(){
-          callback(JSON.parse(xhr.responseText));
+        var resJson = JSON.parse(xhr.responseText);
+        if(resJson.length){
+          if(condition.dob == 1 || condition.sex == "any" || condition.date.indexOf(",") != -1)
+            war = resJson;
+          else
+            requestDatas[condition.date] = resJson;
+          //获取数据后画图
+          setTimeout(function(){
+            callback(resJson);
+            $("#cup").hide(); //隐藏遮罩层
+          },100);
+        }
+        else{
+          alert("获取数据失败");
           $("#cup").hide(); //隐藏遮罩层
-        },100);
+        }
       }
     }
     //进度条处理(gzip压缩后下无法获取进度了，未解决)
@@ -664,7 +621,7 @@ function getWarData(condition, callback){
       $("#data-tip .num").html(~~(this.getResponseHeader("Content-Length")/1024));
       progress(per, $('#progressBar'));
     }
-    if(condition.dob == 1 || condition.sex == "any" || condition.date == "any")
+    if(condition.dob == 1 || condition.sex == "any" || condition.date.indexOf(",") != -1)
       xhr.open("get","api/data/role");
     else
       xhr.open("get","api/data/role?date="+condition.date);
@@ -685,3 +642,75 @@ function progress(percent, $element) {
   $element.find('div').animate({ width: progressBarWidth }, 100).html(percent + "% ");
   $element.find('span.bar').animate({ width: progressBarWidth }, 100);
 }
+
+
+
+/**
+ * 页面加载完处理
+ */
+$(document).ready(function() {
+  /**
+   * 下拉框change事件
+   * 控制下拉框的隐藏和显示
+   */
+  //构建多选框
+  $('#input-date').datepicker({
+    format: "yy-mm-dd",
+    language: "zh-CN",
+    startDate: dates[dates.length-1],
+    endDate: dates[0],
+    todayHighlight: true,
+    clearBtn: true,
+    multidate: true
+  });
+  /*.on("clearDate", function(e){
+    $('#input-date').datepicker('update', dates[0]);
+  });*/
+  function setShowAndHidden(){
+    var dob = $("#date-or-bangumi").val();
+    //按日期
+    if(dob == 0){
+      $("#input-date").show();
+      $("#sel-sex").show();
+      $("#sp-range").show();
+      $("#sel-bangumi").hide();
+    }
+    //按阵营
+    else if(dob == 1){
+      $("#input-date").hide();
+      $("#sel-sex").show();
+      $("#sp-range").hide();
+      $("#sel-bangumi").show();
+    }
+    //票仓图
+    else if(dob == 2){
+      $("#input-date").show();
+      $("#sel-sex").hide();
+      $("#sp-range").hide();
+      $("#sel-bangumi").hide();
+    }
+  }
+  setShowAndHidden();
+  $("#date-or-bangumi").change(setShowAndHidden);
+  $("#submit").click(function(){
+    var condition = {};
+    condition.dob = $("#date-or-bangumi").val();
+    condition.sex = $("#sel-sex").val();
+    condition.date = $("#input-date").val();
+    condition.chart = $("#sel-chart").val();
+    condition.bangumi = $("#sel-bangumi").val();
+    condition.sliceStart = ~~$("#sliceStart").val();
+    condition.sliceEnd = ~~$("#sliceEnd").val();
+    startDraw(condition);
+  });
+
+  var condition = {};
+  condition.dob = $("#date-or-bangumi").val();
+  condition.sex = $("#sel-sex").val();
+  condition.date = $("#input-date").val();
+  condition.chart = $("#sel-chart").val();
+  condition.bangumi = $("#sel-bangumi").val();
+  condition.sliceStart = ~~$("#sliceStart").val();
+  condition.sliceEnd = ~~$("#sliceEnd").val();
+  startDraw(condition);
+});
