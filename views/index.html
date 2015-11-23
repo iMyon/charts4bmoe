@@ -16,7 +16,15 @@
   <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
   {% if notice !== undefined %}
   {% if notice.show%}
-  <div class="{{notice.type}}">{{notice.html}}</div>
+  <div class="{{notice.type}}" id="top-notice">
+  {% for str in notice.html.split("|||") %}
+  {% if str.indexOf("###")==-1 %}
+  {{str}}
+  {% else %}
+  <a href="{{str.split("###")[1]}}" target="_blank">{{str.split("###")[0]}}</a>
+  {% endif %}
+  {% endfor %}
+  </div>
   {% endif %}
   {% endif %}
   <div id="main" style="height:600px;">
