@@ -669,6 +669,8 @@ $(document).ready(function() {
     clearBtn: true,
     multidate: true
   });
+  //bootstrap下拉框
+  $('.selectpicker').selectpicker();
   /*.on("clearDate", function(e){
     $('#input-date').datepicker('update', dates[0]);
   });*/
@@ -677,23 +679,23 @@ $(document).ready(function() {
     //按日期
     if(dob == 0){
       $("#input-date").show();
-      $("#sel-sex").show();
+      $("#span-sex").show();
       $("#sp-range").show();
-      $("#sel-bangumi").hide();
+      $("#span-bangumi").hide();
     }
     //按阵营
     else if(dob == 1){
       $("#input-date").hide();
-      $("#sel-sex").show();
+      $("#span-sex").show();
       $("#sp-range").hide();
-      $("#sel-bangumi").show();
+      $("#span-bangumi").show();
     }
     //票仓图
     else if(dob == 2){
       $("#input-date").show();
-      $("#sel-sex").hide();
+      $("#span-sex").hide();
       $("#sp-range").hide();
-      $("#sel-bangumi").hide();
+      $("#span-bangumi").hide();
     }
   }
   setShowAndHidden();

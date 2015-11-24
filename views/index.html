@@ -8,9 +8,11 @@
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" href="css/bootstrap-select.min.css">
   <script src="js/jquery-2.1.4.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/bootstrap-datepicker.min.js"></script>
+  <script src="js/bootstrap-select.min.js"></script>
 </head>
 <body>
   <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
@@ -30,37 +32,59 @@
   <div id="main" style="height:600px;">
   
   </div>
-  <div class="condition" align="center" id="#sandbox-container">
-    <select name="date-or-bangumi" id="date-or-bangumi">
-      <option value="0" checked>按日期</option>
-      <option value="1">按阵营</option>
-      <option value="2">票仓图</option>
-    </select>
-    <select name="sex" id="sel-sex">
-      <option value="0" checked>萌</option>
-      <option value="1">燃</option>
-      <option value="any">萌燃</option>
-    </select>
-    <select name="bangumi" id="sel-bangumi">
-    {% for bangumi in bangumis %}
-      <option value="{{bangumi}}">{{bangumi}}</option>
-    {% endfor %}
-    </select>
-    <input type="text" id="input-date" value="{{dates[0]}}" placeholder="选择日期" style="width:100px;">
-    <select name="chart" id="sel-chart">
-      <option value="0">总票数折线图</option>
-      <option value="1">每小时票数折线图</option>
-      <option value="2">每小时票率折线图</option>
-      <option value="3">总得票率折线图</option>
-    </select>
-    <span id="sp-range">
-      <input type="number" style="width: 40px;" title="开始名次" id="sliceStart" name="sliceStart" min="1" max="50" value="1" />
-      -
-      <input type="number" style="width: 40px;" title="结束名次" id="sliceEnd" name="sliceEnd" min="1" max="50" value="8" />
+
+  
+  <div class="form-inline condition" align="center" id="#sandbox-container">
+    <div class="form-group">
+    <span id="span-date-or-bangumi">
+      <select name="date-or-bangumi" class="selectpicker" id="date-or-bangumi" data-width="auto">
+        <option value="0" checked>按日期</option>
+        <option value="1">按阵营</option>
+        <option value="2">票仓图</option>
+      </select>
     </span>
-    
-    <div><button id="submit">绘制图形</button></div>
+    </div>
+    <div class="form-group">
+    <span id="span-sex">
+      <select name="sex" id="sel-sex" class="selectpicker" data-width="auto">
+        <option value="0" checked>萌</option>
+        <option value="1">燃</option>
+        <option value="any">萌燃</option>
+      </select>
+    </span>
+    </div>
+    <div class="form-group">
+      <span id="span-bangumi">
+        <select name="bangumi" id="sel-bangumi" class="selectpicker" data-live-search="true" data-width="auto">
+        {% for bangumi in bangumis %}
+          <option value="{{bangumi}}">{{bangumi}}</option>
+        {% endfor %}
+        </select>
+      </span>
+    </div>
+    <div class="form-group">
+      <input type="text" id="input-date" class="form-control" value="{{dates[0]}}" placeholder="选择日期" style="width:100px;">
+    </div>
+    <div class="form-group">
+    <span id="span-chart">
+      <select name="chart" id="sel-chart" class="selectpicker" data-width="auto">
+        <option value="0">总票数折线图</option>
+        <option value="1">每小时票数折线图</option>
+        <option value="2">每小时票率折线图</option>
+        <option value="3">总得票率折线图</option>
+      </select>
+    </span>
+    </div>
+    <div class="form-group">
+      <span id="sp-range">
+        <input type="text"  class="form-control" style="width: 40px;" title="开始名次" id="sliceStart" name="sliceStart" min="1" max="50" value="1" />
+        -
+        <input type="text"  class="form-control" style="width: 40px;" title="结束名次" id="sliceEnd" name="sliceEnd" min="1" max="50" value="8" />
+      </span>
+    </div>
+    <div><button id="submit" class="btn btn-default">绘制图形</button></div>
   </div>
+
   <div id="cup">
     <div id="beforeDraw">
       <div id="data-tip" style="display:none">数据大小<span class="num"></span>kb，加载中..</div>
@@ -71,7 +95,7 @@
     </div>
   </div>
   <div class="footer">
-    <center><p>power by echarts.</p></center>
+    <center><p>power by echarts. <a href="https://github.com/iMyon/charts4bmoe">Source Code</a></p></center>
     <center><p>Contact information: <a href="mailto:Myon&lt;myon.cn@gmail.com&gt;?Subject=b萌曲线图反馈">Myon&lt;myon.cn@gmail.com&gt;</a>.</p></center>
   </div>
 </body>
