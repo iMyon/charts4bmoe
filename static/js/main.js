@@ -822,6 +822,7 @@ $(document).ready(function() {
     condition.dob = $("#date-or-bangumi").val();
     condition.sex = $("#sel-sex").val();
     condition.date = $("#input-date").val();
+    condition.date = condition.date?condition.date:dates.join(",");
     condition.chart = $("#sel-chart").val();
     condition.bangumi = $("#sel-bangumi").val();
     condition.sliceStart = ~~$("#sliceStart").val();
@@ -833,6 +834,7 @@ $(document).ready(function() {
   condition.dob = $("#date-or-bangumi").val();
   condition.sex = $("#sel-sex").val();
   condition.date = $("#input-date").val();
+  condition.date = condition.date?condition.date:dates.join(",");
   condition.chart = $("#sel-chart").val();
   condition.bangumi = $("#sel-bangumi").val();
   condition.sliceStart = ~~$("#sliceStart").val();
