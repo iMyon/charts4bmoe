@@ -159,6 +159,7 @@ div.warn{
 }
 div.warn a{
   color:#3A99D8;
+  text-decoration:none;
 }
 div.notice{
   text-align: center;
@@ -167,6 +168,7 @@ div.notice{
 }
 div.notice a{
   color:#F57E42;
+  text-decoration:none;
 }
 
 div.notice{
