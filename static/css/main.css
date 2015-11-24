@@ -172,6 +172,7 @@ div.notice a{
 }
 
 div.notice{
+  transition:all 500ms ease-in-out;
   opacity: .6;
 }
 div.notice:hover{

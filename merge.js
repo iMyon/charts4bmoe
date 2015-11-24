@@ -15,17 +15,23 @@ var path = require("path");
 var dir = "../data/";
 
 var war = [];
+var totalVote = [];
 var files = fs.readdirSync(dir);
 files.forEach(function(item) {
   var voteDay = item.replace(/-\d+\.json/, "");
+  var maleCount = 0;
+  var femaleCount = 0;
+  var time = item.replace(/.*-(\d+).json/,"$1");
   try{
     var dataJson = require(path.join(dir,item));
     var data = dataJson.data;
-    for(var k in data)
+    for(var k in data){
       data[k].forEach(function(role, index)
       {
+        if(role.sex == 0) femaleCount+=~~role.votes_count;
+        else  maleCount+=~~role.votes_count;
         var info = {};
-        info.time = item.replace(/.*-(\d+).json/,"$1");
+        info.time = time;
         info.count = role.votes_count;
         var r_data = war.find(function(e){ return e.id==role.id;});
         if(r_data == undefined){
@@ -40,6 +46,19 @@ files.forEach(function(item) {
         }
         else r_data.data.push(info);
       });
+    }
+    totalVote.push({
+      date: voteDay,
+      time: time,
+      sex: 1,
+      count: maleCount
+    });
+    totalVote.push({
+      date: voteDay,
+      time: time,
+      sex: 0,
+      count: femaleCount
+    });
   }catch(e){
     console.log(e);
   }
@@ -60,4 +79,6 @@ war.forEach(function(w, index){
   }
 });
 
+
 fs.writeFileSync(path.join("public","data.json"),JSON.stringify(war)); 
+fs.writeFileSync(path.join("public","totalVote.json"),JSON.stringify(totalVote)); 

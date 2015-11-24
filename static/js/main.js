@@ -8,6 +8,7 @@ require.config({
 var war;                  //比赛数据（json获取
 var voteData;             //投票数据（json获取
 var requestDatas = [];    //保存每次请求数据避免重复请求
+var totalVoteData;        //面票总数
 //b萌事件
 var Events = [
 {
@@ -273,6 +274,16 @@ function getRatePerHChartData(chartData){
 function getTotalRateChart(chartData){
   var totalRateChart = getRateChartData(chartData);
   totalRateChart.text = "总得票率折线图";
+  totalRateChart.tooltip_formatter = function (params,ticket,callback) {
+      var res =  params[0].name +'总得票率: <br/>';
+      params.sort(function(a,b){
+        return ~~b.value > ~~a.value || -1;
+      });
+      for (var i = 0, l = params.length; i < l; i++) {
+        res += (i+1) + "." + params[i].seriesName + ' : ' + params[i].value + " %<br/>";
+      }
+      return res;
+  };
   var v_times = totalRateChart.v_times;
   totalRateChart.v_times = [];
   for(var i=0;i<v_times.length-1;i++)
@@ -386,6 +397,57 @@ function getTicketChartData(voteData, day){
     return res;
   };
   return  ticketChartData;
+}
+
+/**
+ * 面票总数数曲线
+ * 
+ * @param  {object} voteData  领票数原始json数据
+ * @param  {string} condition 筛选条件 
+ * @return {object} echarts图形数据
+ * 
+ */
+function getTotalVoteChartData(totalVoteData, condition){
+  var vDatas = totalVoteData.filter(function(vData) {
+    for(var key in condition){
+      if(vData[key] != condition[key]) return false;
+    }
+    return true;
+  });
+  var totalVoteChartData = {};
+  totalVoteChartData.text = "面票总数折线图";
+  totalVoteChartData.subtext = condition.date + "日";
+  totalVoteChartData.formatter = '{value} 票';
+  totalVoteChartData.v_times = [];
+  totalVoteChartData.series = [];
+
+  var moe = "萌";
+  if(condition.sex==1) moe="燃";
+  var sery = {};
+  sery.name = condition.date + moe;
+  sery.type = "line";
+  sery.data = [];
+  sery.itemStyle = {
+    emphasis : {
+      label : {show: true}
+    }
+  };
+  vDatas.forEach(function(vData){
+    sery.data.push(vData.count);
+  });
+  totalVoteChartData.series.push(sery);
+  totalVoteChartData.v_times = ["00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"];
+  totalVoteChartData.tooltip_formatter = function (params,ticket,callback) {
+    var res = params[0].name + ' 投票数总和: ';
+    params.sort(function(a,b){
+      return ~~b.value > ~~a.value || -1;
+    });
+    for (var i = 0, l = params.length; i < l; i++) {
+      res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value;
+    }
+    return res;
+  };
+  return  totalVoteChartData;
 }
 
 /**
@@ -554,8 +616,40 @@ function startDraw(condition){
         }
         else chartData = getTicketChartData(voteData, condition.date);
         if(condition.chart == 1) chartData = getGradChartData(chartData)
-        else if(condition.chart == 2) chartData = getRatePerHChartData(chartData)
-        else if(condition.chart == 3) chartData = getTotalRateChart(chartData)
+        draw(chartData, 0, 99999);
+      });
+    }
+    else alert("这个画不了");
+  }
+  else if(condition.dob == 3){          //面票
+    if(["0","1"].indexOf(condition.chart) != -1){
+      getTotalVoteData(function(totalVoteData){
+        var chartData;
+        if(condition.date.indexOf(",") != -1){
+          //合并data
+          condition.date.split(",").forEach(function(date){
+            var d = {};
+            if(condition.sex != "any") d = getTotalVoteChartData(totalVoteData, {date:date,sex:condition.sex});
+            //萌燃
+            else{
+              d = getTotalVoteChartData(totalVoteData, {date:date,sex:0});
+              d.series = getTotalVoteChartData(totalVoteData, {date:date,sex:1}).series
+                        .concat(d.series);
+            }
+            if(chartData == undefined) chartData = d;
+            else chartData.series = chartData.series.concat(d.series);
+          });
+        }
+        else{
+          if(condition.sex != "any") chartData = getTotalVoteChartData(totalVoteData, {date:condition.date,sex:condition.sex});
+          //萌燃
+          else{
+            chartData = getTotalVoteChartData(totalVoteData, {date:condition.date,sex:0});
+            chartData.series = getTotalVoteChartData(totalVoteData, {date:condition.date,sex:1}).series
+                      .concat(chartData.series);
+          }
+        }
+        if(condition.chart == 1) chartData = getGradChartData(chartData)
         draw(chartData, 0, 99999);
       });
     }
@@ -577,6 +671,22 @@ function getVoteData(callback){
     $.get("public/voteData.json", function(data){
       voteData = data;
       callback(voteData);
+    });
+  }
+}
+/**
+ * 获取面票json
+ * 
+ * @param  {Function} callback  获取json后的回调函数
+ * @return none
+ * 
+ */
+function getTotalVoteData(callback){
+  if(totalVoteData) callback(totalVoteData);
+  else{
+    $.get("public/totalVote.json", function(data){
+      totalVoteData = data;
+      callback(totalVoteData);
     });
   }
 }
@@ -694,6 +804,13 @@ $(document).ready(function() {
     else if(dob == 2){
       $("#input-date").show();
       $("#span-sex").hide();
+      $("#sp-range").hide();
+      $("#span-bangumi").hide();
+    }
+    //面票图
+    else if(dob == 3){
+      $("#input-date").show();
+      $("#span-sex").show();
       $("#sp-range").hide();
       $("#span-bangumi").hide();
     }
