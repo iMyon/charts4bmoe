@@ -464,6 +464,10 @@ function getTotalVoteChartData(totalVoteData, condition){
     }
     return true;
   });
+  var lingFlag = false; //是否有零点标志
+  vDatas.forEach(function(e){
+    if(e.time == 00 ) lingFlag = true;
+  });
   var totalVoteChartData = {};
   totalVoteChartData.text = "面票总数折线图";
   totalVoteChartData.subtext = condition.date + "日";
@@ -482,9 +486,16 @@ function getTotalVoteChartData(totalVoteData, condition){
       label : {show: true}
     }
   };
+  if(!lingFlag){
+    sery.data.push(0);
+  }
   vDatas.forEach(function(vData){
-    sery.data.push(vData.count);
+    sery.data[~~vData.time] = vData.count;
   });
+  //补全空值为undefined
+  for(var i=0;i<=23;i++){
+    if(sery[i] == undefined) sery[i] = undefined;
+  }
   totalVoteChartData.series.push(sery);
   totalVoteChartData.v_times = ["00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"];
   totalVoteChartData.tooltip_formatter = function (params,ticket,callback) {
