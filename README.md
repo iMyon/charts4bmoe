@@ -5,6 +5,18 @@
 * 11月7日之后有完整数据，之前数据不完整
 * 由于b站票仓api有点混乱，不保证票仓数据完全正确
 
+### 名词解释  
+`票仓图`：b萌领票人数的统计图  
+`面票图`：组内票数总和的统计图  
+
+### 公式说明  
+1. 按时间/阵营图  
+`每小时票数` = 时间段内增加的票数  
+`每小时票率` = 角色`每小时票数`/组内`每小时票数总和`  
+`总得票率` = 角色`总票数`/组内`总票数`  
+2. 票仓图/面票图  
+`每小时票率` = `时间段票数增长数量`/`全天总票数`  
+
 ------------------------------------------------------------
 
 
@@ -32,9 +44,9 @@ Reuqired    |   Name   |  Type  |  description
 optional    |date      |string  |日期
 optional    |name      |string  |人物名称
 optional    |bangumi   |string  |动画名称
-optional    |sex       |string  |性别，0女1男
+optional    |sex       |int     |性别，0女1男
 optional    |format    |string  |数据格式，默认json，table为使用网页表格显示
-optional    |id        |string  |人物标识id
+optional    |id        |int     |人物标识id
 
 ####返回参数  
 返回角色数据数组
@@ -120,10 +132,11 @@ Reuqired    |   Name   |  Type  |  description
 optional    |date      |string  |日期
 optional    |name      |string  |人物名称
 optional    |bangumi   |string  |动画名称
-optional    |sex       |string  |性别，0女1男
+optional    |sex       |int     |性别，0女1男
 optional    |format    |string  |数据格式，默认json，table为使用网页表格显示
-optional    |id        |string  |人物标识id
-optional    |rank      |string  |名次
+optional    |id        |int     |人物标识id
+optional    |rank      |int     |名次
+optional    |stat      |int     |晋级状态： 1晋级 2复活 3淘汰
 
 ####请求样例  
 GET     http://bmoe.uuzsama.me/api/data/rank?bangumi=凭物语  

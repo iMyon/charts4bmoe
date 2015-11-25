@@ -30,9 +30,10 @@ files.forEach(function(item) {
     for(var k in data){
       data[k].forEach(function(role, index)
       {
+
         //23点加入名次统计
         if(time == 23){
-          rankData.push({
+          var r = {
             id: role.id,
             name: role.name,
             bangumi: role.bangumi,
@@ -40,7 +41,11 @@ files.forEach(function(item) {
             sex: role.sex,
             count: role.votes_count,
             rank: index+1
-          });
+          };
+          if(r.rank<=3) r.stat = 1;
+          else if(r.rank <=6) r.stat = 2;
+          else r.stat = 3;
+          rankData.push(r);
         }
         if(role.sex == 0) femaleCount+=~~role.votes_count;
         else  maleCount+=~~role.votes_count;
@@ -102,7 +107,7 @@ rankData.forEach(function(w, index){
   }
 });
 rankData = rankData.sort(function(a, b){
-  return a.rank-b.rank || b.count - a.count;
+  return  b.count - a.count || a.rank-b.rank;
 });
 
 fs.writeFileSync(path.join("public","data.json"),JSON.stringify(war)); 

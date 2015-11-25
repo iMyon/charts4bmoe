@@ -139,6 +139,7 @@ app.get('/api/data/ballot', function(req, res){
  * @param  {string} rank      名次
  * @param  {string} id        角色id
  * @param  {string} name      角色名
+ * @param  {string} stat      晋级情况：1晋级 2复活 3 淘汰
  * @param  {string} format    格式，默认json，table为使用网页表格显示
  */
 app.get('/api/data/rank', function(req, res){
