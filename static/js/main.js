@@ -1,7 +1,7 @@
 ﻿// 引入百度echarts支持
 require.config({
   paths: {
-    echarts: 'http://echarts.baidu.com/build/dist'
+    echarts: '/js'
   }
 });
 
@@ -351,6 +351,56 @@ function getRateChartData(chartData){
 }
 
 /**
+ * 根据echarts数据求得时间段在全天的占比
+ * 
+ * @param  {object} chartData echarts图形数据
+ * @return {object} 占比echarts数据
+ * 
+ */
+function perHourDivTotal(chartData){
+  chartData = getGradChartData(chartData);
+  chartData.formatter = '{value}%';
+  chartData.tooltip_formatter = function (params,ticket,callback) {
+      var res = '时间段票数相对全天票数占比: <br/>' + params[0].name;
+      params.sort(function(a,b){
+        return ~~b.value > ~~a.value || -1;
+      });
+      for (var i = 0, l = params.length; i < l; i++) {
+        res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value + " %";
+      }
+      return res;
+  };
+  var perDivTotalData = chartData;
+
+  perDivTotalData.series.forEach(function(sery, index){
+    var data = new Array();
+    var sum = 0;
+    sery.data.forEach(function(e){
+      sum += ~~e;
+    });
+    sery.data.forEach(function(e){
+      data.push( parseFloat(((~~e/sum).toFixed(6)*100).toFixed(2)) );
+    });
+    perDivTotalData.series[index].data = data;
+    perDivTotalData.series[index].itemStyle.emphasis.label.formatter = "{c} %";
+    perDivTotalData.series[index].markPoint={
+      data : [
+        {type : 'max', name: '最大值'},
+        {type : 'average', name: '平均值'}
+      ],
+      itemStyle:{
+        normal:{
+          label:{
+            formatter:"{c} %"
+          }
+        }
+      }
+    };
+  });
+  return perDivTotalData;
+}
+
+/**
  * 领票数曲线
  * 
  * @param  {object} voteData  领票数原始json数据
@@ -603,7 +653,7 @@ function startDraw(condition){
     });
   }
   else if(condition.dob == 2){
-    if(["0","1"].indexOf(condition.chart) != -1){   //票仓只能画总票数和每小时票数折线图
+    if(["0","1","2"].indexOf(condition.chart) != -1){   //票仓只能画总票数和每小时票数折线图
       getVoteData(function(voteData){
         var chartData;
         if(condition.date.indexOf(",") != -1){
@@ -616,13 +666,14 @@ function startDraw(condition){
         }
         else chartData = getTicketChartData(voteData, condition.date);
         if(condition.chart == 1) chartData = getGradChartData(chartData)
+        else if(condition.chart == 2) chartData = perHourDivTotal(chartData);
         draw(chartData, 0, 99999);
       });
     }
     else alert("这个画不了");
   }
   else if(condition.dob == 3){          //面票
-    if(["0","1"].indexOf(condition.chart) != -1){
+    if(["0","1", "2"].indexOf(condition.chart) != -1){
       getTotalVoteData(function(totalVoteData){
         var chartData;
         if(condition.date.indexOf(",") != -1){
@@ -649,7 +700,8 @@ function startDraw(condition){
                       .concat(chartData.series);
           }
         }
-        if(condition.chart == 1) chartData = getGradChartData(chartData)
+        if(condition.chart == 1) chartData = getGradChartData(chartData);
+        else if(condition.chart == 2) chartData = perHourDivTotal(chartData);
         draw(chartData, 0, 99999);
       });
     }
