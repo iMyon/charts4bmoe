@@ -16,6 +16,8 @@ var dir = "../data/";
 
 var war = [];
 var totalVote = [];
+var rankData = [];        //统计名次
+
 var files = fs.readdirSync(dir);
 files.forEach(function(item) {
   var voteDay = item.replace(/-\d+\.json/, "");
@@ -28,6 +30,18 @@ files.forEach(function(item) {
     for(var k in data){
       data[k].forEach(function(role, index)
       {
+        //23点加入名次统计
+        if(time == 23){
+          rankData.push({
+            id: role.id,
+            name: role.name,
+            bangumi: role.bangumi,
+            date: voteDay,
+            sex: role.sex,
+            count: role.votes_count,
+            rank: index+1
+          });
+        }
         if(role.sex == 0) femaleCount+=~~role.votes_count;
         else  maleCount+=~~role.votes_count;
         var info = {};
@@ -69,7 +83,8 @@ war = war.sort(function(a, b){
   var maxCount2 = ~~b.data[b.data.length-1].count;
   return maxCount2-maxCount1;
 });
-      //阵营合并
+
+//阵营合并
 war.forEach(function(w, index){
   for(var i in AnimateGroup){
     if(AnimateGroup[i].indexOf(w.bangumi) != -1){
@@ -77,8 +92,19 @@ war.forEach(function(w, index){
       break;
     }
   }
+}); 
+rankData.forEach(function(w, index){
+  for(var i in AnimateGroup){
+    if(AnimateGroup[i].indexOf(w.bangumi) != -1){
+      rankData[index].bangumi = AnimateGroup[i][0];
+      break;
+    }
+  }
+});
+rankData = rankData.sort(function(a, b){
+  return a.rank-b.rank || b.count - a.count;
 });
 
-
 fs.writeFileSync(path.join("public","data.json"),JSON.stringify(war)); 
+fs.writeFileSync(path.join("public","rankData.json"),JSON.stringify(rankData)); 
 fs.writeFileSync(path.join("public","totalVote.json"),JSON.stringify(totalVote)); 

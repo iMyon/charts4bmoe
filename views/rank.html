@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>角色得票数据表格视图</title>
+  <link rel="stylesheet" href="/css/table.css">
+</head>
+<body>
+<div class="ui-table-container">
+<table class="ui-table">
+    <thead>
+      <tr>
+        <!-- <th>序号</th> -->
+        <th>id</th>
+				<th>名字</th>
+				<th>性别</th>
+				<th>动画</th>
+				<th>日期</th>
+				<th>得票数</th>
+				<th>名次</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+</div>
+	
+</body>
+<script>
+	/*浏览器生成节点，省流量daze*/
+	var rankData = {{JSON.stringify(rankData)}};
+	var tbody = document.getElementsByTagName("tbody")[0];
+	//减少html重排重绘
+	tbody.style.display = "none";
+	rankData.forEach(function(data){
+		var tr = document.createElement("tr");
+		// var td0 = document.createElement("td");
+		var td1 = document.createElement("td");
+		var td2 = document.createElement("td");
+		var td3 = document.createElement("td");
+		var td4 = document.createElement("td");
+		var td5 = document.createElement("td");
+		var td6 = document.createElement("td");
+		var td7 = document.createElement("td");
+		td1.innerHTML = data.id;
+		td2.innerHTML = data.name;
+		td3.innerHTML = data.sex==1 ? "男":"女";
+		td4.innerHTML = data.bangumi;
+		td5.innerHTML = data.date;
+		td6.innerHTML = data.count;
+		td7.innerHTML = data.rank;
+		// tr.appendChild(td0);
+		tr.appendChild(td1);
+		tr.appendChild(td2);
+		tr.appendChild(td3);
+		tr.appendChild(td4);
+		tr.appendChild(td5);
+		tr.appendChild(td6);
+		tr.appendChild(td7);
+		tbody.appendChild(tr);
+	});
+	tbody.style.display = "";
+</script>
+</html>

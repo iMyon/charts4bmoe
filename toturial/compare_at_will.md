@@ -19,6 +19,4 @@ getWarData({date:"any"}, function(war){
 
 
 ###角色id如何获取？   
-打开[http://bmoe.uuzsama.me/api/data/role](http://bmoe.uuzsama.me/api/data/role)  
-`ctrl+f` 搜索名字，往前看几个字，id就是这个了  
-![](https://c.hime.io/images/2015/11/21/2556794212293238.png)  
+打开[http://bmoe.uuzsama.me/api/data/rank?format=table](http://bmoe.uuzsama.me/api/data/rank?format=table)  

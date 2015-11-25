@@ -19,7 +19,7 @@
 浏览器打开`http://127.0.0.1:2333/`  
 需要nodejs环境支持  
 ##对外API接口说明  
-###1./data/role  
+###1./api/data/role  
 ####描述  
 获取人物得票数据
 
@@ -60,7 +60,7 @@ GET     http://bmoe.uuzsama.me/api/data/role?date=15-11-14&name=岩泽雅美
 }]
 ```
 
-###2./data/ballot  
+###2./api/data/ballot  
 ####描述  
 获取领票数据  
 ####请求方法  
@@ -108,4 +108,37 @@ date    |   日期
 time    |   时间
 total   |   总发票数
 token   |   领票数
+
+###3./api/data/rank  
+####描述  
+获取排名数据  
+####请求方法  
+GET  
+####参数  
+Reuqired    |   Name   |  Type  |  description
+------------|----------|--------|-----------------
+optional    |date      |string  |日期
+optional    |name      |string  |人物名称
+optional    |bangumi   |string  |动画名称
+optional    |sex       |string  |性别，0女1男
+optional    |format    |string  |数据格式，默认json，table为使用网页表格显示
+optional    |id        |string  |人物标识id
+optional    |rank      |string  |名次
+
+####请求样例  
+GET     http://bmoe.uuzsama.me/api/data/rank?bangumi=凭物语  
+返回json：  
+```js
+[
+  {"id":"9443","name":"阿良良木历","bangumi":"凭物语","date":"15-11-07","sex":"1","count":"37523","rank":1},
+  {"id":"8561","name":"阿良良木火怜","bangumi":"凭物语","date":"15-11-19","sex":"0","count":"16469","rank":1},
+  {"id":"8729","name":"阿良良木月火","bangumi":"凭物语","date":"15-11-22","sex":"0","count":"23990","rank":3},
+  {"id":"8060","name":"忍野忍","bangumi":"凭物语","date":"15-11-08","sex":"0","count":"23730","rank":3},
+  {"id":"7850","name":"战场原黑仪","bangumi":"凭物语","date":"15-11-04","sex":"0","count":"18471","rank":3},
+  {"id":"8229","name":"斧乃木余接","bangumi":"凭物语","date":"15-11-12","sex":"0","count":"12482","rank":5},
+  {"id":"8787","name":"忍野扇","bangumi":"凭物语","date":"15-11-24","sex":"0","count":"8590","rank":7},
+  {"id":"6240","name":"手折正弦","bangumi":"凭物语","date":"15-11-02","sex":"1","count":"963","rank":18}
+]
+
+```
 

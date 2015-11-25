@@ -97,7 +97,6 @@ app.get('/api/data/role', function(req, res){
     res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
     res.send(resStr);
   }
-  
 });
 
 /**
@@ -124,6 +123,43 @@ app.get('/api/data/ballot', function(req, res){
   //json
   else{
     var resStr = JSON.stringify(ballots);
+    res.header( 'content-type', 'application/json;charset=utf-8');
+    // res.header( 'Transfer-Encoding', 'gzip');
+    res.header( 'Access-Control-Allow-Origin', '*');
+    res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
+    res.send(resStr);
+  }
+  
+});
+/**
+ * 根据排名数据，api参数列表如下：
+ * @param  {string} date      日期
+ * @param  {string} sex       性别
+ * @param  {string} bangumi   动画
+ * @param  {string} rank      名次
+ * @param  {string} id        角色id
+ * @param  {string} name      角色名
+ * @param  {string} format    格式，默认json，table为使用网页表格显示
+ */
+app.get('/api/data/rank', function(req, res){
+  var rankData = require("./public/rankData.json", 'utf-8');
+  //根据参数筛选
+  rankData = rankData.filter(function(w) {
+    for(var key in req.query){
+      if(w[key] != undefined && w[key] != req.query[key]) return false;
+    }
+    return true;
+  });
+
+  //使用表格视图渲染数据
+  if(req.query.format == "table"){
+    res.render("rank",{
+      rankData: rankData
+    });
+  }
+  //json
+  else{
+    var resStr = JSON.stringify(rankData);
     res.header( 'content-type', 'application/json;charset=utf-8');
     // res.header( 'Transfer-Encoding', 'gzip');
     res.header( 'Access-Control-Allow-Origin', '*');
