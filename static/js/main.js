@@ -9,6 +9,26 @@ var war;                  //比赛数据（json获取
 var voteData;             //投票数据（json获取
 var requestDatas = [];    //保存每次请求数据避免重复请求
 var totalVoteData;        //面票总数
+//echars属性：显示数值点
+var itemStyle_show = {
+  emphasis : {
+    label : {show: true}
+  }
+};
+//echars属性：markpoint 百分比添加平均值和最大值
+var markPoint_percent = {
+  data : [
+    {type : 'max', name: '最大值'},
+    {type : 'average', name: '平均值'}
+  ],
+  itemStyle:{
+    normal:{
+      label:{
+        formatter:"{c} %"
+      }
+    }
+  }
+};
 //b萌事件
 var Events = [
 {
@@ -81,9 +101,6 @@ function getDataByCondition(war, condition,chartType){
     }
     else AllCharDatas.series = AllCharDatas.series.concat(tdata.series);
   }
-  if(condition.bangumi) AllCharDatas.subtext = condition.bangumi;
-  // if(condition.day) AllCharDatas.subtext = condition.day;
-  if(condition.sex) AllCharDatas.subtext = AllCharDatas.subtext+" | "+ (condition.sex==1?"男子组":condition.sex==0?"女子组":"男女");
   condition.day = undefined;//重置day，以便后面筛选
   AllCharDatas.series = AllCharDatas.series.filter(function(e) {
     for(var key in condition){
@@ -135,20 +152,10 @@ function getChartData(war, day, sex){
   });
   var chartData = {};
   chartData.text = "总票数折线图";
-  chartData.subtext = day+" | "+ (sex==1?"男子组":sex==0?"女子组":"男女");
   chartData.formatter = '{value} 票';
   chartData.v_times = [];
   chartData.series = [];
-  chartData.tooltip_formatter = function (params,ticket,callback) {
-    var res = params[0].name + ' 总共获得票数: ';
-    params.sort(function(a,b){
-      return ~~b.value > ~~a.value || -1;
-    });
-    for (var i = 0, l = params.length; i < l; i++) {
-      res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value;
-    }
-    return res;
-  };
+  chartData.tooltip_formatter = tooltipFormatGenerator("{{name}} 总共获得票数: ");
   if(dayData){
     if(dayData[0].data[0].time!="00") chartData.v_times.push("00:00");
     for(var i=0;i<dayData[0].data.length;i++){
@@ -165,11 +172,7 @@ function getChartData(war, day, sex){
       sery.type = "line";
       // sery.symbol = "none"; //取消点显示
       sery.data = [];
-      sery.itemStyle = {
-        emphasis : {
-          label : {show: true}
-        }
-      };
+      sery.itemStyle = itemStyle_show;
       if(dayData[0].data[0].time!="00")  sery.data.push(0);
       for(var j=0;j<dayData[i].data.length;j++){
         sery.data.push(dayData[i].data[j].count);
@@ -216,16 +219,7 @@ function getChartData(war, day, sex){
  * 
  */
 function getGradChartData(chartData){
-  chartData.tooltip_formatter = function (params,ticket,callback) {
-    var res = '时间段得票数: <br/>' + params[0].name;
-    params.sort(function(a,b){
-      return ~~b.value > ~~a.value || -1;
-    });
-    for (var i = 0, l = params.length; i < l; i++) {
-      res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value;
-    }
-    return res;
-  };
+  chartData.tooltip_formatter = tooltipFormatGenerator("时间段得票数: <br/>{{name}}");
   chartData.text = "每小时票数折线图";
   var gradchartData = chartData;
   var v_times = gradchartData.v_times;
@@ -259,7 +253,6 @@ function getRatePerHChartData(chartData){
   //根据每小时票数数据计算每小时占比例
   var rateChartData = gradchartData = getRateChartData(gradchartData);
   rateChartData.text = "每小时得票率折线图";
-  // rateChartData.subtext = rateChartData.subtext + " | 交点表示票数差距缩小";
   rateChartData.formatter = '{value}%';
   return rateChartData;
 }
@@ -274,16 +267,7 @@ function getRatePerHChartData(chartData){
 function getTotalRateChart(chartData){
   var totalRateChart = getRateChartData(chartData);
   totalRateChart.text = "总得票率折线图";
-  totalRateChart.tooltip_formatter = function (params,ticket,callback) {
-      var res =  params[0].name +'总得票率: <br/>';
-      params.sort(function(a,b){
-        return ~~b.value > ~~a.value || -1;
-      });
-      for (var i = 0, l = params.length; i < l; i++) {
-        res += (i+1) + "." + params[i].seriesName + ' : ' + params[i].value + " %<br/>";
-      }
-      return res;
-  };
+  totalRateChart.tooltip_formatter = tooltipFormatGenerator("{{name}}总得票率：");
   var v_times = totalRateChart.v_times;
   totalRateChart.v_times = [];
   for(var i=0;i<v_times.length-1;i++)
@@ -304,16 +288,7 @@ function getTotalRateChart(chartData){
  */
 function getRateChartData(chartData){
   chartData.formatter = '{value}%';
-  chartData.tooltip_formatter = function (params,ticket,callback) {
-      var res = '时间段得票率: <br/>' + params[0].name;
-      params.sort(function(a,b){
-        return ~~b.value > ~~a.value || -1;
-      });
-      for (var i = 0, l = params.length; i < l; i++) {
-        res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value + " %";
-      }
-      return res;
-  };
+  chartData.tooltip_formatter = tooltipFormatGenerator("时间段得票率: <br/>{{name}}");
   var sums_boy = [];
   var sums_girl = [];
   var ratechartData = chartData;
@@ -333,19 +308,7 @@ function getRateChartData(chartData){
     } 
     ratechartData.series[index].data = data;
     ratechartData.series[index].itemStyle.emphasis.label.formatter = "{c} %";
-    ratechartData.series[index].markPoint={
-      data : [
-        {type : 'max', name: '最大值'},
-        {type : 'average', name: '平均值'}
-      ],
-      itemStyle:{
-        normal:{
-          label:{
-            formatter:"{c} %"
-          }
-        }
-      }
-    };
+    ratechartData.series[index].markPoint = markPoint_percent;
   });
   return ratechartData;
 }
@@ -360,16 +323,7 @@ function getRateChartData(chartData){
 function perHourDivTotal(chartData){
   chartData = getGradChartData(chartData);
   chartData.formatter = '{value}%';
-  chartData.tooltip_formatter = function (params,ticket,callback) {
-      var res = '时间段票数相对全天票数占比: <br/>' + params[0].name;
-      params.sort(function(a,b){
-        return ~~b.value > ~~a.value || -1;
-      });
-      for (var i = 0, l = params.length; i < l; i++) {
-        res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value + " %";
-      }
-      return res;
-  };
+  chartData.tooltip_formatter = tooltipFormatGenerator("时间段票数相对全天票数占比: <br/>{{name}}");
   var perDivTotalData = chartData;
 
   perDivTotalData.series.forEach(function(sery, index){
@@ -383,19 +337,7 @@ function perHourDivTotal(chartData){
     });
     perDivTotalData.series[index].data = data;
     perDivTotalData.series[index].itemStyle.emphasis.label.formatter = "{c} %";
-    perDivTotalData.series[index].markPoint={
-      data : [
-        {type : 'max', name: '最大值'},
-        {type : 'average', name: '平均值'}
-      ],
-      itemStyle:{
-        normal:{
-          label:{
-            formatter:"{c} %"
-          }
-        }
-      }
-    };
+    perDivTotalData.series[index].markPoint = markPoint_percent;
   });
   return perDivTotalData;
 }
@@ -417,7 +359,6 @@ function getTicketChartData(voteData, day){
   });
   var ticketChartData = {};
   ticketChartData.text = "领票总数折线图";
-  ticketChartData.subtext = day + "日";
   ticketChartData.formatter = '{value} 票';
   ticketChartData.v_times = [];
   ticketChartData.series = [];
@@ -426,26 +367,13 @@ function getTicketChartData(voteData, day){
   sery.name = day;
   sery.type = "line";
   sery.data = [];
-  sery.itemStyle = {
-    emphasis : {
-      label : {show: true}
-    }
-  };
+  sery.itemStyle = itemStyle_show;
   vDatas.forEach(function(vData){
     sery.data.push(vData.token);
   });
   ticketChartData.series.push(sery);
   ticketChartData.v_times = ["00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"];
-  ticketChartData.tooltip_formatter = function (params,ticket,callback) {
-    var res = params[0].name + ' 总共领取票数: ';
-    params.sort(function(a,b){
-      return ~~b.value > ~~a.value || -1;
-    });
-    for (var i = 0, l = params.length; i < l; i++) {
-      res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value;
-    }
-    return res;
-  };
+  ticketChartData.tooltip_formatter = tooltipFormatGenerator("{{name}} 总共领取票数: ");
   return  ticketChartData;
 }
 
@@ -470,7 +398,6 @@ function getTotalVoteChartData(totalVoteData, condition){
   });
   var totalVoteChartData = {};
   totalVoteChartData.text = "面票总数折线图";
-  totalVoteChartData.subtext = condition.date + "日";
   totalVoteChartData.formatter = '{value} 票';
   totalVoteChartData.v_times = [];
   totalVoteChartData.series = [];
@@ -481,11 +408,7 @@ function getTotalVoteChartData(totalVoteData, condition){
   sery.name = condition.date + moe;
   sery.type = "line";
   sery.data = [];
-  sery.itemStyle = {
-    emphasis : {
-      label : {show: true}
-    }
-  };
+  sery.itemStyle = itemStyle_show;
   if(!lingFlag){
     sery.data.push(0);
   }
@@ -498,8 +421,18 @@ function getTotalVoteChartData(totalVoteData, condition){
   }
   totalVoteChartData.series.push(sery);
   totalVoteChartData.v_times = ["00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"];
-  totalVoteChartData.tooltip_formatter = function (params,ticket,callback) {
-    var res = params[0].name + ' 投票数总和: ';
+  totalVoteChartData.tooltip_formatter = tooltipFormatGenerator("{{name}} 投票数总和: ");
+  return  totalVoteChartData;
+}
+
+/**
+ * 生成echarts的tooltip_format函数
+ * @param  {string}           title 标题
+ * @return {[function]}       tooltip_format函数
+ */
+function tooltipFormatGenerator(title){
+  return function (params,ticket,callback) {
+    var res = title.replace(/{{name}}/g, params[0].name);
     params.sort(function(a,b){
       return ~~b.value > ~~a.value || -1;
     });
@@ -508,7 +441,30 @@ function getTotalVoteChartData(totalVoteData, condition){
     }
     return res;
   };
-  return  totalVoteChartData;
+}
+
+/**
+ * 生成echarts的subtext参数的函数
+ * @param  {object} condition     生成条件
+ * @return {String}               subtext字符串
+ */
+function subTextGenerator(condition){
+  var date, bangumi, sex;
+  if(condition.date != undefined){
+    var dateArr = condition.date.split(",");
+    date = condition.date;
+    if(dateArr.length > 4) date = dateArr.slice(0, 4).join(",") + " 等";
+  }
+  if(condition.bangumi != undefined) bangumi = condition.bangumi;
+  if(condition.sex != undefined){
+    if(condition.sex == 0) sex = "萌";
+    else if(condition.sex == 1) sex = "燃";
+    else sex = "萌燃";
+  }
+  var arr = [date, bangumi, sex].filter(function(e) {
+    return e != undefined;
+  });
+  return arr.join(" | ");
 }
 
 /**
@@ -652,15 +608,18 @@ function startDraw(condition){
         else if(condition.chart == 2) chartData = getRatePerHChartData(chartData);
         else if(condition.chart == 3) chartData = getTotalRateChart(chartData);
       }
+      chartData.subtext = subTextGenerator({date:condition.date, sex:condition.sex});
       draw(chartData, condition.sliceStart, condition.sliceEnd);
     });
   }
   else if(condition.dob == 1){
     getWarData(condition, function(war){
-      draw(getDataByCondition(war, {
+      var chartData = getDataByCondition(war, {
         bangumi: condition.bangumi,
         sex: condition.sex
-      }, condition.chart), 1, 999999);
+      }, condition.chart);
+      chartData.subtext = subTextGenerator({bangumi:condition.bangumi, sex:condition.sex});
+      draw(chartData, 1, 999999);
     });
   }
   else if(condition.dob == 2){
@@ -678,6 +637,7 @@ function startDraw(condition){
         else chartData = getTicketChartData(voteData, condition.date);
         if(condition.chart == 1) chartData = getGradChartData(chartData)
         else if(condition.chart == 2) chartData = perHourDivTotal(chartData);
+        chartData.subtext = subTextGenerator({date:condition.date});
         draw(chartData, 0, 99999);
       });
     }
@@ -713,6 +673,7 @@ function startDraw(condition){
         }
         if(condition.chart == 1) chartData = getGradChartData(chartData);
         else if(condition.chart == 2) chartData = perHourDivTotal(chartData);
+        chartData.subtext = subTextGenerator({date:condition.date, sex:condition.sex});
         draw(chartData, 0, 99999);
       });
     }

@@ -91,10 +91,7 @@ app.get('/api/data/role', function(req, res){
   }
   else{
     var resStr = JSON.stringify(war);
-    res.header( 'content-type', 'application/json;charset=utf-8');
-    // res.header( 'Transfer-Encoding', 'gzip');
-    res.header( 'Access-Control-Allow-Origin', '*');  //允许跨域请求
-    res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
+    res = setResJson(res,resStr);
     res.send(resStr);
   }
 });
@@ -123,10 +120,7 @@ app.get('/api/data/ballot', function(req, res){
   //json
   else{
     var resStr = JSON.stringify(ballots);
-    res.header( 'content-type', 'application/json;charset=utf-8');
-    // res.header( 'Transfer-Encoding', 'gzip');
-    res.header( 'Access-Control-Allow-Origin', '*');
-    res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
+    res = setResJson(res,resStr);
     res.send(resStr);
   }
   
@@ -161,10 +155,7 @@ app.get('/api/data/rank', function(req, res){
   //json
   else{
     var resStr = JSON.stringify(rankData);
-    res.header( 'content-type', 'application/json;charset=utf-8');
-    // res.header( 'Transfer-Encoding', 'gzip');
-    res.header( 'Access-Control-Allow-Origin', '*');
-    res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
+    res = setResJson(res,resStr);
     res.send(resStr);
   }
   
@@ -180,11 +171,29 @@ app.get('/voteData/', function(req, res){
   });
 });
 
-var server = app.listen(2333, function() {
-    console.log('Listening on port %d', server.address().port);
-});
-
-//前置补全0
+/**
+ * 前置补全0
+ * @param  {int}    num 数值位数
+ * @param  {int}    val 数值
+ * @return {string}     补全后的字符串
+ */
 function prefixZero(num, val) {
   return (new Array(num).join('0') + val).slice(-num);
 }
+
+/**
+ * 设置response为json格式
+ * @param  {string} res  response对象
+ * @return {object}      response对象
+ */ 
+function setResJson(res, resStr){
+  res.header( 'content-type', 'application/json;charset=utf-8');
+  // res.header( 'Transfer-Encoding', 'gzip');
+  res.header( 'Access-Control-Allow-Origin', '*');
+  res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
+  return res;
+}
+
+var server = app.listen(2333, function() {
+    console.log('Listening on port %d', server.address().port);
+});
