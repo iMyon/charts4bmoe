@@ -434,7 +434,7 @@ function tooltipFormatGenerator(title){
   return function (params,ticket,callback) {
     var res = title.replace(/{{name}}/g, params[0].name);
     params.sort(function(a,b){
-      return ~~b.value > ~~a.value || -1;
+      return parseFloat(b.value) > parseFloat(a.value) || -1;
     });
     for (var i = 0, l = params.length; i < l; i++) {
       res += '<br/>' + (i+1) + "." + params[i].seriesName + ' : ' + params[i].value;
