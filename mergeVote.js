@@ -36,13 +36,18 @@ files.forEach(function(item) {
       if(matches){
         var day = matches[1];
         var time = matches[2];
-        var time_h = time.replace(/:\d+/,"");
+        var time_h = ~~time.replace(/:\d+/,"");
         var jsonstr = matches[3];
         var json = JSON.parse(jsonstr);
 
         if(json.state == 200){
           var token;  //当前总共领取票数
           var data = json.data;
+          //初始化0点数据
+          if(time == "00:00"){
+            data = [{},{}];
+            token = 0;
+          }
           if(data[1].time != time_flag){ //领票时间发生变化
             time_flag = data[1].time;
             voteAddStash.push({
@@ -58,7 +63,7 @@ files.forEach(function(item) {
               voteAddStashIndex++;
             }
             if(vrt && time == vrt.match(/\d+-\d+-\d+\s+(\d+:\d+):/)[1])
-            {//当前等于超过发票时间
+            {//当前等于发票时间
               token = sumVote-~~data[0].total;
               sumVote+=~~voteAddStash[voteAddStashIndex].voteCount;
               voteAddStashIndex++;
@@ -66,12 +71,11 @@ files.forEach(function(item) {
           }
           if(hourTime < time_h){   //过一小时统计一次
             hourTime = time_h;
-            var data = json.data;
             voteDatas.push({
               date: day,
               time: time,
               total: sumVote,
-              token: token?token:sumVote-~~data[0].total
+              token: token !== undefined?token:sumVote-~~data[0].total
             });
           }
         }
