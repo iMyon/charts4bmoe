@@ -20,6 +20,25 @@
 			"sourceMaps": false,
 			"outDir": null
 		},
+    {
+			"name": "merge",
+			"type": "node",
+			"request": "launch",
+			"program": "merge.js",
+			"stopOnEntry": false,
+			"args": [],
+			"cwd": ".",
+			"runtimeExecutable": null,
+			"runtimeArgs": [
+				"--nolazy"
+			],
+			"env": {
+				"NODE_ENV": "development"
+			},
+			"externalConsole": false,
+			"sourceMaps": false,
+			"outDir": null
+		},
 		{
 			"name": "Attach",
 			"type": "node",

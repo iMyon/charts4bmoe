@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>角色名次表格视图</title>
+  <title>阵营信息表格视图</title>
   <link rel="stylesheet" href="/css/table.css">
   <style>
     
@@ -16,14 +16,14 @@
       <thead>
         <tr>
            <th>序号</th> 
-          <th>名字</th>
-          <th>得票数</th>
-          <th>组内名次</th>
-          <th>状态</th>
-          <th>性别</th>
-          <th>id</th>
           <th>动画</th>
-          <th>日期</th>
+          <th>参与人数</th>
+          <th>晋级人数</th>
+          <th>复活人数</th>
+          <th>淘汰人数</th>
+          <th>晋级率</th>
+          <th>复活率</th>
+          <th>淘汰率</th>
         </tr>
       </thead>
       <tbody class="count">
@@ -35,11 +35,11 @@
 </body>
 <script>
   /*浏览器生成节点，省流量daze*/
-	var rankData = {{JSON.stringify(rankData)}};
+	var campData = {{JSON.stringify(campData)}};
 	var tbody = document.getElementsByTagName("tbody")[0];
 	//减少html重排重绘
 	tbody.style.display = "none";
-	rankData.forEach(function(data){
+	campData.forEach(function(data){
 		var tr = document.createElement("tr");
 		var td0 = document.createElement("td");
 		var td1 = document.createElement("td");
@@ -50,16 +50,18 @@
 		var td6 = document.createElement("td");
 		var td7 = document.createElement("td");
 		var td8 = document.createElement("td");
-		td1.innerHTML = data.name;
-		td2.innerHTML = data.count;
-		td3.innerHTML = data.rank;
-    if(data.stat == 1) td4.innerHTML = "晋级";
-    else if(data.stat == 2) td4.innerHTML = "复活";
-    else td4.innerHTML = "淘汰";
-		td5.innerHTML = data.sex==1 ? "男":"女";
-		td6.innerHTML = data.id;
-		td7.innerHTML = data.bangumi;
-		td8.innerHTML = data.date;
+    var bangumiArchor = document.createElement("a");
+    bangumiArchor.target = "_blank";
+    bangumiArchor.href = "/api/data/rank?format=table&bangumi=" + encodeURIComponent(data.bangumi);
+    bangumiArchor.innerHTML = data.bangumi;
+		td1.appendChild(bangumiArchor);
+		td2.innerHTML = data.total;
+		td3.innerHTML = data.suc;
+    td4.innerHTML = data.wait;
+		td5.innerHTML = data.fail;
+		td6.innerHTML = (data.suc/data.total*100).toFixed(2) + "%";
+		td7.innerHTML = (data.wait/data.total*100).toFixed(2)+ "%";
+		td8.innerHTML = (data.fail/data.total*100).toFixed(2)+ "%";
 		tr.appendChild(td0);
 		tr.appendChild(td1);
 		tr.appendChild(td2);

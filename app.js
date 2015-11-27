@@ -126,7 +126,7 @@ app.get('/api/data/ballot', function(req, res){
   
 });
 /**
- * 根据排名数据，api参数列表如下：
+ * 排名数据，api参数列表如下：
  * @param  {string} date      日期
  * @param  {string} sex       性别
  * @param  {string} bangumi   动画
@@ -155,6 +155,35 @@ app.get('/api/data/rank', function(req, res){
   //json
   else{
     var resStr = JSON.stringify(rankData);
+    res = setResJson(res,resStr);
+    res.send(resStr);
+  }
+  
+});
+/**
+ * 阵营数据api，api参数列表如下：
+ * @param  {string} bangumi   动画
+ * @param  {string} format    格式，默认json，table为使用网页表格显示
+ */
+app.get('/api/data/camp', function(req, res){
+  var campData = require("./public/camp.json", 'utf-8');
+  //根据参数筛选
+  campData = campData.filter(function(w) {
+    for(var key in req.query){
+      if(w[key] !== undefined && w[key] != req.query[key]) return false;
+    }
+    return true;
+  });
+
+  //使用表格视图渲染数据
+  if(req.query.format == "table"){
+    res.render("camp",{
+      campData: campData
+    });
+  }
+  //json
+  else{
+    var resStr = JSON.stringify(campData);
     res = setResJson(res,resStr);
     res.send(resStr);
   }
