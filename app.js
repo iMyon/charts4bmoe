@@ -32,7 +32,7 @@ app.get('/', function(req, res){
   var dataJson = require("./public/data.json");
   var notice;
   try{
-    var notice = require("./public/notice.json");
+    notice = require("./public/notice.json");
   }
   catch(e){
     console.log(e);
@@ -79,7 +79,7 @@ app.get('/api/data/role', function(req, res){
   //根据参数筛选
   war = war.filter(function(w) {
     for(var key in req.query){
-      if(w[key] != undefined && w[key] != req.query[key]) return false;
+      if(w[key] !== undefined && w[key] != req.query[key]) return false;
     }
     return true;
   });
@@ -106,7 +106,7 @@ app.get('/api/data/ballot', function(req, res){
   //根据参数筛选
   ballots = ballots.filter(function(w) {
     for(var key in req.query){
-      if(w[key] != undefined && w[key] != req.query[key]) return false;
+      if(w[key] !== undefined && w[key] != req.query[key]) return false;
     }
     return true;
   });
@@ -141,7 +141,7 @@ app.get('/api/data/rank', function(req, res){
   //根据参数筛选
   rankData = rankData.filter(function(w) {
     for(var key in req.query){
-      if(w[key] != undefined && w[key] != req.query[key]) return false;
+      if(w[key] !== undefined && w[key] != req.query[key]) return false;
     }
     return true;
   });

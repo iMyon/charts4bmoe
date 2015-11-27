@@ -27,44 +27,45 @@ files.forEach(function(item) {
   try{
     var dataJson = require(path.join(dir,item));
     var data = dataJson.data;
-    for(var k in data){
-      data[k].forEach(function(role, index)
-      {
+    var doMerge = function(role, index)
+    {
 
-        //23点加入名次统计
-        if(time == 23){
-          var r = {
-            id: role.id,
-            name: role.name,
-            bangumi: role.bangumi,
-            date: voteDay,
-            sex: role.sex,
-            count: role.votes_count,
-            rank: index+1
-          };
-          if(r.rank<=3) r.stat = 1;
-          else if(r.rank <=6) r.stat = 2;
-          else r.stat = 3;
-          rankData.push(r);
-        }
-        if(role.sex == 0) femaleCount+=~~role.votes_count;
-        else  maleCount+=~~role.votes_count;
-        var info = {};
-        info.time = time;
-        info.count = role.votes_count;
-        var r_data = war.find(function(e){ return e.id==role.id;});
-        if(r_data == undefined){
-          war.push({
-            id: role.id,
-            name: role.name,
-            bangumi: role.bangumi,
-            date:voteDay,
-            sex: role.sex,
-            data:[info]
-          });
-        }
-        else r_data.data.push(info);
-      });
+      //23点加入名次统计
+      if(time == 23){
+        var r = {
+          id: role.id,
+          name: role.name,
+          bangumi: role.bangumi,
+          date: voteDay,
+          sex: role.sex,
+          count: role.votes_count,
+          rank: index+1
+        };
+        if(r.rank<=3) r.stat = 1;
+        else if(r.rank <=6) r.stat = 2;
+        else r.stat = 3;
+        rankData.push(r);
+      }
+      if(~~role.sex === 0) femaleCount+=~~role.votes_count;
+      else  maleCount+=~~role.votes_count;
+      var info = {};
+      info.time = time;
+      info.count = role.votes_count;
+      var r_data = war.find(function(e){ return e.id==role.id;});
+      if(r_data === undefined){
+        war.push({
+          id: role.id,
+          name: role.name,
+          bangumi: role.bangumi,
+          date:voteDay,
+          sex: role.sex,
+          data:[info]
+        });
+      }
+      else r_data.data.push(info);
+    };
+    for(var k in data){
+      data[k].forEach(doMerge);
     }
     totalVote.push({
       date: voteDay,

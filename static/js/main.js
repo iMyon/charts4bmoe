@@ -82,21 +82,22 @@ function getDataByCondition(war, condition,chartType){
   var _dates = dates;
   //如果参数中有日期，则按照参数中的筛选
   if(condition.day) _dates = condition.day.split(",");
+  var sortSeries = function(sery,index){
+    for(var i=0,j=0;i<v_times.length;i++){
+      if(tdata.v_times[j] != v_times[i]){
+        tdata.series[index].data.splice(i, 0, undefined);
+      }
+      else j++;
+    }
+  };
   for(var i=0; i<_dates.length;i++){
     var tdata = getChartData(war, _dates[i], "any");
-    tdata.series.forEach(function(sery,index){
-      for(var i=0,j=0;i<v_times.length;i++){
-        if(tdata.v_times[j] != v_times[i]){
-          tdata.series[index].data.splice(i, 0, undefined);
-        }
-        else j++;
-      }
-    });
+    tdata.series.forEach(sortSeries);
     tdata.v_times = v_times;
     if(chartType == 1) tdata = getGradChartData(tdata);
     else if(chartType == 2) tdata = getRatePerHChartData(tdata);
     else if(chartType == 3) tdata = getTotalRateChart(tdata);
-    if(AllCharDatas == undefined){  //初始化首次数据
+    if(AllCharDatas === undefined){  //初始化首次数据
       AllCharDatas = tdata;
     }
     else AllCharDatas.series = AllCharDatas.series.concat(tdata.series);
@@ -124,7 +125,7 @@ function getDataByCondition(war, condition,chartType){
 function getDataByIds(war, ids, chartType){
 	var datas;
 	ids.forEach(function(id){
-		if(datas == undefined) datas = getDataByCondition(war, {id: id}, chartType);
+		if(datas === undefined) datas = getDataByCondition(war, {id: id}, chartType);
 		else datas.series = datas.series.concat(getDataByCondition(war, {id: id}, chartType).series);
 	});
 	var roles = [];
@@ -159,15 +160,15 @@ function getChartData(war, day, sex){
   if(dayData){
     if(dayData[0].data[0].time!="00") chartData.v_times.push("00:00");
     for(var i=0;i<dayData[0].data.length;i++){
-      chartData.v_times.push(dayData[0].data[i].time+":00")
+      chartData.v_times.push(dayData[0].data[i].time+":00");
     }
-    for(var i=0;i<dayData.length;i++){
+    for(i=0;i<dayData.length;i++){
       var sery = {};
       sery.filterCondition = {
         id: dayData[i].id,
         sex: dayData[i].sex,
         bangumi: dayData[i].bangumi
-      }
+      };
       sery.name = dayData[i].name;
       sery.type = "line";
       // sery.symbol = "none"; //取消点显示
@@ -228,9 +229,9 @@ function getGradChartData(chartData){
       gradchartData.v_times.push((v_times[i+1]));
       // gradchartData.v_times.push((v_times[i]+"-"+v_times[i+1]).replace(/:\d+/g, ""));
   gradchartData.series.forEach(function(sery, index){
-    var data = new Array();
+    var data = [];
     for(var i=0; i<sery.data.length-1; i++){
-      if(sery.data[i+1] == undefined || sery.data[i] == undefined)
+      if(sery.data[i+1] === undefined || sery.data[i] === undefined)
         data.push(undefined);
       else
         data.push(sery.data[i+1]-sery.data[i]);
@@ -251,7 +252,7 @@ function getRatePerHChartData(chartData){
   //获取每小时票数数据
   var gradchartData = getGradChartData(chartData);
   //根据每小时票数数据计算每小时占比例
-  var rateChartData = gradchartData = getRateChartData(gradchartData);
+  var rateChartData = getRateChartData(gradchartData);
   rateChartData.text = "每小时得票率折线图";
   rateChartData.formatter = '{value}%';
   return rateChartData;
@@ -294,16 +295,16 @@ function getRateChartData(chartData){
   var ratechartData = chartData;
   ratechartData.series.forEach(function(sery, index){
     for(var i=0; i<sery.data.length; i++){
-      if(sery.filterCondition.sex == 0) sums_girl[i] = ~~sums_girl[i]+~~sery.data[i];  
-      if(sery.filterCondition.sex == 1) sums_boy[i] = ~~sums_boy[i]+~~sery.data[i];  
+      if(sery.filterCondition.sex == "0") sums_girl[i] = ~~sums_girl[i]+~~sery.data[i];  
+      if(sery.filterCondition.sex == "1") sums_boy[i] = ~~sums_boy[i]+~~sery.data[i];  
     }
   });
   ratechartData.series.forEach(function(sery, index){
-    var data = new Array();
-    var sums = sery.filterCondition.sex==0?sums_girl:sums_boy;
+    var data = [];
+    var sums = sery.filterCondition.sex=="0"?sums_girl:sums_boy;
     for(var i=0; i<sery.data.length; i++){ 
       if(sery.data[i] === undefined) data.push(undefined);
-      else if(sums[i] == 0) data.push(0);
+      else if(sums[i] === 0) data.push(0);
       else data.push( parseFloat(((~~sery.data[i]/sums[i]).toFixed(6)*100).toFixed(2)) ); 
     } 
     ratechartData.series[index].data = data;
@@ -327,7 +328,7 @@ function perHourDivTotal(chartData){
   var perDivTotalData = chartData;
 
   perDivTotalData.series.forEach(function(sery, index){
-    var data = new Array();
+    var data = [];
     var sum = 0;
     sery.data.forEach(function(e){
       sum += ~~e;
@@ -394,7 +395,7 @@ function getTotalVoteChartData(totalVoteData, condition){
   });
   var lingFlag = false; //是否有零点标志
   vDatas.forEach(function(e){
-    if(e.time == 00 ) lingFlag = true;
+    if(e.time == "00" ) lingFlag = true;
   });
   var totalVoteChartData = {};
   totalVoteChartData.text = "面票总数折线图";
@@ -417,7 +418,7 @@ function getTotalVoteChartData(totalVoteData, condition){
   });
   //补全空值为undefined
   for(var i=0;i<=23;i++){
-    if(sery[i] == undefined) sery[i] = undefined;
+    if(sery[i] === undefined) sery[i] = undefined;
   }
   totalVoteChartData.series.push(sery);
   totalVoteChartData.v_times = ["00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"];
@@ -428,7 +429,7 @@ function getTotalVoteChartData(totalVoteData, condition){
 /**
  * 生成echarts的tooltip_format函数
  * @param  {string}           title 标题
- * @return {[function]}       tooltip_format函数
+ * @return {Function}         tooltip_format函数
  */
 function tooltipFormatGenerator(title){
   return function (params,ticket,callback) {
@@ -450,19 +451,19 @@ function tooltipFormatGenerator(title){
  */
 function subTextGenerator(condition){
   var date, bangumi, sex;
-  if(condition.date != undefined){
+  if(condition.date !== undefined){
     var dateArr = condition.date.split(",");
     date = condition.date;
     if(dateArr.length > 4) date = dateArr.slice(0, 4).join(",") + " 等";
   }
-  if(condition.bangumi != undefined) bangumi = condition.bangumi;
-  if(condition.sex != undefined){
-    if(condition.sex == 0) sex = "萌";
-    else if(condition.sex == 1) sex = "燃";
+  if(condition.bangumi !== undefined) bangumi = condition.bangumi;
+  if(condition.sex !== undefined){
+    if(condition.sex == "0") sex = "萌";
+    else if(condition.sex == "1") sex = "燃";
     else sex = "萌燃";
   }
   var arr = [date, bangumi, sex].filter(function(e) {
-    return e != undefined;
+    return e !== undefined;
   });
   return arr.join(" | ");
 }
@@ -600,7 +601,7 @@ function draw(chartData, sliceStart, sliceEnd){
  * @return none
  */
 function startDraw(condition){
-  if(condition.dob == 0){
+  if(condition.dob == "0"){
     getWarData(condition, function(war){
       var chartData = getChartData(war, condition.date, condition.sex);
       if(condition.date.indexOf(",") == -1){
@@ -630,12 +631,12 @@ function startDraw(condition){
           //合并data
           condition.date.split(",").forEach(function(date){
             var d = getTicketChartData(voteData, date);
-            if(chartData == undefined) chartData = d;
+            if(chartData === undefined) chartData = d;
             else chartData.series = chartData.series.concat(d.series);
           });
         }
         else chartData = getTicketChartData(voteData, condition.date);
-        if(condition.chart == 1) chartData = getGradChartData(chartData)
+        if(condition.chart == 1) chartData = getGradChartData(chartData);
         else if(condition.chart == 2) chartData = perHourDivTotal(chartData);
         chartData.subtext = subTextGenerator({date:condition.date});
         draw(chartData, 0, 99999);
@@ -658,7 +659,7 @@ function startDraw(condition){
               d.series = getTotalVoteChartData(totalVoteData, {date:date,sex:1}).series
                         .concat(d.series);
             }
-            if(chartData == undefined) chartData = d;
+            if(chartData === undefined) chartData = d;
             else chartData.series = chartData.series.concat(d.series);
           });
         }
@@ -726,7 +727,7 @@ function getWarData(condition, callback){
   //有总数据
   if(war) callback(war);
   //按日期画图，且有对应日期的数据
-  else if(requestDatas[condition.date] != undefined && condition.dob == 0)
+  else if(requestDatas[condition.date] !== undefined && condition.dob == "0")
     callback(requestDatas[condition.date]);
   //
   else{
@@ -751,7 +752,7 @@ function getWarData(condition, callback){
           $("#cup").hide(); //隐藏遮罩层
         }
       }
-    }
+    };
     //进度条处理(gzip压缩后下无法获取进度了，未解决)
     xhr.onprogress = function(evt){
       var loaded = evt.loaded;
@@ -760,7 +761,7 @@ function getWarData(condition, callback){
       var son =  document.getElementById('son');
       $("#data-tip .num").html(~~(this.getResponseHeader("Content-Length")/1024));
       progress(per, $('#progressBar'));
-    }
+    };
     if(condition.dob == 1 || condition.sex == "any" || condition.date.indexOf(",") != -1)
       xhr.open("get","api/data/role");
     else
@@ -811,28 +812,28 @@ $(document).ready(function() {
   function setShowAndHidden(){
     var dob = $("#date-or-bangumi").val();
     //按日期
-    if(dob == 0){
+    if(dob == "0"){
       $("#input-date").show();
       $("#span-sex").show();
       $("#sp-range").show();
       $("#span-bangumi").hide();
     }
     //按阵营
-    else if(dob == 1){
+    else if(dob == "1"){
       $("#input-date").hide();
       $("#span-sex").show();
       $("#sp-range").hide();
       $("#span-bangumi").show();
     }
     //票仓图
-    else if(dob == 2){
+    else if(dob == "2"){
       $("#input-date").show();
       $("#span-sex").hide();
       $("#sp-range").hide();
       $("#span-bangumi").hide();
     }
     //面票图
-    else if(dob == 3){
+    else if(dob == "3"){
       $("#input-date").show();
       $("#span-sex").show();
       $("#sp-range").hide();
