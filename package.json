@@ -1,7 +1,7 @@
 {
 
   "name": "charts4bmoe",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author" : "Myon<myon.cn@gmail.com>",
   "description" : "B萌曲线图",
   "dependencies": {

@@ -63,10 +63,10 @@
 	outline: none;
 }
 
-/* 	tbody {
+tbody.count {
 counter-reset: sectioncounter;
 }
-tbody td:first-child::before {
+tbody.count td:first-child::before {
 content: counter(sectioncounter);
 counter-increment: sectioncounter;
-} */
+} 

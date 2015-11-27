@@ -155,3 +155,30 @@ GET     http://bmoe.uuzsama.me/api/data/rank?bangumi=凭物语
 
 ```
 
+###4./api/data/camp  
+####描述  
+获取排名数据  
+####请求方法  
+GET  
+####参数  
+Reuqired    |   Name   |  Type  |  description
+------------|----------|--------|-----------------
+optional    |bangumi   |string  |动画名称
+optional    |format    |string  |数据格式，默认json，table为使用网页表格显示
+
+####请求样例  
+GET     http://bmoe.uuzsama.me/api/data/camp?bangumi=%E5%88%80%E5%89%91%E7%A5%9E%E5%9F%9F%20%E7%AC%AC%E4%BA%8C%E5%AD%A3  
+返回json：  
+```js
+  [{"bangumi":"刀剑神域 第二季","total":7,"suc":6,"wait":0,"fail":1}]
+
+```
+
+####返回参数说明  
+Name    |   Description
+--------|-----------------------
+bangumi |   动画名次
+total   |   参与人数
+suc     |   晋级人数
+wait    |   复活人数
+fail    |   淘汰人数

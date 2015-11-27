@@ -17,6 +17,8 @@ var dir = "../data/";
 var war = [];
 var totalVote = [];
 var rankData = [];        //统计名次
+var  campInfo= [];        //阵营统计
+var bangumis = [];        //阵营列表
 
 var files = fs.readdirSync(dir);
 files.forEach(function(item) {
@@ -41,10 +43,23 @@ files.forEach(function(item) {
           count: role.votes_count,
           rank: index+1
         };
+        //晋级
         if(r.rank<=3) r.stat = 1;
+        //复活
         else if(r.rank <=6) r.stat = 2;
+        //淘汰
         else r.stat = 3;
         rankData.push(r);
+        //添加阵营
+        var bgm = role.bangumi;
+        for(var i in AnimateGroup){
+          if(AnimateGroup[i].indexOf(bgm) != -1){
+            bgm = AnimateGroup[i][0];
+            break;
+          }
+        }
+        if(bangumis.indexOf(bgm) == -1)
+          bangumis.push(bgm);
       }
       if(~~role.sex === 0) femaleCount+=~~role.votes_count;
       else  maleCount+=~~role.votes_count;
@@ -110,7 +125,31 @@ rankData.forEach(function(w, index){
 rankData = rankData.sort(function(a, b){
   return  b.count - a.count || a.rank-b.rank;
 });
+//统计阵营
+bangumis.forEach(function(bgm){
+  var suc = rankData.filter(function(rd){
+    return rd.bangumi == bgm && rd.rank<=3;
+  }).length;
+  var wait = rankData.filter(function(rd){
+    return rd.bangumi == bgm && rd.rank>3 && rd.rank<=6;
+  }).length;
+  var fail = rankData.filter(function(rd){
+    return rd.bangumi == bgm && rd.rank>6;
+  }).length;
+  var total = suc + wait + fail;
+  campInfo.push({
+    bangumi: bgm,
+    total: total,
+    suc: suc,
+    wait: wait,
+    fail: fail
+  });
+});
+campInfo = campInfo.sort(function(a, b){
+  return  b.suc/b.total - a.suc/a.total || b.wait/b.total-a.wait/a.total || a.total-b.total;
+});
 
+fs.writeFileSync(path.join("public","camp.json"),JSON.stringify(campInfo)); 
 fs.writeFileSync(path.join("public","data.json"),JSON.stringify(war)); 
 fs.writeFileSync(path.join("public","rankData.json"),JSON.stringify(rankData)); 
 fs.writeFileSync(path.join("public","totalVote.json"),JSON.stringify(totalVote)); 
