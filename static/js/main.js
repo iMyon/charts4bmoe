@@ -324,6 +324,7 @@ function getRateChartData(chartData){
 function perHourDivTotal(chartData){
   chartData = getGradChartData(chartData);
   chartData.formatter = '{value}%';
+  chartData.text = "时间段得票率折线图";
   chartData.tooltip_formatter = tooltipFormatGenerator("时间段票数相对全天票数占比: <br/>{{name}}");
   var perDivTotalData = chartData;
 
