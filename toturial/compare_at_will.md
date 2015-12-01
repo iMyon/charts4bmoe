@@ -7,7 +7,7 @@
 var roles = [9471,9584];    /*角色id，英文逗号分隔*/
 var _chartType = 0;         /*0总票数 1每小时票数 2每小时票率*/
 
-getWarData({date:"any"}, function(war){
+getWarData({date:dates.join(',')}, function(war){
   var d = getDataByIds(war, roles, _chartType);
   draw(d);
 });
