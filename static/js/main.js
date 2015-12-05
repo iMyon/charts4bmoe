@@ -808,6 +808,7 @@ $(document).ready(function() {
     language: "zh-CN",
     startDate: dates[dates.length-1],
     endDate: dates[0],
+    datesDisabled: ["15-12-06","15-12-11","15-12-26"],
     todayHighlight: true,
     clearBtn: true,
     multidate: true

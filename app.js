@@ -26,6 +26,8 @@ app.use('/', express.static(__dirname+'/static'));
 app.use('/data', express.static(dataPath)); 
 app.use('/voteData', express.static(voteDataPath)); 
 
+//休息日
+var yasumiDate = ["15-12-06","15-12-11","15-12-26"];
 
 app.get('/', function(req, res){
   var bangumis = [];
@@ -42,12 +44,11 @@ app.get('/', function(req, res){
       bangumis.push(role.bangumi);
   });
   var dates = [];
-  var today = (""+new Date().getFullYear()).slice(2)+"-"+prefixZero(2, new Date().getMonth()+1)+"-"+prefixZero(2, new Date().getDate());
-  dates.push(today);
-  var i=1;
+  var i=0;
   while(true){
     var d = new Date(new Date()-24*60*60*1000*i++);
     var bday = (""+d.getFullYear()).slice(2)+"-"+prefixZero(2, d.getMonth()+1)+"-"+prefixZero(2, d.getDate());
+    if(yasumiDate.indexOf(bday) != -1) continue;
     if(bday>="15-10-31") dates.push(bday);
     else break;
   }
