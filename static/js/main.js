@@ -442,6 +442,7 @@ function tooltipFormatGenerator(title){
   return function (params,ticket,callback) {
     var res = title.replace(/{{name}}/g, params[0].name);
     params.sort(function(a,b){
+      if(a.value==="-") return 1;
       return parseFloat(b.value) > parseFloat(a.value) || -1;
     });
     for (var i = 0, l = params.length; i < l; i++) {
