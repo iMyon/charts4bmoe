@@ -5,9 +5,8 @@
   <meta charset="UTF-8">
   <title>阵营信息表格视图</title>
   <link rel="stylesheet" href="/css/table.css">
-  <style>
-    
-  </style>
+  <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script> 
+	<script type="text/javascript" src="/js/jquery.tablesorter.min.js"></script> 
 </head>
 
 <body>
@@ -74,6 +73,11 @@
 		tbody.appendChild(tr);
 	});
 	tbody.style.display = "";
+	$(document).ready(function() 
+    { 
+      $("table").tablesorter(); 
+    } 
+	);
 
 </script>
 

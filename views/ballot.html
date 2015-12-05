@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<title>票仓数据表格视图</title>
   <link rel="stylesheet" href="/css/table.css">
+  <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script> 
+	<script type="text/javascript" src="/js/jquery.tablesorter.min.js"></script> 
 </head>
 <body>
 <div class="ui-table-container">
@@ -49,5 +51,10 @@
 		tbody.appendChild(tr);
 	});
 	tbody.style.display = "";
+	$(document).ready(function() 
+    { 
+      $("table").tablesorter(); 
+    } 
+	);
 </script>
 </html>

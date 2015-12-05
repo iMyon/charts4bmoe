@@ -43,6 +43,7 @@
 }
 .ui-table th {
 	padding: 7px 9px;
+	cursor: pointer;
 }
 .ui-table tfoot td {
 	border-bottom: none;
