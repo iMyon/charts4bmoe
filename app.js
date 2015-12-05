@@ -29,6 +29,10 @@ app.use('/voteData', express.static(voteDataPath));
 //休息日
 var yasumiDate = ["15-12-06","15-12-11","15-12-26"];
 
+var roleLinks = require("./public/info/roleLinks.json");
+var cvInfo = require("./public/info/cv.json");
+var bangumiLinks = require("./public/info/bangumiLinks.json");
+
 app.get('/', function(req, res){
   var bangumis = [];
   var dataJson = require("./public/data.json");
@@ -150,7 +154,10 @@ app.get('/api/data/rank', function(req, res){
   //使用表格视图渲染数据
   if(req.query.format == "table"){
     res.render("rank",{
-      rankData: rankData
+      rankData: rankData,
+      roleLinks: roleLinks,
+      cvInfo: cvInfo,
+      bangumiLinks: bangumiLinks
     });
   }
   //json

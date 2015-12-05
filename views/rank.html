@@ -5,11 +5,19 @@
   <meta charset="UTF-8">
   <title>角色名次表格视图</title>
   <link rel="stylesheet" href="/css/table.css">
+  <link rel="stylesheet" href="/css/main.css">
   <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script> 
 	<script type="text/javascript" src="/js/jquery.tablesorter.min.js"></script> 
 </head>
 
 <body>
+  <div class="notice" id="top-notice">
+     b萌信息补全计划：
+     <a target="_blank" href="https://github.com/iMyon/charts4bmoe/edit/master/public/info/bangumiLinks.json">动画信息</a>、
+     <a target="_blank" href="https://github.com/iMyon/charts4bmoe/edit/master/public/info/cv.json">声优信息</a>、
+     <a target="_blank" href="https://github.com/iMyon/charts4bmoe/edit/master/public/info/roleLinks.json">人物信息</a>
+     ，希望有人能帮忙补全(｡・`ω´･)
+  </div>
   <div class="ui-table-container">
     <table class="ui-table">
       <thead>
@@ -33,12 +41,8 @@
 
 </body>
 <script>
-	var namelinks = {
-		"宫内莲华": "http://www.bilibili.com/video/av871584/"
-	};
-	var camplinks = {
-		"悠哉日常大王 第二季": "http://www.bilibili.com/video/av1019708/index_2.html"
-	};
+	var roleLinks = {{JSON.stringify(roleLinks)}};
+	var bangumiLinks = {{JSON.stringify(bangumiLinks)}};
   /*浏览器生成节点，省流量daze*/
 	var rankData = {{JSON.stringify(rankData)}};
 	var tbody = document.getElementsByTagName("tbody")[0];
@@ -49,14 +53,14 @@
 		var td0 = document.createElement("td");
 		var a1 = document.createElement("a");
 		a1.target = "_blank";
-		if(namelinks[data.name] !== undefined){
-			a1.href = namelinks[data.name];
+		if(!!roleLinks[[data.name, data.bangumi].join(" @")]){
+			a1.href = roleLinks[[data.name, data.bangumi].join(" @")];
 			a1.innerHTML = data.name;
 		}
 		var a7 = document.createElement("a");
 		a7.target = "_blank";
-		if(camplinks[data.bangumi] !== undefined){
-			a7.href = camplinks[data.bangumi];
+		if(!!bangumiLinks[data.bangumi]){
+			a7.href = bangumiLinks[data.bangumi];
 			a7.innerHTML = data.bangumi;
 		}
 		var td1 = document.createElement("td");
@@ -67,7 +71,7 @@
 		var td6 = document.createElement("td");
 		var td7 = document.createElement("td");
 		var td8 = document.createElement("td");
-		if(namelinks[data.name] !== undefined) td1.appendChild(a1);
+		if(!!roleLinks[[data.name, data.bangumi].join(" @")]) td1.appendChild(a1);
 		else  td1.innerHTML = data.name;
 		td2.innerHTML = data.count;
 		td3.innerHTML = data.rank;
@@ -76,7 +80,7 @@
     else td4.innerHTML = "淘汰";
 		td5.innerHTML = data.sex==1 ? "男":"女";
 		td6.innerHTML = data.id;
-		if(camplinks[data.bangumi] !== undefined) td7.appendChild(a7);
+		if(!!bangumiLinks[data.bangumi]) td7.appendChild(a7);
 		else  td7.innerHTML = data.bangumi;
 		td8.innerHTML = data.date;
 		tr.appendChild(td0);
