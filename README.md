@@ -45,6 +45,7 @@ optional    |date      |string  |日期
 optional    |name      |string  |人物名称
 optional    |bangumi   |string  |动画名称
 optional    |sex       |int     |性别，0女1男
+optional    |stage     |int     |比赛阶段 1:海选 2:复活 3:128强 4:32强 5:16强 6：8强 7:半决赛 8：三四位半决赛 9:决赛
 optional    |format    |string  |数据格式，默认json，table为使用网页表格显示
 optional    |id        |int     |人物标识id
 
@@ -133,6 +134,7 @@ optional    |date      |string  |日期
 optional    |name      |string  |人物名称
 optional    |bangumi   |string  |动画名称
 optional    |sex       |int     |性别，0女1男
+optional    |stage     |int     |比赛阶段 1:海选 2:复活 3:128强 4:32强 5:16强 6：8强 7:半决赛 8：三四位半决赛 9:决赛
 optional    |format    |string  |数据格式，默认json，table为使用网页表格显示
 optional    |id        |int     |人物标识id
 optional    |rank      |int     |名次

@@ -9,6 +9,7 @@ var war;                  //比赛数据（json获取
 var voteData;             //投票数据（json获取
 var requestDatas = [];    //保存每次请求数据避免重复请求
 var totalVoteData;        //面票总数
+var stageMap =["","海选","复活赛","128强","32强","16强","8强","半决赛","三四位决赛","决赛"];
 //echars属性：显示数值点
 var itemStyle_show = {
   emphasis : {
@@ -88,7 +89,7 @@ function getDataByCondition(war, condition,chartType){
   var _dates = dates;
   //如果参数中有日期，则按照参数中的筛选
   if(condition.day) _dates = condition.day.split(",");
-  var sortSeries = function(sery,index){
+  var fillTime = function(sery,index){
     for(var i=0,j=0;i<v_times.length;i++){
       if(tdata.v_times[j] != v_times[i]){
         tdata.series[index].data.splice(i, 0, undefined);
@@ -96,9 +97,16 @@ function getDataByCondition(war, condition,chartType){
       else j++;
     }
   };
+  var setNameWithStage = function(stage){
+    return function(sery, index){
+      sery.name = sery.name + "（"+stageMap[stage]+"）";
+    };
+  };
   for(var i=0; i<_dates.length;i++){
+    var stage = getStage(_dates[i]);
     var tdata = getChartData(war, _dates[i], "any");
-    tdata.series.forEach(sortSeries);
+    tdata.series.forEach(fillTime);
+    if(stage>1) tdata.series.forEach(setNameWithStage(stage));
     tdata.v_times = v_times;
     if(chartType == 1) tdata = getGradChartData(tdata);
     else if(chartType == 2) tdata = getRatePerHChartData(tdata);
@@ -792,6 +800,26 @@ function progress(percent, $element) {
   $element.find('span.bar').animate({ width: progressBarWidth }, 100);
 }
 
+/**
+ * 根据日期获得阶段
+ * 
+ * @param  {string}     date   日期
+ * @return {int}               阶段标识
+ * 
+ */
+function getStage(voteDay){
+  var stage;
+  if(voteDay<="15-12-06") stage = 1;       //海选
+  else if(voteDay<="15-12-11") stage = 2;  //复活
+  else if(voteDay<="15-12-19") stage = 3;  //128强
+  else if(voteDay<="15-12-23") stage = 4;  //32强
+  else if(voteDay<="15-12-26") stage = 5;  //16强
+  else if(voteDay<="15-12-30") stage = 6;  //8强
+  else if(voteDay<="16-01-01") stage = 7;  //半决赛
+  else if(voteDay<="16-01-02") stage = 8;  //三四名决赛
+  else stage = 9;                          //决赛
+  return stage;
+}
 
 
 /**
