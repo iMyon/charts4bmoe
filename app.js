@@ -75,6 +75,7 @@ app.get('/data/', function(req, res){
  * @param  {string} date      日期
  * @param  {string} name      角色名称
  * @param  {string} bangumi   动画名称
+ * @param  {string} stage     比赛阶段 1:海选 2:复活 3:128强 4:32强 5:16强 6：8强 7:半决赛 8：三四位半决赛 9:决赛
  * @param  {string} sex       性别，0女1男
  * @param  {string} format    格式，默认json，table为使用网页表格显示
  * @param  {string} id        b站标识id
@@ -136,6 +137,7 @@ app.get('/api/data/ballot', function(req, res){
  * @param  {string} sex       性别
  * @param  {string} bangumi   动画
  * @param  {string} rank      名次
+ * @param  {string} stage     比赛阶段 1:海选 2:复活 3:128强 4:32强 5:16强 6：8强 7:半决赛 8：三四位半决赛 9:决赛
  * @param  {string} id        角色id
  * @param  {string} name      角色名
  * @param  {string} stat      晋级情况：1晋级 2复活 3 淘汰

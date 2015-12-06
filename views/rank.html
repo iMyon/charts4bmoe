@@ -22,8 +22,9 @@
     <table class="ui-table">
       <thead>
         <tr>
-           <th>序号</th> 
+          <th>序号</th> 
           <th>名字</th>
+          <th>阶段</th>
           <th>得票数</th>
           <th>组内名次</th>
           <th>状态</th>
@@ -48,6 +49,7 @@
 	var tbody = document.getElementsByTagName("tbody")[0];
 	//减少html重排重绘
 	tbody.style.display = "none";
+  var stage =["","海选","复活赛","128强","32强","16强","8强","半决赛","三四位决赛","决赛"];
 	rankData.forEach(function(data){
 		var tr = document.createElement("tr");
 		var td0 = document.createElement("td");
@@ -71,6 +73,7 @@
 		var td6 = document.createElement("td");
 		var td7 = document.createElement("td");
 		var td8 = document.createElement("td");
+		var td9 = document.createElement("td");
 		if(!!roleLinks[[data.name, data.bangumi].join(" @")]) td1.appendChild(a1);
 		else  td1.innerHTML = data.name;
 		td2.innerHTML = data.count;
@@ -83,8 +86,10 @@
 		if(!!bangumiLinks[data.bangumi]) td7.appendChild(a7);
 		else  td7.innerHTML = data.bangumi;
 		td8.innerHTML = data.date;
+    td9.innerHTML = stage[data.stage];
 		tr.appendChild(td0);
 		tr.appendChild(td1);
+		tr.appendChild(td9);
 		tr.appendChild(td2);
 		tr.appendChild(td3);
 		tr.appendChild(td4);

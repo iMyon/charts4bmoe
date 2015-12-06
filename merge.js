@@ -31,25 +31,47 @@ files.forEach(function(item) {
     var data = dataJson.data;
     var doMerge = function(role, index)
     {
-
+      //添加阶段标识
+      if(voteDay<="15-12-06") role.stage = 1;       //海选
+      else if(voteDay<="15-12-11") role.stage = 2;  //复活
+      else if(voteDay<="15-12-19") role.stage = 3;  //128强
+      else if(voteDay<="15-12-23") role.stage = 4;  //32强
+      else if(voteDay<="15-12-26") role.stage = 5;  //16强
+      else if(voteDay<="15-12-30") role.stage = 6;  //8强
+      else if(voteDay<="16-01-01") role.stage = 7;  //半决赛
+      else if(voteDay<="16-01-02") role.stage = 8;  //三四名决赛
+      else role.stage = 9;                          //决赛
       //23点加入名次统计
       if(time == 23){
+        var riseRank, recoveryRank;
+        switch(role.stage){
+          case 1: riseRank = 3;recoveryRank=6;break;
+          case 2: riseRank = 5;recoveryRank=5;break;
+          case 3: riseRank = 1;recoveryRank=1;break;
+          case 4: riseRank = 1;recoveryRank=1;break;
+          case 5: riseRank = 1;recoveryRank=1;break;
+          case 6: riseRank = 1;recoveryRank=1;break;
+          case 7: riseRank = 1;recoveryRank=1;break;
+          case 8: riseRank = 1;recoveryRank=1;break;
+          case 9: riseRank = 1;recoveryRank=1;break;
+        }
         var r = {
           id: role.id,
           name: role.name,
           bangumi: role.bangumi,
           date: voteDay,
+          stage: role.stage,
           sex: role.sex,
           count: role.votes_count,
           rank: index+1
         };
         //晋级
-        if(r.rank<=3) r.stat = 1;
+        if(r.rank<=riseRank) r.stat = 1;
         //复活
-        else if(r.rank <=6) r.stat = 2;
+        else if(r.rank <=recoveryRank) r.stat = 2;
         //淘汰
         else r.stat = 3;
-        rankData.push(r);
+        if(r.stage == 1) rankData.push(r);
         //添加阵营
         var bgm = role.bangumi;
         for(var i in AnimateGroup){
@@ -73,6 +95,7 @@ files.forEach(function(item) {
           name: role.name,
           bangumi: role.bangumi,
           date:voteDay,
+          stage: role.stage,
           sex: role.sex,
           data:[info]
         });
