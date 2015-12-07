@@ -1,7 +1,7 @@
 ﻿// 引入百度echarts支持
 require.config({
   paths: {
-    echarts: '/js'
+    echarts: '/js/lib'
   }
 });
 
