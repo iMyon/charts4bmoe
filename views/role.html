@@ -4,22 +4,23 @@
 	<meta charset="UTF-8">
 	<title>角色得票数据表格视图</title>
   <link rel="stylesheet" href="/css/table.css">
-  <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script> 
-	<script type="text/javascript" src="/js/jquery.tablesorter.min.js"></script> 
+  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script> 
+	<script type="text/javascript" src="/js/lib/jquery.tablesorter.min.js"></script>
+  <script type="text/javascript" src="/js/view.js"></script> 
 </head>
 <body>
 <div class="ui-table-container">
 <table class="ui-table">
     <thead>
       <tr>
-        <!-- <th>序号</th> -->
+        <!--<th>序号</th> -->
         <th>id</th>
 				<th>名字</th>
-				<th>性别</th>
-				<th>动画</th>
+				<th>得票数</th>
 				<th>日期</th>
 				<th>时间</th>
-				<th>得票数</th>
+				<th>性别</th>
+				<th>动画</th>
       </tr>
     </thead>
     <tbody>
@@ -37,30 +38,17 @@
 	tbody.style.display = "none";
 	roles.forEach(function(role){
 		role.data.forEach(function(d){
-			var tr = document.createElement("tr");
-			// var td0 = document.createElement("td");
-			var td1 = document.createElement("td");
-			var td2 = document.createElement("td");
-			var td3 = document.createElement("td");
-			var td4 = document.createElement("td");
-			var td5 = document.createElement("td");
-			var td6 = document.createElement("td");
-			var td7 = document.createElement("td");
-			td1.innerHTML = role.id;
-			td2.innerHTML = role.name;
-			td3.innerHTML = role.sex==1 ? "男":"女";
-			td4.innerHTML = role.bangumi;
-			td5.innerHTML = role.date;
-			td6.innerHTML = d.time;
-			td7.innerHTML = d.count;
-			// tr.appendChild(td0);
-			tr.appendChild(td1);
-			tr.appendChild(td2);
-			tr.appendChild(td3);
-			tr.appendChild(td4);
-			tr.appendChild(td5);
-			tr.appendChild(td6);
-			tr.appendChild(td7);
+      var tr = genTrLIst([
+        // {},
+        {innerHTML:role.id},
+        {innerHTML:role.name},
+        {innerHTML:d.count},
+        {innerHTML:role.date},
+        {innerHTML:d.time},
+        {innerHTML:role.sex==1 ? "男":"女"},
+        {innerHTML:role.bangumi}
+      ]);
+
 			tbody.appendChild(tr);
 		});
 	});

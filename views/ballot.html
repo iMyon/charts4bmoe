@@ -4,8 +4,8 @@
 	<meta charset="UTF-8">
 	<title>票仓数据表格视图</title>
   <link rel="stylesheet" href="/css/table.css">
-  <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script> 
-	<script type="text/javascript" src="/js/jquery.tablesorter.min.js"></script> 
+  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script> 
+	<script type="text/javascript" src="/js/lib/jquery.tablesorter.min.js"></script> 
 </head>
 <body>
 <div class="ui-table-container">
@@ -33,21 +33,13 @@
 	//减少html重排重绘
 	tbody.style.display = "none";
 	ballots.forEach(function(ballot){
-		var tr = document.createElement("tr");
-		// var td0 = document.createElement("td");
-		var td1 = document.createElement("td");
-		var td2 = document.createElement("td");
-		var td3 = document.createElement("td");
-		var td4 = document.createElement("td");
-		td1.innerHTML = ballot.date;
-		td2.innerHTML = ballot.time;
-		td3.innerHTML = ballot.total;
-		td4.innerHTML = ballot.token;
-		// tr.appendChild(td0);
-		tr.appendChild(td1);
-		tr.appendChild(td2);
-		tr.appendChild(td3);
-		tr.appendChild(td4);
+		var tr = genTrLIst([
+      {},
+      {innerHTML:ballot.date},
+      {innerHTML:ballot.time},
+      {innerHTML:ballot.total},
+      {innerHTML:ballot.token}
+    ]);
 		tbody.appendChild(tr);
 	});
 	tbody.style.display = "";

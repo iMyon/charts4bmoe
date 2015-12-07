@@ -14,11 +14,12 @@ var path = require("path");
 
 var dir = "../data/";
 
-var war = [];
-var totalVote = [];
+var war = [];             //角色数据
+var totalVote = [];       //总票数数据
 var rankData = [];        //统计名次
-var  campInfo= [];        //阵营统计
+var campInfo= [];         //阵营统计
 var bangumis = [];        //阵营列表
+var failList = {};        //角色淘汰列表，hashmap形式
 
 var files = fs.readdirSync(dir);
 files.forEach(function(item) {
@@ -71,7 +72,8 @@ files.forEach(function(item) {
         else if(r.rank <=recoveryRank) r.stat = 2;
         //淘汰
         else r.stat = 3;
-        if(r.stage == 1) rankData.push(r);
+        if(r.stage == 1) rankData.push(r);    //添加排名
+        if(r.stat == 3) failList[[r.name, r.bangumi].join(" @")] = true;
         //添加阵营
         var bgm = role.bangumi;
         for(var i in AnimateGroup){
@@ -176,3 +178,4 @@ fs.writeFileSync(path.join("public","camp.json"),JSON.stringify(campInfo));
 fs.writeFileSync(path.join("public","data.json"),JSON.stringify(war)); 
 fs.writeFileSync(path.join("public","rankData.json"),JSON.stringify(rankData)); 
 fs.writeFileSync(path.join("public","totalVote.json"),JSON.stringify(totalVote)); 
+fs.writeFileSync(path.join("public","failList.json"),JSON.stringify(failList)); 
