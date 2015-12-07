@@ -77,9 +77,10 @@ counter-increment: sectioncounter;
   text-decoration: none;
 }
 .ui-table tr.role.failed{
-  background: #efebe9;
-  opacity: 1;
+  /*background: #efebe9;*/
+  background: none;
+  opacity: .5;
 }
 .ui-table tr.role.failed:hover{
-  background: none;
+  /*opacity: 1;*/
 }

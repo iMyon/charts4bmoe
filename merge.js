@@ -3,10 +3,11 @@
 **/
 
 /*阵营归类 用于合并*/
-var AnimateGroup = [
-  ["Fate/stay night [UBW]", "Fate stay night [UBW]", "Fate/stay night [UBW]"],
-  ["天麻 阿知贺篇SP&咲日和", "天才麻将少女 阿知贺篇SP", "咲日和"]
-];
+var AnimateGroup = {
+  "Fate stay night [UBW]": "Fate/stay night [UBW]",
+  "天才麻将少女 阿知贺篇SP": "天麻 阿知贺篇SP&咲日和",
+  "咲日和": "天麻 阿知贺篇SP&咲日和",
+};
 
 require('array.prototype.find');
 var fs = require("fs");
@@ -42,6 +43,9 @@ files.forEach(function(item) {
       else if(voteDay<="16-01-01") role.stage = 7;  //半决赛
       else if(voteDay<="16-01-02") role.stage = 8;  //三四名决赛
       else role.stage = 9;                          //决赛
+      
+      if(AnimateGroup[role.bangumi] !== undefined) role.bangumi = AnimateGroup[role.bangumi];
+      
       //23点加入名次统计
       if(time == 23){
         var riseRank, recoveryRank;
@@ -72,16 +76,10 @@ files.forEach(function(item) {
         else if(r.rank <=recoveryRank) r.stat = 2;
         //淘汰
         else r.stat = 3;
-        if(r.stage == 1) rankData.push(r);    //添加排名
+        rankData.push(r);    //添加排名
         if(r.stat == 3) failList[[r.name, r.bangumi].join(" @")] = true;
         //添加阵营
         var bgm = role.bangumi;
-        for(var i in AnimateGroup){
-          if(AnimateGroup[i].indexOf(bgm) != -1){
-            bgm = AnimateGroup[i][0];
-            break;
-          }
-        }
         if(bangumis.indexOf(bgm) == -1)
           bangumis.push(bgm);
       }
@@ -130,36 +128,23 @@ war = war.sort(function(a, b){
   return maxCount2-maxCount1;
 });
 
-//阵营合并
-war.forEach(function(w, index){
-  for(var i in AnimateGroup){
-    if(AnimateGroup[i].indexOf(w.bangumi) != -1){
-      war[index].bangumi = AnimateGroup[i][0];
-      break;
-    }
-  }
-}); 
-rankData.forEach(function(w, index){
-  for(var i in AnimateGroup){
-    if(AnimateGroup[i].indexOf(w.bangumi) != -1){
-      rankData[index].bangumi = AnimateGroup[i][0];
-      break;
-    }
-  }
-});
+
 rankData = rankData.sort(function(a, b){
   return  b.count - a.count || a.rank-b.rank;
 });
 //统计阵营
 bangumis.forEach(function(bgm){
   var suc = rankData.filter(function(rd){
-    return rd.bangumi == bgm && rd.rank<=3;
+    if(rd.stage != 1) return false;
+    return rd.bangumi == bgm && rd.stat == 1;
   }).length;
   var wait = rankData.filter(function(rd){
-    return rd.bangumi == bgm && rd.rank>3 && rd.rank<=6;
+    if(rd.stage != 1) return false;
+    return rd.bangumi == bgm && rd.stat == 2;
   }).length;
   var fail = rankData.filter(function(rd){
-    return rd.bangumi == bgm && rd.rank>6;
+    if(rd.stage != 1) return false;
+    return rd.bangumi == bgm && rd.stat == 3;
   }).length;
   var total = suc + wait + fail;
   campInfo.push({
