@@ -6,8 +6,9 @@
   <title>角色名次表格视图</title>
   <link rel="stylesheet" href="/css/table.css">
   <link rel="stylesheet" href="/css/main.css">
-  <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script> 
-	<script type="text/javascript" src="/js/jquery.tablesorter.min.js"></script> 
+  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script> 
+	<script type="text/javascript" src="/js/lib/jquery.tablesorter.min.js"></script> 
+	<script type="text/javascript" src="/js/view.js"></script> 
 </head>
 
 <body>
@@ -42,6 +43,7 @@
 
 </body>
 <script>
+  var failList = {{JSON.stringify(failList)}};
 	var roleLinks = {{JSON.stringify(roleLinks)}};
 	var bangumiLinks = {{JSON.stringify(bangumiLinks)}};
   /*浏览器生成节点，省流量daze*/
@@ -49,54 +51,24 @@
 	var tbody = document.getElementsByTagName("tbody")[0];
 	//减少html重排重绘
 	tbody.style.display = "none";
-  var stage =["","海选","复活赛","128强","32强","16强","8强","半决赛","三四位决赛","决赛"];
+  var stageMap =["","海选","复活赛","128强","32强","16强","8强","半决赛","三四位决赛","决赛"];
+  var statMap =["","晋级","复活","淘汰"];
 	rankData.forEach(function(data){
-		var tr = document.createElement("tr");
-		var td0 = document.createElement("td");
-		var a1 = document.createElement("a");
-		a1.target = "_blank";
-		if(!!roleLinks[[data.name, data.bangumi].join(" @")]){
-			a1.href = roleLinks[[data.name, data.bangumi].join(" @")];
-			a1.innerHTML = data.name;
-		}
-		var a7 = document.createElement("a");
-		a7.target = "_blank";
-		if(!!bangumiLinks[data.bangumi]){
-			a7.href = bangumiLinks[data.bangumi];
-			a7.innerHTML = data.bangumi;
-		}
-		var td1 = document.createElement("td");
-		var td2 = document.createElement("td");
-		var td3 = document.createElement("td");
-		var td4 = document.createElement("td");
-		var td5 = document.createElement("td");
-		var td6 = document.createElement("td");
-		var td7 = document.createElement("td");
-		var td8 = document.createElement("td");
-		var td9 = document.createElement("td");
-		if(!!roleLinks[[data.name, data.bangumi].join(" @")]) td1.appendChild(a1);
-		else  td1.innerHTML = data.name;
-		td2.innerHTML = data.count;
-		td3.innerHTML = data.rank;
-    if(data.stat == 1) td4.innerHTML = "晋级";
-    else if(data.stat == 2) td4.innerHTML = "复活";
-    else td4.innerHTML = "淘汰";
-		td5.innerHTML = data.sex==1 ? "男":"女";
-		td6.innerHTML = data.id;
-		if(!!bangumiLinks[data.bangumi]) td7.appendChild(a7);
-		else  td7.innerHTML = data.bangumi;
-		td8.innerHTML = data.date;
-    td9.innerHTML = stage[data.stage];
-		tr.appendChild(td0);
-		tr.appendChild(td1);
-		tr.appendChild(td9);
-		tr.appendChild(td2);
-		tr.appendChild(td3);
-		tr.appendChild(td4);
-		tr.appendChild(td5);
-		tr.appendChild(td6);
-		tr.appendChild(td7);
-		tr.appendChild(td8);
+    var tr = genTrLIst([
+      {},
+      {innerHTML:data.name, link:roleLinks[[data.name, data.bangumi].join(" @")]},
+      {innerHTML:stageMap[data.stage]},
+      {innerHTML:data.count},
+      {innerHTML:data.rank},
+      {innerHTML:statMap[data.stat]},
+      {innerHTML:data.sex==1 ? "男":"女"},
+      {innerHTML:data.id},
+      {innerHTML:data.bangumi, link:bangumiLinks[data.bangumi]},
+      {innerHTML:data.date}
+    ]);
+    if(failList[[data.name, data.bangumi].join(" @")]){
+      tr.className = "role failed";
+    }
 		tbody.appendChild(tr);
 	});
 	tbody.style.display = "";

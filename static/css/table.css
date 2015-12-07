@@ -76,3 +76,10 @@ counter-increment: sectioncounter;
   color:#2196f3;
   text-decoration: none;
 }
+.ui-table tr.role.failed{
+  background: #efebe9;
+  opacity: 1;
+}
+.ui-table tr.role.failed:hover{
+  background: none;
+}

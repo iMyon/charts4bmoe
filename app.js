@@ -32,6 +32,7 @@ var yasumiDate = ["15-12-06","15-12-11","15-12-26"];
 var roleLinks = require("./public/info/roleLinks.json");
 var cvInfo = require("./public/info/cv.json");
 var bangumiLinks = require("./public/info/bangumiLinks.json");
+var failList = require("./public/failList.json");
 
 app.get('/', function(req, res){
   var bangumis = [];
@@ -159,6 +160,7 @@ app.get('/api/data/rank', function(req, res){
       rankData: rankData,
       roleLinks: roleLinks,
       cvInfo: cvInfo,
+      failList: failList,
       bangumiLinks: bangumiLinks
     });
   }

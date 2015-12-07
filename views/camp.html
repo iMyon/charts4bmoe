@@ -5,8 +5,9 @@
   <meta charset="UTF-8">
   <title>阵营信息表格视图</title>
   <link rel="stylesheet" href="/css/table.css">
-  <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script> 
-	<script type="text/javascript" src="/js/jquery.tablesorter.min.js"></script> 
+  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script> 
+	<script type="text/javascript" src="/js/lib/jquery.tablesorter.min.js"></script> 
+  <script type="text/javascript" src="/js/view.js"></script> 
 </head>
 
 <body>
@@ -14,7 +15,7 @@
     <table class="ui-table">
       <thead>
         <tr>
-           <th>序号</th> 
+          <th>序号</th> 
           <th>动画</th>
           <th>参与人数</th>
           <th>晋级人数</th>
@@ -39,37 +40,17 @@
 	//减少html重排重绘
 	tbody.style.display = "none";
 	campData.forEach(function(data){
-		var tr = document.createElement("tr");
-		var td0 = document.createElement("td");
-		var td1 = document.createElement("td");
-		var td2 = document.createElement("td");
-		var td3 = document.createElement("td");
-		var td4 = document.createElement("td");
-		var td5 = document.createElement("td");
-		var td6 = document.createElement("td");
-		var td7 = document.createElement("td");
-		var td8 = document.createElement("td");
-    var bangumiArchor = document.createElement("a");
-    bangumiArchor.target = "_blank";
-    bangumiArchor.href = "/api/data/rank?format=table&bangumi=" + encodeURIComponent(data.bangumi);
-    bangumiArchor.innerHTML = data.bangumi;
-		td1.appendChild(bangumiArchor);
-		td2.innerHTML = data.total;
-		td3.innerHTML = data.suc;
-    td4.innerHTML = data.wait;
-		td5.innerHTML = data.fail;
-		td6.innerHTML = (data.suc/data.total*100).toFixed(2) + "%";
-		td7.innerHTML = (data.wait/data.total*100).toFixed(2)+ "%";
-		td8.innerHTML = (data.fail/data.total*100).toFixed(2)+ "%";
-		tr.appendChild(td0);
-		tr.appendChild(td1);
-		tr.appendChild(td2);
-		tr.appendChild(td3);
-		tr.appendChild(td4);
-		tr.appendChild(td5);
-		tr.appendChild(td6);
-		tr.appendChild(td7);
-		tr.appendChild(td8);
+    var tr = genTrLIst([
+      {},
+      {innerHTML:data.bangumi, link:"/api/data/rank?format=table&bangumi=" + encodeURIComponent(data.bangumi)},
+      {innerHTML:data.total},
+      {innerHTML:data.suc},
+      {innerHTML:data.wait},
+      {innerHTML:data.fail},
+      {innerHTML:(data.suc/data.total*100).toFixed(2) + "%"},
+      {innerHTML:(data.wait/data.total*100).toFixed(2)+ "%"},
+      {innerHTML:(data.fail/data.total*100).toFixed(2)+ "%"}
+    ]);
 		tbody.appendChild(tr);
 	});
 	tbody.style.display = "";
