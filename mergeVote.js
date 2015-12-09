@@ -28,6 +28,8 @@ files.forEach(function(item) {
   {date: "15-12-05",count: 60000},
   {date: "15-12-07",count: 12700},
   {date: "15-12-08",count: 13900},
+  {date: "15-12-09",count: 14200},
+  {date: "15-12-10",count: 14900},
   {date: "15-11-18",count: 8000}
   ];
   var sumVote = 10000;  //初始一万票
