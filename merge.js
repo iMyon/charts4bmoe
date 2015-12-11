@@ -30,6 +30,7 @@ files.forEach(function(item) {
   var time = item.replace(/.*-(\d+).json/,"$1");
   try{
     var dataJson = require(path.join(dir,item));
+    //本战适应
     var data = dataJson.data;
     var doMerge = function(role, index)
     {
@@ -103,7 +104,12 @@ files.forEach(function(item) {
       else r_data.data.push(info);
     };
     for(var k in data){
-      data[k].forEach(doMerge);
+      if(k == "male" || k=="female"){
+        data[k].forEach(function(e){
+          e.members.forEach(doMerge);
+        });
+      }
+      else  data[k].forEach(doMerge);
     }
     totalVote.push({
       date: voteDay,
