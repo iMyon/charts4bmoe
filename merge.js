@@ -91,21 +91,26 @@ files.forEach(function(item) {
       info.count = role.votes_count;
       var r_data = war.find(function(e){ return e.id==role.id;});
       if(r_data === undefined){
-        war.push({
-          id: role.id,
-          name: role.name,
-          bangumi: role.bangumi,
-          date:voteDay,
-          stage: role.stage,
-          sex: role.sex,
-          data:[info]
-        });
+        var warChunk = {};
+        if(role.group !== undefined) warChunk.group = role.group;
+        warChunk.id = role.id;
+        warChunk.name = role.name;
+        warChunk.bangumi = role.bangumi;
+        warChunk.date = voteDay;
+        warChunk.stage = role.stage;
+        warChunk.sex = role.sex;
+        warChunk.data =[info];
+        war.push(warChunk);
       }
       else r_data.data.push(info);
     };
     for(var k in data){
       if(k == "male" || k=="female"){
+        //写入组信息
         data[k].forEach(function(e){
+          e.members.forEach(function(e1){
+            e1.group = e.name;
+          });
           e.members.forEach(doMerge);
         });
       }

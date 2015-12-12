@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>角色得票数据表格视图</title>
+	<title>角色时段得票数据表格</title>
   <link rel="stylesheet" href="/css/table.css">
   <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script> 
 	<script type="text/javascript" src="/js/lib/jquery.tablesorter.min.js"></script>
@@ -14,13 +14,14 @@
     <thead>
       <tr>
         <!--<th>序号</th> -->
-        <th>id</th>
 				<th>名字</th>
+				<th>动画</th>
 				<th>得票数</th>
+				<th>分组</th>
 				<th>日期</th>
 				<th>时间</th>
 				<th>性别</th>
-				<th>动画</th>
+        <th>id</th>
       </tr>
     </thead>
     <tbody>
@@ -33,6 +34,9 @@
 <script>
 	/*浏览器生成节点，省流量daze*/
 	var roles = {{JSON.stringify(roles)}};
+  roles.sort(function(a,b){
+    return a.group>b.group;
+  });
 	var tbody = document.getElementsByTagName("tbody")[0];
 	//减少html重排重绘
 	tbody.style.display = "none";
@@ -40,13 +44,14 @@
 		role.data.forEach(function(d){
       var tr = genTrLIst([
         // {},
-        {innerHTML:role.id},
         {innerHTML:role.name},
+        {innerHTML:role.bangumi},
         {innerHTML:d.count},
+        {innerHTML:role.group},
         {innerHTML:role.date},
         {innerHTML:d.time},
         {innerHTML:role.sex==1 ? "男":"女"},
-        {innerHTML:role.bangumi}
+        {innerHTML:role.id}
       ]);
 
 			tbody.appendChild(tr);
