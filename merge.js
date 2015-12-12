@@ -71,8 +71,13 @@ files.forEach(function(item) {
           count: role.votes_count,
           rank: index+1
         };
+        //本战处理
+        if(role.winner !== undefined){
+          if(role.winner == role.role_id) r.stat = 1;
+          else r.stat = 3;
+        }
         //晋级
-        if(r.rank<=riseRank) r.stat = 1;
+        else if(r.rank<=riseRank) r.stat = 1;
         //复活
         else if(r.rank <=recoveryRank) r.stat = 2;
         //淘汰
@@ -110,6 +115,7 @@ files.forEach(function(item) {
         data[k].forEach(function(e){
           e.members.forEach(function(e1){
             e1.group = e.name;
+            e1.winner = e.winner;
           });
           e.members.forEach(doMerge);
         });
