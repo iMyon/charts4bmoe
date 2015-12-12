@@ -16,8 +16,9 @@
         <!-- <th>序号</th> -->
         <th>日期</th>
 				<th>时间</th>
-				<th>发票数</th>
-				<th>领票数</th>
+				<th>票仓剩余票数</th>
+				<th>下次发票时间</th>
+				<th>预计发票数</th>
       </tr>
     </thead>
     <tbody>
@@ -35,11 +36,11 @@
 	tbody.style.display = "none";
 	ballots.forEach(function(ballot){
 		var tr = genTrLIst([
-      {},
       {innerHTML:ballot.date},
       {innerHTML:ballot.time},
       {innerHTML:ballot.total},
-      {innerHTML:ballot.token}
+      {innerHTML:ballot.n_time},
+      {innerHTML:ballot.n_number}
     ]);
 		tbody.appendChild(tr);
 	});

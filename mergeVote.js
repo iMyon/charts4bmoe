@@ -8,9 +8,9 @@ var dir = "../voteData/";
 
 var files = fs.readdirSync(dir);
 var voteDatas = [];
+var voteDatasAll = [];
 
 files.forEach(function(item) {
-  //16 17号这两天只发了8000
   var specialDay = [
   {date: "15-11-16",count: 8000},
   {date: "15-11-17",count: 8000},
@@ -54,8 +54,23 @@ files.forEach(function(item) {
         var time_h = ~~time.replace(/:\d+/,"");
         var jsonstr = matches[3];
         var json = JSON.parse(jsonstr);
+        
 
         if(json.state == 200){
+          
+          var totalNum = json.data[0].total;
+          if(time == "00:00") totalNum = sumVote;
+          var n_time;
+          if(json.data[1].time) n_time = json.data[1].time.match(/\s+(.*$)/)[1];
+          else n_time = "";
+          voteDatasAll.push({
+            date: day,
+            time: time,
+            total: totalNum,
+            n_number: json.data[1].number,
+            n_time: n_time
+          });
+          
           var token;  //当前总共领取票数
           var data = json.data;
           //初始化0点数据
@@ -102,3 +117,4 @@ files.forEach(function(item) {
 });
 
 fs.writeFileSync(path.join("public/voteData.json"),JSON.stringify(voteDatas));
+fs.writeFileSync(path.join("public/ballot.json"),JSON.stringify(voteDatasAll));

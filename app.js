@@ -109,7 +109,7 @@ app.get('/api/data/role', function(req, res){
  * @param  {string} format    格式，默认json，table为使用网页表格显示
  */
 app.get('/api/data/ballot', function(req, res){
-  var ballots = require("./public/voteData.json", 'utf-8');
+  var ballots = require("./public/ballot.json", 'utf-8');
   //根据参数筛选
   ballots = ballots.filter(function(w) {
     for(var key in req.query){
