@@ -48,7 +48,7 @@ var Events = [
   day: "15-11-16",
   time: "20",
   name: "保鸭战争",
-  desc: "鸭子被影姐首次超过，战吧愤慨"
+  desc: "鸭子被影姐首次超过，舆论一波"
 },
 {
   day: "15-11-17",
@@ -183,7 +183,10 @@ function getChartData(war, day, sex){
         sex: dayData[i].sex,
         bangumi: dayData[i].bangumi
       };
+      if(dayData[i].group !== undefined) sery.filterCondition.group = dayData[i].group;
       sery.name = dayData[i].name;
+      if(sery.filterCondition.group !== undefined)
+        sery.name = sery.name + "（"+sery.filterCondition.group+"）";
       sery.type = "line";
       // sery.symbol = "none"; //取消点显示
       sery.data = [];
@@ -191,34 +194,6 @@ function getChartData(war, day, sex){
       if(dayData[0].data[0].time!="00")  sery.data.push(0);
       for(var j=0;j<dayData[i].data.length;j++){
         sery.data.push(dayData[i].data[j].count);
-        //添加事件
-/*        Events.forEach(function(e){
-          if(e.day == dayData[i].date && e.time == dayData[i].data[j].time){
-            if(!sery.markLine) {
-              sery.markLine = {
-                data:[
-                  [
-                    {name: '', value:e.desc, xAxis: chartData.v_times[j], yAxis: 0},
-                    {name: '', value:e.desc, xAxis: chartData.v_times[j], yAxis: 999999999999}
-                  ]
-                ],
-                itemStyle:{
-                  normal:{
-                    label:{
-                      formatter: e.desc
-                    }
-                  }
-                }
-              }
-            }
-            else{
-              sery.markLine.data.push([
-                {name: '', value:e.desc, xAxis: chartData.v_times[j], yAxis: 0},
-                {name: '', value:e.desc, xAxis: chartData.v_times[j], yAxis: 999999999999}
-              ]);
-            };
-          }
-        });*/
       }
       chartData.series.push(sery);
     }
@@ -308,14 +283,19 @@ function getRateChartData(chartData){
   var sums_girl = [];
   var ratechartData = chartData;
   ratechartData.series.forEach(function(sery, index){
+    var group = sery.filterCondition.group?sery.filterCondition.group:"default";
+    sums_boy[group] = sums_boy[group]?sums_boy[group]:[];
+    sums_girl[group] = sums_girl[group]?sums_girl[group]:[];
     for(var i=0; i<sery.data.length; i++){
-      if(sery.filterCondition.sex == "0") sums_girl[i] = ~~sums_girl[i]+~~sery.data[i];  
-      if(sery.filterCondition.sex == "1") sums_boy[i] = ~~sums_boy[i]+~~sery.data[i];  
+      if(sery.filterCondition.sex == "0") sums_girl[group][i] = ~~sums_girl[group][i]+~~sery.data[i];  
+      if(sery.filterCondition.sex == "1") sums_boy[group][i] = ~~sums_boy[group][i]+~~sery.data[i];  
     }
   });
   ratechartData.series.forEach(function(sery, index){
     var data = [];
     var sums = sery.filterCondition.sex=="0"?sums_girl:sums_boy;
+    var group = sery.filterCondition.group?sery.filterCondition.group:"default";
+    sums = sums[group];
     for(var i=0; i<sery.data.length; i++){ 
       if(sery.data[i] === undefined) data.push(undefined);
       else if(sums[i] === 0) data.push(0);
