@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{title}}</title>
+  <link href="/css/icon.css?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css" media="screen,projection" />
+  <link type="text/css" rel="stylesheet" href="/css/main.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+</head>
+
+<body>
+
+  <header>
+    <nav class="top-nav">
+      <div class="container">
+        <div class="nav-wrapper"><a class="page-title">{{title}}</a></div>
+      </div>
+    </nav>
+    {% raw %}
+    <ul class="side-nav fixed" id="nav-left" style="width: 240px;">
+      <li class="logo">
+        <a class="brand-logo header" href="/" id="logo-container">
+            B萌战况曲线
+        </a>
+      </li>
+      <li class="bold active"><a class="waves-effect waves-teal" href="/">曲线图</a></li>
+      <li class="bold"><a class="waves-effect waves-teal" href="/api/data/camp?format=table">阵营信息</a></li>
+      <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">角色信息</a>
+            <div class="collapsible-body" style="">
+              <ul>
+                <li><a href="color.html">萌组</a></li>
+                <li><a href="grid.html">燃组</a></li>
+                <li><a href="/api/data/rank?format=table&stat=1&sex=0">本战列表</a></li>
+                <li><a href="media-css.html">Media</a></li>
+                <li><a href="sass.html">Sass</a></li>
+                <li><a href="shadow.html">Shadow</a></li>
+                <li><a href="table.html">Table</a></li>
+                <li><a href="typography.html">Typography</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="bold"><a class="waves-effect waves-teal" href="/api/data/role?format=table&date=today">得票数据</a></li>
+      <li class="bold"><a class="waves-effect waves-teal" href="/api/data/ballot?format=table&date=today">票仓数据</a></li>
+    </ul>
+    {% endraw %}
+  </header>
+
+  <main>
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+  <footer></footer>
+  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="/js/lib/vue.js"></script>
+  <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
+  <script>
+  var dates = {{JSON.stringify(dates)}};
+  </script>
+  {% block endScript %}{% endblock %}
+</body>
+
+</html>

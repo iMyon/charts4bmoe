@@ -16,7 +16,7 @@ body:after {
   width: 100%;
   height: 100%;
   opacity: 0.1;
-  background-image: url(../img/bg.png);
+  /*background-image: url(../img/bg.png);*/
   background-repeat: no-repeat;
   background-position: 100% 30%;
   background-attachment: fixed;
@@ -54,39 +54,6 @@ body:after {
   /*background: red;*/
 }
 
-#submit {
-  margin-top: 15px;
-  padding: 12px 30px;
-  text-transform: uppercase;
-  background-clip: padding-box;
-  background-color: #ddd;
-  background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
-  border: 1px solid #bbb;
-  border-radius: 3px;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 2px 2px -1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
-  color: #555;
-  cursor: pointer;
-  display: inline-block;
-  font: bold 13px arial,helvetica,sans-serif;
-  overflow: visible;
-  padding: 6px 20px;
-  text-decoration: none;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition: background-color 0.2s ease-out 0s;
-  white-space: nowrap;
-}
-#submit:hover {
-  background-color: #EEE;
-  color: #555;
-}
-#submit:active {
-  background: #E9E9E9 none repeat scroll 0% 0%;
-  position: relative;
-  top: 1px;
-  text-shadow: none;
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3) inset;
-}
-
 /*progressBar*/
 #progressBar {
   margin:0 auto;
@@ -96,48 +63,7 @@ body:after {
   border-radius: 6px;
   background-color: none;
   text-align: left;
-  /*垂直居中*/
-/*  position: relative;
-  top: 50%;
-  transform: translateY(-50%);*/
 }
-/*进度条样式*/
-#progressBar span.bar {
-  height: 100%;
-  color: black;
-  text-align: right;
-  border-radius: 6px;
-  line-height: 35px; /* same as #progressBar height if we want text middle aligned */
-  width: 0;
-  background-color: #0099ff;
-}
-/*#progressBar span.decorator{
-  width: 80px;
-  height: 70px;
-  z-index: 999999;
-  display: block;
-  position: absolute;
-  left: -2000px;
-  top: -10px;
-  background-image: url("../img/喵帕斯.png");
-  background-repeat:no-repeat;
-  background-position: right;
-  background-size: 80px 70px;
-}*/
-/*添加尾巴图片*/
-/*#progressBar div:before{
-  content: "";
-  width: 80px;
-  height: 70px;
-  background-image: url("../img/喵帕斯.png");
-  background-repeat:no-repeat;
-  background-position: right;
-  background-size: 80px 70px;
-  top: -50px;
-  z-index: 9999;
-  position: relative;
-  display: inline-block;
-}*/
 
 .footer{
   display: block;
@@ -178,4 +104,41 @@ div.notice{
 div.notice:hover{
   transition:all 500ms ease-in-out;
   opacity: 1;
+}
+
+
+/*materializecss modify*/
+header, main, footer {
+    padding-left: 240px;
+}
+.container{
+  width:95%;
+  max-width: 1680px;
+}
+.page-title{
+  font-size: 35px;
+}
+.side-nav.fixed a.header{
+  font-size: 25px;
+  color: #ee6e73;
+}
+ul.side-nav.fixed li:hover, ul.side-nav.fixed li.active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+#e-canvas{
+  min-height: 600px;
+}
+
+.side-nav .collapsible-body li.active, .side-nav.fixed .collapsible-body li.active {
+  background-color: #ee6e73;
+}
+
+/*表格自动编号*/
+tbody.count {
+counter-reset: sectioncounter;
+}
+tbody.count td:first-child::before {
+content: counter(sectioncounter);
+counter-increment: sectioncounter;
 }

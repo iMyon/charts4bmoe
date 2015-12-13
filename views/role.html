@@ -1,67 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>角色时段得票数据表格</title>
-  <link rel="stylesheet" href="/css/table.css">
-  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script> 
-	<script type="text/javascript" src="/js/lib/jquery.tablesorter.min.js"></script>
-  <script type="text/javascript" src="/js/view.js"></script> 
-</head>
-<body>
-<div class="ui-table-container">
-<table class="ui-table">
-    <thead>
-      <tr>
-        <!--<th>序号</th> -->
-				<th>名字</th>
-				<th>动画</th>
-				<th>得票数</th>
-				<th>分组</th>
-				<th>日期</th>
-				<th>时间</th>
-				<th>性别</th>
-        <th>id</th>
-      </tr>
-    </thead>
-    <tbody>
-
-    </tbody>
+{% extends "tableBase.html" %} {% block table %} {% raw %}
+<table class="ui-table bordered highlight">
+  <thead>
+    <tr>
+      <th>名字</th>
+      <th>动画</th>
+      <th>得票数</th>
+      <th>分组</th>
+      <th>日期</th>
+      <th>时间</th>
+      <th>性别</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <template v-for="role in datas">
+      <template v-for="data in role.data">
+        <tr>
+          <td>{{role.name}}</td>
+          <td>{{role.bangumi}}</td>
+          <td>{{data.count}}</td>
+          <td>{{role.group}}</td>
+          <td>{{role.date}}</td>
+          <td>{{data.time}}</td>
+          <td>{{role.sex==1 ? "男":"女"}}</td>
+          <td>{{role.id}}</td>
+        </tr>
+      </template>
+    </template>
+  </tbody>
 </table>
-</div>
-	
-</body>
-<script>
-	/*浏览器生成节点，省流量daze*/
-	var roles = {{JSON.stringify(roles)}};
-  roles.sort(function(a,b){
-    return a.group>b.group;
-  });
-	var tbody = document.getElementsByTagName("tbody")[0];
-	//减少html重排重绘
-	tbody.style.display = "none";
-	roles.forEach(function(role){
-		role.data.forEach(function(d){
-      var tr = genTrLIst([
-        // {},
-        {innerHTML:role.name},
-        {innerHTML:role.bangumi},
-        {innerHTML:d.count},
-        {innerHTML:role.group},
-        {innerHTML:role.date},
-        {innerHTML:d.time},
-        {innerHTML:role.sex==1 ? "男":"女"},
-        {innerHTML:role.id}
-      ]);
-
-			tbody.appendChild(tr);
-		});
-	});
-	tbody.style.display = "";
-	$(document).ready(function() 
-    { 
-      $("table").tablesorter(); 
-    } 
-	);
-</script>
-</html>
+{% endraw %} {% endblock %}

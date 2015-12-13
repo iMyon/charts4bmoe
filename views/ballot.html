@@ -1,54 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>票仓数据表格</title>
-  <link rel="stylesheet" href="/css/table.css">
-  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script> 
-	<script type="text/javascript" src="/js/lib/jquery.tablesorter.min.js"></script> 
-  <script type="text/javascript" src="/js/view.js"></script> 
-</head>
-<body>
-<div class="ui-table-container">
-<table class="ui-table">
-    <thead>
-      <tr>
-        <!-- <th>序号</th> -->
-        <th>日期</th>
-				<th>时间</th>
-				<th>票仓剩余票数</th>
-				<th>下次发票时间</th>
-				<th>预计发票数</th>
-      </tr>
-    </thead>
-    <tbody>
-	    
-    </tbody>
-</table>
-</div>
+{% extends "tableBase.html" %}
 
-</body>
-<script>
-	/*浏览器生成节点，省流量daze*/
-	var ballots = {{JSON.stringify(ballots)}};
-	var tbody = document.getElementsByTagName("tbody")[0];
-	//减少html重排重绘
-	tbody.style.display = "none";
-	ballots.forEach(function(ballot){
-		var tr = genTrLIst([
-      {innerHTML:ballot.date},
-      {innerHTML:ballot.time},
-      {innerHTML:ballot.total},
-      {innerHTML:ballot.n_time},
-      {innerHTML:ballot.n_number}
-    ]);
-		tbody.appendChild(tr);
-	});
-	tbody.style.display = "";
-	$(document).ready(function() 
-    { 
-      $("table").tablesorter(); 
-    } 
-	);
-</script>
-</html>
+{% block table %}
+{% raw %}
+<table class="ui-table bordered highlight">
+  <thead>
+    <tr>
+      <th>日期</th>
+      <th>时间</th>
+      <th>票仓剩余票数</th>
+      <th>下次发票时间</th>
+      <th>预计发票数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="data in datas">
+      <td>{{data.date}}</td>
+      <td>{{data.time}}</td>
+      <td>{{data.total}}</td>
+      <td>{{data.n_time.replace(/:00$/,"")}}</td>
+      <td>{{data.n_number}}</td>
+    </tr>
+  </tbody>
+</table>
+{% endraw %}
+{% endblock %}

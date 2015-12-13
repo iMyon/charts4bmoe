@@ -82,22 +82,28 @@ app.get('/data/', function(req, res){
  * @param  {string} id        b站标识id
  */
 app.get('/api/data/role', function(req, res){
-  var war = require("./public/data.json", 'utf-8');
+  var datas = require("./public/data.json", 'utf-8');
   //根据参数筛选
-  war = war.filter(function(w) {
+  datas = datas.filter(function(w) {
+    if(req.query.date == "today") req.query.date = getToday();
     for(var key in req.query){
       if(w[key] !== undefined && w[key] != req.query[key]) return false;
     }
     return true;
   });
+  //排序
+  datas = datas.sort(function (a, b) {
+    return a.group > b.group ? 1 : -1;
+  });
   //使用表格视图渲染数据
   if(req.query.format == "table"){
     res.render("role",{
-      roles: war
+      datas: datas,
+      title: "角色得票数据表格"
     });
   }
   else{
-    var resStr = JSON.stringify(war);
+    var resStr = JSON.stringify(datas);
     res = setResJson(res,resStr);
     res.send(resStr);
   }
@@ -109,9 +115,10 @@ app.get('/api/data/role', function(req, res){
  * @param  {string} format    格式，默认json，table为使用网页表格显示
  */
 app.get('/api/data/ballot', function(req, res){
-  var ballots = require("./public/ballot.json", 'utf-8');
+  var datas = require("./public/ballot.json", 'utf-8');
   //根据参数筛选
-  ballots = ballots.filter(function(w) {
+  datas = datas.filter(function(w) {
+    if(req.query.date == "today") req.query.date = getToday();
     for(var key in req.query){
       if(w[key] !== undefined && w[key] != req.query[key]) return false;
     }
@@ -121,12 +128,13 @@ app.get('/api/data/ballot', function(req, res){
   //使用表格视图渲染数据
   if(req.query.format == "table"){
     res.render("ballot",{
-      ballots: ballots
+      datas: datas,
+      title: "票仓数据表格"
     });
   }
   //json
   else{
-    var resStr = JSON.stringify(ballots);
+    var resStr = JSON.stringify(datas);
     res = setResJson(res,resStr);
     res.send(resStr);
   }
@@ -156,12 +164,15 @@ app.get('/api/data/rank', function(req, res){
 
   //使用表格视图渲染数据
   if(req.query.format == "table"){
+    var datas = {};
+    datas.rankData = rankData;
+    datas.cvInfo = cvInfo;
+    datas.roleLinks = roleLinks;
+    datas.failList = failList;
+    datas.bangumiLinks = bangumiLinks;
     res.render("rank",{
-      rankData: rankData,
-      roleLinks: roleLinks,
-      cvInfo: cvInfo,
-      failList: failList,
-      bangumiLinks: bangumiLinks
+      datas: datas,
+      title: "角色数据表格"
     });
   }
   //json
@@ -178,9 +189,9 @@ app.get('/api/data/rank', function(req, res){
  * @param  {string} format    格式，默认json，table为使用网页表格显示
  */
 app.get('/api/data/camp', function(req, res){
-  var campData = require("./public/camp.json", 'utf-8');
+  var datas = require("./public/camp.json", 'utf-8');
   //根据参数筛选
-  campData = campData.filter(function(w) {
+  datas = datas.filter(function(w) {
     for(var key in req.query){
       if(w[key] !== undefined && w[key] != req.query[key]) return false;
     }
@@ -190,12 +201,13 @@ app.get('/api/data/camp', function(req, res){
   //使用表格视图渲染数据
   if(req.query.format == "table"){
     res.render("camp",{
-      campData: campData
+      datas: datas,
+      title: "阵营表格"
     });
   }
   //json
   else{
-    var resStr = JSON.stringify(campData);
+    var resStr = JSON.stringify(datas);
     res = setResJson(res,resStr);
     res.send(resStr);
   }
@@ -233,6 +245,16 @@ function setResJson(res, resStr){
   res.header( 'Access-Control-Allow-Origin', '*');
   res.header( 'content-length', Buffer.byteLength(resStr, "utf-8"));
   return res;
+}
+
+/**
+ *获取今天的字符串 
+**/
+function getToday(){
+  var d = new Date();
+  return (""+d.getFullYear()).slice(2)+
+  "-"+prefixZero(2, d.getMonth()+1)+
+  "-"+prefixZero(2, d.getDate());
 }
 
 var server = app.listen(2333, function() {

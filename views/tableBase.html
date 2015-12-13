@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% set datas=datas %}
+
+{% block content %}
+<div class="ui-table-container">
+  {% block table %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block endScript %}
+<script>
+/*浏览器生成节点，省流量daze*/
+var datas = {{JSON.stringify(datas)}};
+var tbody = document.getElementsByTagName("tbody")[0];
+//减少html重排重绘
+tbody.style.display = "none";
+
+var tableVm = new Vue({
+  el: 'table',
+  data: {
+    datas:datas,
+    stageMap:["","海选","复活赛","128强","32强","16强","8强","半决赛","三四位决赛","决赛"],
+    statMap:["","晋级","复活","淘汰"]
+  }
+});
+
+tbody.style.display = "";
+</script>
+{% endblock %}

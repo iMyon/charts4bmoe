@@ -1,65 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "tableBase.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <title>阵营信息</title>
-  <link rel="stylesheet" href="/css/table.css">
-  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script> 
-	<script type="text/javascript" src="/js/lib/jquery.tablesorter.min.js"></script> 
-  <script type="text/javascript" src="/js/view.js"></script> 
-</head>
-
-<body>
-  <div class="ui-table-container">
-    <table class="ui-table">
-      <thead>
-        <tr>
-          <th>序号</th> 
-          <th>动画</th>
-          <th>参与人数</th>
-          <th>晋级人数</th>
-          <th>复活人数</th>
-          <th>淘汰人数</th>
-          <th>晋级率</th>
-          <th>复活率</th>
-          <th>淘汰率</th>
-        </tr>
-      </thead>
-      <tbody class="count">
-
-      </tbody>
-    </table>
-  </div>
-
-</body>
-<script>
-  /*浏览器生成节点，省流量daze*/
-	var campData = {{JSON.stringify(campData)}};
-	var tbody = document.getElementsByTagName("tbody")[0];
-	//减少html重排重绘
-	tbody.style.display = "none";
-	campData.forEach(function(data){
-    var tr = genTrLIst([
-      {},
-      {innerHTML:data.bangumi, link:"/api/data/rank?format=table&bangumi=" + encodeURIComponent(data.bangumi)},
-      {innerHTML:data.total},
-      {innerHTML:data.suc},
-      {innerHTML:data.wait},
-      {innerHTML:data.fail},
-      {innerHTML:(data.suc/data.total*100).toFixed(2) + "%"},
-      {innerHTML:(data.wait/data.total*100).toFixed(2)+ "%"},
-      {innerHTML:(data.fail/data.total*100).toFixed(2)+ "%"}
-    ]);
-		tbody.appendChild(tr);
-	});
-	tbody.style.display = "";
-	$(document).ready(function() 
-    { 
-      $("table").tablesorter(); 
-    } 
-	);
-
-</script>
-
-</html>
+{% block table %}
+{% raw %}
+<table class="ui-table bordered highlight">
+  <thead>
+    <tr>
+      <th>序号</th>
+      <th>动画</th>
+      <th>参与人数</th>
+      <th>晋级人数</th>
+      <th>复活人数</th>
+      <th>淘汰人数</th>
+      <th>晋级率</th>
+      <th>复活率</th>
+      <th>淘汰率</th>
+    </tr>
+  </thead>
+  <tbody class="count">
+    <tr v-for="data in datas">
+      <td></td>
+      <td>
+        <a target="_blank" href="/api/data/rank?format=table&bangumi={{encodeURIComponent(data.bangumi)}}">{{data.bangumi}}</a>
+      </td>
+      <td>{{data.total}}</td>
+      <td>{{data.suc}}</td>
+      <td>{{data.wait}}</td>
+      <td>{{data.fail}}</td>
+      <td>{{(data.suc / data.total * 100).toFixed(2)}}%</td>
+      <td>{{(data.wait / data.total * 100).toFixed(2)}}%</td>
+      <td>{{(data.fail / data.total * 100).toFixed(2)}}%</td>
+    </tr>
+  </tbody>
+</table>
+{% endraw %}
+{% endblock %}

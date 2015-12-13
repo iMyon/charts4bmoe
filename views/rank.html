@@ -1,77 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <title>角色名次表格</title>
-  <link rel="stylesheet" href="/css/table.css">
-  <link rel="stylesheet" href="/css/main.css">
-  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script> 
-	<script type="text/javascript" src="/js/lib/jquery.tablesorter.min.js"></script> 
-	<script type="text/javascript" src="/js/view.js"></script> 
-</head>
-
-<body>
-  <div class="ui-table-container">
-    <table class="ui-table">
-      <thead>
-        <tr>
-          <th>序号</th> 
-          <th>名字</th>
-          <th>阶段</th>
-          <th>得票数</th>
-          <th>组内名次</th>
-          <th>状态</th>
-          <th>性别</th>
-          <th>id</th>
-          <th>动画</th>
-          <th>日期</th>
-        </tr>
-      </thead>
-      <tbody class="count">
-
-      </tbody>
-    </table>
-  </div>
-
-</body>
-<script>
-  var failList = {{JSON.stringify(failList)}};
-	var roleLinks = {{JSON.stringify(roleLinks)}};
-	var bangumiLinks = {{JSON.stringify(bangumiLinks)}};
-  /*浏览器生成节点，省流量daze*/
-	var rankData = {{JSON.stringify(rankData)}};
-	var tbody = document.getElementsByTagName("tbody")[0];
-	//减少html重排重绘
-	tbody.style.display = "none";
-  var stageMap =["","海选","复活赛","128强","32强","16强","8强","半决赛","三四位决赛","决赛"];
-  var statMap =["","晋级","复活","淘汰"];
-	rankData.forEach(function(data){
-    var tr = genTrLIst([
-      {},
-      {innerHTML:data.name, link:roleLinks[[data.name, data.bangumi].join(" @")]},
-      {innerHTML:stageMap[data.stage]},
-      {innerHTML:data.count},
-      {innerHTML:data.rank},
-      {innerHTML:statMap[data.stat]},
-      {innerHTML:data.sex==1 ? "男":"女"},
-      {innerHTML:data.id},
-      {innerHTML:data.bangumi, link:bangumiLinks[data.bangumi]},
-      {innerHTML:data.date}
-    ]);
-    if(failList[[data.name, data.bangumi].join(" @")]){
-      tr.className = "role failed";
-    }
-		tbody.appendChild(tr);
-	});
-	tbody.style.display = "";
-
-	$(document).ready(function() 
-    { 
-      $("table").tablesorter(); 
-    } 
-	);
-
-</script>
-
-</html>
+{% extends "tableBase.html" %} 
+{% block table %} 
+{% raw %}
+<table class="ui-table bordered highlight">
+  <thead>
+    <tr>
+      <th>序号</th>
+      <th>存活状态</th>
+      <th>名字</th>
+      <th>阶段</th>
+      <th>得票数</th>
+      <th>组内名次</th>
+      <th>状态</th>
+      <th>性别</th>
+      <th>id</th>
+      <th>动画</th>
+      <th>日期</th>
+    </tr>
+  </thead>
+  <tbody class="count">
+    <tr v-for="data in datas.rankData">
+      <td></td>
+      <td>
+        <i v-if="datas.failList[[data.name, data.bangumi].join(' @')]" class="material-icons grey-text">error</i>
+        <i v-else class="material-icons  teal-text text-lighten-1">done</i>
+      </td>
+      <td v-if="datas.roleLinks[[data.name, data.bangumi].join(' @')]">
+        <a target="_blank" href="{{datas.roleLinks[[data.name, data.bangumi].join(' @')]}}">{{data.name}}</a>
+      </td>
+      <td v-else>{{data.name}}</td>
+      <td>{{stageMap[data.stage]}}</td>
+      <td>{{data.count}}</td>
+      <td>{{data.rank}}</td>
+      <td>{{statMap[data.stat]}}</td>
+      <td>{{data.sex==1 ? "男":"女"}}</td>
+      <td>{{data.id}}</td>
+      <td v-if="datas.bangumiLinks[data.bangumi]">
+        <a target="_blank" href="{{datas.bangumiLinks[data.bangumi]}}">{{data.bangumi}}</a>
+      </td>
+      <td v-else>{{data.bangumi}}</td>
+      <td>{{data.date}}</td>
+    </tr>
+  </tbody>
+</table>
+{% endraw %} 
+{% endblock %}
