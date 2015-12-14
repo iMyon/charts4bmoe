@@ -15,38 +15,64 @@
   <header>
     <nav class="top-nav">
       <div class="container">
-        <div class="nav-wrapper"><a class="page-title">{{title}}</a></div>
+        <div class="nav-wrapper"><a class="page-title">{{XXX}}</a></div>
       </div>
     </nav>
     {% raw %}
-    <ul class="side-nav fixed" id="nav-left" style="width: 240px;">
+    <ul class="side-nav fixed" id="nav-left hide-on-med-and-down" style="width: 240px;">
       <li class="logo">
-        <a class="brand-logo header" href="/" id="logo-container">
-            B萌战况曲线
+        <a class="brand-logo header" href="/#" id="logo-container">
+            XXX
         </a>
       </li>
-      <li class="bold active"><a class="waves-effect waves-teal" href="/">曲线图</a></li>
+      <li class="bold"><a class="waves-effect waves-teal" href="/">曲线图</a></li>
       <li class="bold"><a class="waves-effect waves-teal" href="/api/data/camp?format=table">阵营信息</a></li>
       <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
-          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">角色信息</a>
+          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">海选赛</a>
             <div class="collapsible-body" style="">
               <ul>
-                <li><a href="color.html">萌组</a></li>
-                <li><a href="grid.html">燃组</a></li>
-                <li><a href="/api/data/rank?format=table&stat=1&sex=0">本战列表</a></li>
-                <li><a href="media-css.html">Media</a></li>
-                <li><a href="sass.html">Sass</a></li>
-                <li><a href="shadow.html">Shadow</a></li>
-                <li><a href="table.html">Table</a></li>
-                <li><a href="typography.html">Typography</a></li>
+                <li><a href="/api/data/rank?format=table&stat=1&sex=0&stage=1">萌组晋级</a></li>
+                <li><a href="/api/data/rank?format=table&stat=1&sex=1&stage=1">燃组晋级</a></li>
+                <li><a href="/api/data/rank?format=table&stat=2&sex=0&stage=1">萌组复活</a></li>
+                <li><a href="/api/data/rank?format=table&stat=2&sex=1&stage=1">燃组复活</a></li>
+                <li><a href="/api/data/rank?format=table&stat=3&sex=0&stage=1">萌组淘汰</a></li>
+                <li><a href="/api/data/rank?format=table&stat=3&sex=1&stage=1">燃组淘汰</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">复活赛</a>
+            <div class="collapsible-body" style="">
+              <ul>
+                <li><a href="/api/data/rank?format=table&stat=1&sex=0&stage=2">萌组晋级</a></li>
+                <li><a href="/api/data/rank?format=table&stat=1&sex=1&stage=2">燃组晋级</a></li>
+                <li><a href="/api/data/rank?format=table&stat=3&sex=0&stage=2">萌组淘汰</a></li>
+                <li><a href="/api/data/rank?format=table&stat=3&sex=1&stage=2">燃组淘汰</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">128强赛</a>
+            <div class="collapsible-body" style="">
+              <ul>
+                <li><a href="/api/data/rank?format=table&stat=1&sex=0&stage=3">萌组晋级</a></li>
+                <li><a href="/api/data/rank?format=table&stat=1&sex=1&stage=3">燃组晋级</a></li>
+                <li><a href="/api/data/rank?format=table&stat=3&sex=0&stage=3">萌组淘汰</a></li>
+                <li><a href="/api/data/rank?format=table&stat=3&sex=1&stage=3">燃组淘汰</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="bold"><a class="collapsible-header waves-effect waves-teal" href="/api/data/role?format=table&date=today">得票数据</a></li>
+          <li class="bold"><a class="collapsible-header waves-effect waves-teal" href="/api/data/ballot?format=table&date=today">票仓数据</a></li>
+          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">b萌原始数据</a>
+            <div class="collapsible-body" style="">
+              <ul>
+                <li><a href="/data">角色得票</a></li>
+                <li><a href="/voteData">票仓</a></li>
               </ul>
             </div>
           </li>
         </ul>
       </li>
-      <li class="bold"><a class="waves-effect waves-teal" href="/api/data/role?format=table&date=today">得票数据</a></li>
-      <li class="bold"><a class="waves-effect waves-teal" href="/api/data/ballot?format=table&date=today">票仓数据</a></li>
     </ul>
     {% endraw %}
   </header>
@@ -62,6 +88,14 @@
   <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
   <script>
   var dates = {{JSON.stringify(dates)}};
+  // $('.collapsible').collapsible({});
+  //添加active类
+  $(document).ready(function(){
+    $(".side-nav.fixed li a").each(function(i,e){
+      if(e.href == location.href) $(e).parents("li").addClass("active")
+                                      .parents("li.bold").find(".collapsible-header").click();
+    });
+  });
   </script>
   {% block endScript %}{% endblock %}
 </body>
