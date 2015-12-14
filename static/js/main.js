@@ -806,7 +806,6 @@ function getStage(voteDay) {
  * 页面加载完处理
  */
 $(document).ready(function () {
-  $(".button-collapse").sideNav();
   $('select').material_select();
   function setShowAndHidden() {
     var dob = $("#date-or-bangumi").val();
