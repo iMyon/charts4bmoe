@@ -88,7 +88,7 @@ function getDataByCondition(war, condition, chartType) {
   var v_times = ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
   var _dates = dates;
   //如果参数中有日期，则按照参数中的筛选
-  if (condition.day) _dates = condition.day.split(",");
+  if (condition.date) _dates = condition.date.split(",");
   var fillTime = function (sery, index) {
     for (var i = 0, j = 0; i < v_times.length; i++) {
       if (tdata.v_times[j] != v_times[i]) {
@@ -104,7 +104,7 @@ function getDataByCondition(war, condition, chartType) {
   };
   for (var i = 0; i < _dates.length; i++) {
     var stage = getStage(_dates[i]);
-    var tdata = getChartData(war, _dates[i], "any");
+    var tdata = getChartData(war, {date:_dates[i], sex:"any", group:"any"});
     tdata.series.forEach(fillTime);
     if (stage > 1) tdata.series.forEach(setNameWithStage(stage));
     tdata.v_times = v_times;
@@ -116,7 +116,7 @@ function getDataByCondition(war, condition, chartType) {
     }
     else AllCharDatas.series = AllCharDatas.series.concat(tdata.series);
   }
-  condition.day = undefined;//重置day，以便后面筛选
+  condition.date = undefined;//重置day，以便后面筛选
   AllCharDatas.series = AllCharDatas.series.filter(function (e) {
     for (var key in condition) {
       if (condition[key] == "any") continue;
@@ -154,16 +154,17 @@ function getDataByIds(war, ids, chartType) {
  * 根据日期和性别得到当前时间人物获得的总票数曲线图信息
  * 
  * @param  {object} war 萌战比赛json原始数据
- * @param  {string} day 比赛日期，逗号分隔
- * @param  {string} sex 性别：0女 1男 any任意
+ * @param  {object} condition 表单条件
  * @return {object} echarts总票数图形数据
  * 
  */
-function getChartData(war, day, sex) {
-  var days = day.split(",");
-  if (days.length > 1) return getDataByCondition(war, { bangumi: "any", sex: sex, day: day }, $("#sel-chart").val());
+function getChartData(war, condition) {
+  var days = condition.date.split(",");
+  if (days.length > 1) return getDataByCondition(war, { bangumi: "any", sex: condition.sex, date: condition.date }, $("#sel-chart").val());
   var dayData = war.filter(function (e) {
-    return (e.date == day) && (sex == e.sex || sex == "any");
+    return (e.date == condition.date) && 
+      (condition.sex == e.sex || condition.sex == "any") && 
+      (e.group == condition.group || condition.group == "any");
   });
   var chartData = {};
   chartData.text = "总票数折线图";
@@ -599,7 +600,7 @@ function draw(chartData, sliceStart, sliceEnd) {
 function startDraw(condition) {
   if (condition.dob == "0") {
     getWarData(condition, function (war) {
-      var chartData = getChartData(war, condition.date, condition.sex);
+      var chartData = getChartData(war, condition);
       if (condition.date.indexOf(",") == -1) {
         if (condition.chart == 1) chartData = getGradChartData(chartData);
         else if (condition.chart == 2) chartData = getRatePerHChartData(chartData);
@@ -820,6 +821,7 @@ $(document).ready(function () {
     var condition = {};
     condition.dob = $("#date-or-bangumi").val();
     condition.sex = $("#sel-sex").val();
+    condition.group = $("#sel-group").val();
     condition.date = $("#input-date").val();
     condition.date = condition.date ? condition.date : dates.join(",");
     condition.chart = $("#sel-chart").val();
@@ -830,4 +832,35 @@ $(document).ready(function () {
   };
   doClick();
   $("#submit").click(doClick);
+  
+  var onDateChange = function(){
+    setTimeout(function(){
+      $("#sel-group").material_select();
+    },500);
+  };
+  
+  var formVm = new Vue({
+    el: "#condition-form",
+    data:{
+      //本战分组
+      a2h:{
+        "15-12-12": ["A1","A2","A3","A4"],
+        "15-12-13": ["B1","B2","B3","B4"],
+        "15-12-14": ["C1","C2","C3","C4"],
+        "15-12-15": ["D1","D2","D3","D4"],
+        "15-12-16": ["E1","E2","E3","E4"],
+        "15-12-17": ["F1","F2","F3","F4"],
+        "15-12-18": ["G1","G2","G3","G4"],
+        "15-12-19": ["H1","H2","H3","H4"]
+      }
+    },
+    attached: function(){
+      onDateChange();
+    },
+    watch: {
+      "condition.date": function(val, oldVal){
+        onDateChange();
+      }
+    }
+  });
 });

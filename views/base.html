@@ -19,7 +19,7 @@
       </div>
     </nav>
     {% raw %}
-    <ul class="side-nav fixed" id="nav-left hide-on-med-and-down" style="width: 240px;">
+    <ul class="side-nav fixed  hide-on-med-and-down" id="nav-left" style="width: 240px;">
       <li class="logo">
         <a class="brand-logo header" href="/#" id="logo-container">
             XXX
@@ -61,8 +61,8 @@
               </ul>
             </div>
           </li>
-          <li class="bold"><a class="collapsible-header waves-effect waves-teal" href="/api/data/role?format=table&date=today">得票数据</a></li>
-          <li class="bold"><a class="collapsible-header waves-effect waves-teal" href="/api/data/ballot?format=table&date=today">票仓数据</a></li>
+          <!--<li class="bold"><a class="collapsible-header waves-effect waves-teal" href="/api/data/role?format=table&date=today">得票数据</a></li>-->
+          <li class="bold"><a class="collapsible-header waves-effect waves-teal" href="/api/data/ballot?format=table&date=today">今日票仓数据</a></li>
           <li class="bold"><a class="collapsible-header  waves-effect waves-teal">b萌原始数据</a>
             <div class="collapsible-body" style="">
               <ul>
@@ -87,7 +87,7 @@
   <script type="text/javascript" src="/js/lib/vue.js"></script>
   <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
   <script>
-  var dates = {{JSON.stringify(dates)}};
+    var dates = {{JSON.stringify(dates)}};
   // $('.collapsible').collapsible({});
   //添加active类
   $(document).ready(function(){
@@ -98,6 +98,61 @@
   });
   </script>
   {% block endScript %}{% endblock %}
+  <div id="cup">
+    <div style="z-index: 1002; display: block; opacity: 0.5;" id="materialize-lean-overlay-4" class="lean-overlay"></div>
+
+    <div class="valign-wrapper" id="loading">
+      <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="spinner-layer spinner-red">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="spinner-layer spinner-yellow">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="spinner-layer spinner-green">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

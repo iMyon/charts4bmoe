@@ -1,13 +1,10 @@
+#e-canvas {
+  min-height: 700px;
+}
 @media only all and (max-height: 900px) {
   #e-canvas {
     min-height: 500px;
   }
-}
-
-@media only all and (min-height: 1000px) {
-    #e-canvas {
-      min-height: 600px;
-    }
 }
 
 html,
@@ -135,6 +132,15 @@ main,
 footer {
     padding-left: 240px;
 }
+#nav-left{
+  z-index: 1003;
+}
+#loading{
+  position: fixed;
+  z-index: 1005;
+  top: 50%;
+  left: 50%;
+}
 
 .container {
     width: 95%;
@@ -160,18 +166,6 @@ ul.side-nav.fixed li.active {
     background-color: #ee6e73;
 }
 
-*,
-*::before,
-*::after {
-    box-sizing: inherit;
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: inherit;
-}
-
 ul.side-nav.fixed li a {
     font-size: 16px;
     height: 44px;
@@ -183,7 +177,10 @@ ul.side-nav.fixed ul.collapsible-accordion {
 }
 
 .bold > a {
-    font-weight: bold;
+    /*font-weight: bold;*/
+}
+ul.side-nav.fixed li.bold>a{
+  font-size: 18px;
 }
 
 /*表格自动编号*/

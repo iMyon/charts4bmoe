@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col s12" id="e-canvas"></div>
 </div>
-<div class="row">
+<div class="row" id="condition-form">
   <div class="col s1 offset-s1 input-field">
     <select name="date-or-bangumi" id="date-or-bangumi">
       <option value="0" checked>按日期</option>
@@ -23,7 +23,20 @@
     </select>
     <!--<label for="sel-sex">选择性别</label>-->
   </div>
-  <div class="col s3 input-field">
+  {% raw %}
+  <div class="col s1 input-field">
+    <select name="group" id="sel-group"  data-control="true" data-show="0">
+      <option value="any">全部</option>
+      <template v-for="(key, options) in a2h">
+      <template v-if="key==condition.date">
+        <option :value="value" v-for="value in options">{{value}}</option>
+      </template>
+      </template>
+    </select>
+    <label for="sel-group">选择分组</label>
+  </div>
+  {% endraw %}
+  <div class="col s2 input-field">
     <select name="bangumi" id="sel-bangumi" data-control="true" data-show="1">
       {% for bangumi in bangumis %}
       <option value="{{bangumi}}">{{bangumi}}</option>
@@ -32,8 +45,8 @@
     <!--<label for="sel-bangumi">选择阵营</label>-->
   </div>
   <div class="col s1 input-field">
-    <input type="text" id="input-date" class="form-control" value="{{dates[0]}}" placeholder="选择日期" data-control="true" data-show="023">
-    <!--<label for="input-date">选择日期</label>-->
+    <input type="text" v-model="condition.date" id="input-date" class="form-control" value="{{dates[0]}}" placeholder="选择日期" data-control="true" data-show="023">
+    <label for="input-date">比赛日期</label>
   </div>
   <div class="col s2 input-field">
     <select name="chart" id="sel-chart" data-control="true" data-show="0123">
@@ -47,12 +60,12 @@
   <div class="col s1 input-field">
     <input type="text" class="form-control" placeholder="起始名次" id="sliceStart" name="sliceStart" value="1" data-control="true"
     data-show="0" />
-    <!--<label for="sliceStart">起始名次</label>-->
+    <label for="sliceStart">起始名次</label>
   </div>
   <div class="col s1 input-field">
     <input type="text" class="form-control" placeholder="终止名次" id="sliceEnd" name="sliceEnd" value="16" data-control="true" data-show="0"
     />
-    <!--<label for="sliceEnd">终止名次</label>-->
+    <label for="sliceEnd">终止名次</label>
   </div>
 </div>
 
