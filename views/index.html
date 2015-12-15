@@ -23,17 +23,15 @@
     </select>
     <!--<label for="sel-sex">选择性别</label>-->
   </div>
-  <div class="col s3 input-field">
-    <select name="bangumi" id="sel-bangumi" data-control="true" data-show="1">
-      {% for bangumi in bangumis %}
-      <option value="{{bangumi}}">{{bangumi}}</option>
-      {% endfor %}
-    </select>
-    <!--<label for="sel-bangumi">选择阵营</label>-->
+  <div class="col s2 input-field">
+    <input v-model="condition.bangumi" type="text" id="input-bangumi" class="form-control modal-trigger" value=""
+     data-target="modal-bangumi" placeholder="选择阵营" data-control="true" data-show="1">
+    <label for="sel-bangumi">选择阵营</label>
   </div>
   <div class="col s1 input-field">
-    <input type="text" id="input-date" class="form-control" value="{{dates[0]}}" placeholder="选择日期" data-control="true" data-show="023">
-    <!--<label for="input-date">选择日期</label>-->
+    <input v-model="condition.date" type="text" id="input-date" class="form-control modal-trigger" value="{{dates[0]}}"
+     data-target="modal-input-date" placeholder="选择日期" data-control="true" data-show="023">
+    <label for="input-date">选择日期</label>
   </div>
   <div class="col s2 input-field">
     <select name="chart" id="sel-chart" data-control="true" data-show="0123">
@@ -62,9 +60,74 @@
   </div>
 </div>
 
+{%raw%}
+<div id="modals">
+  <div id="modal-input-date" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Choose Date</h4>
+      <div class="container">
+        <div class="row">
+          <div class="col" style="width:14%;">星期一</div>
+          <div class="col" style="width:14%;">星期二</div>
+          <div class="col" style="width:14%;">星期三</div>
+          <div class="col" style="width:14%;">星期四</div>
+          <div class="col" style="width:14%;">星期五</div>
+          <div class="col" style="width:14%;">星期六</div>
+          <div class="col" style="width:14%;">星期日</div>
+        </div>
+        <div class="row">
+          <!--10-31号周一到周五占位-->
+          <div v-for="n in 5" class="col" style="width:14%;">　</div>
+          <template v-for="date in dates | orderBy true">
+          <div v-if="yasumiNextDates.indexOf(date) != -1" class="col grey-text text-lighten-2" style="width:14%;">Rest</div>
+          <div class="col date-unit" style="width:14%;">
+            <span @click="changeStat" :class="{'date-selected':condition.date.split(',').indexOf(date)!=-1}">
+              {{date}}
+            </span>
+          </div>
+          </template>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Done</a>
+      <a href="#!" @click="clearDates" class="waves-effect waves-green btn-flat ">Clear</a>
+      <a href="#!" @click="selectAllDates" class="waves-effect waves-green btn-flat ">Select All</a>
+    </div>
+  </div>
+  <div id="modal-bangumi" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>选择阵营</h4>
+      <div class="container">
+        <div class="row">
+          <div class="col s12 input-field">
+            <input type="text" v-model="bangumiFilterStr" class="form-control" value="" placeholder="输入过滤文本" id="input-bangumiFilter" autocomplete="off"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="collection">
+            <template v-for="bgm in bangumis">
+            <a href="#!" v-if="bgm.toUpperCase().indexOf(bangumiFilterStr.toUpperCase().trim())!=-1" class="modal-action modal-close collection-item" @click="onBangumiClick" :class="{'bangumi-selected':condition.bangumi==bgm}">
+              {{bgm}}
+            </a>
+          </template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Done</a>
+    </div>
+  </div>
+</div>
+{%endraw%}
+
 {% endblock %}
 
 {% block endScript %}
 <script src="js/lib/echarts.js"></script>
 <script src="js/main.js"></script>
+<script>
+  var bangumis = {{JSON.stringify(bangumis)}};
+</script>
 {% endblock %}

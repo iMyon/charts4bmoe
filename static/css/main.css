@@ -196,3 +196,21 @@ tbody.count td:first-child::before {
     content: counter(sectioncounter);
     counter-increment: sectioncounter;
 }
+
+/*modal*/
+.date-unit span{
+  cursor: pointer;
+}
+.date-selected{
+  color: #ee6e73;
+}
+.bangumi-selected{
+  background: #26a69a !important;
+  color: #fff !important;
+}
+
+/*avatar*/
+.avatar:hover{
+  transform: scale(1.1);
+  transition: 200ms;
+}

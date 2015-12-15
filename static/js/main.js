@@ -807,6 +807,7 @@ function getStage(voteDay) {
  */
 $(document).ready(function () {
   $('select').material_select();
+  $('.modal-trigger').leanModal();
   function setShowAndHidden() {
     var dob = $("#date-or-bangumi").val();
     $("[data-control='true']").attr('disabled', true);
@@ -823,11 +824,44 @@ $(document).ready(function () {
     condition.date = $("#input-date").val();
     condition.date = condition.date ? condition.date : dates.join(",");
     condition.chart = $("#sel-chart").val();
-    condition.bangumi = $("#sel-bangumi").val();
+    condition.bangumi = $("#input-bangumi").val();
     condition.sliceStart = ~~$("#sliceStart").val();
     condition.sliceEnd = ~~$("#sliceEnd").val();
     startDraw(condition);
   };
   doClick();
   $("#submit").click(doClick);
+  var modalVm = new Vue({
+    el:"body", 
+    data:{
+      dates:dates,
+      bangumis: bangumis,
+      yasumiNextDates:["15-12-07","15-12-12","15-12-27"]
+    },
+    methods:{
+      changeStat: function(event){
+        $(event.target).toggleClass('date-selected');
+        this.setConditionDate();
+      },
+      selectAllDates: function(event){
+        $('.date-unit span').addClass('date-selected');
+        this.setConditionDate();
+      },
+      clearDates: function(event){
+        $(event.target).addClass('bangumi-selected');
+        $('.date-unit span').removeClass('date-selected');
+        this.setConditionDate();
+      },
+      onBangumiClick: function(event){
+        this.condition.bangumi = event.target.innerHTML.trim();
+      },
+      setConditionDate: function(){
+        var dateArr = [];
+        $("#modal-input-date .date-unit span.date-selected").each(function(){
+          dateArr.push($(this).text().trim());
+        });
+        this.condition.date = dateArr.join(",");
+      }
+    }
+  });
 });

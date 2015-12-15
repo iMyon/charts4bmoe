@@ -15,7 +15,12 @@
   <header>
     <nav class="top-nav">
       <div class="container">
-        <div class="nav-wrapper"><a class="page-title">{{XXX}}</a></div>
+        <div class="nav-wrapper">
+          <a class="page-title">{{XXX}}</a>
+          <a @click>
+            <img src="http://i1.hdslb.com/u_user/1ddbfb8af54df29205c0d90192eb49de.jpg" class="avatar right circle responsive-img" style="height:65px;">
+          </a>
+        </div>
       </div>
     </nav>
     {% raw %}
@@ -82,7 +87,30 @@
       {% block content %}{% endblock %}
     </div>
   </main>
-  <footer></footer>
+
+<footer class="page-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12">
+        <h5 class="white-text">说明</h5>
+        <p class="grey-text text-lighten-4">个人娱乐/练手项目</p>
+      </div>
+      <div class="col l4 offset-l2 s12">
+        <h5 class="white-text">相关链接</h5>
+        <ul>
+          <li><a class="grey-text text-lighten-3" target="_blank" href="https://github.com/iMyon/charts4bmoe">源代码</a></li>
+          <li><a class="grey-text text-lighten-3" target="_blank" href="https://github.com/iMyon/charts4bmoe/issues/new">问题反馈</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+      © 2015 Myon&ltmyon.cn@gmail.com&gt;
+      <a class="grey-text text-lighten-4 right" href="https://github.com/iMyon/charts4bmoe/LICENSE">MIT LICENCE</a>
+    </div>
+  </div>
+</footer>
   <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script>
   <script type="text/javascript" src="/js/lib/vue.js"></script>
   <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
