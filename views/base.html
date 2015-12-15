@@ -15,14 +15,21 @@
   <header>
     <nav class="top-nav">
       <div class="container">
-        <div class="nav-wrapper"><a class="page-title">{{XXX}}</a></div>
+        <div class="nav-wrapper">
+          <a class="page-title">{{title}}</a>
+          {% raw %}
+          <a @click="avatarClick" @mouseover="avatarHover" @mouseout="avatarHoverout">
+            <img v-show="!!avatar_url" :src="avatar_url" class="avatar right circle responsive-img" style="height:65px;">
+          </a>
+          {% endraw %}
+        </div>
       </div>
     </nav>
     {% raw %}
     <ul class="side-nav fixed  hide-on-med-and-down" id="nav-left" style="width: 240px;">
       <li class="logo">
         <a class="brand-logo header" href="/#" id="logo-container">
-            XXX
+            
         </a>
       </li>
       <li class="bold"><a class="waves-effect waves-teal" href="/">曲线图</a></li>
@@ -78,81 +85,135 @@
   </header>
 
   <main>
-    <div class="container">
+    <div class="container" id="main-content">
       {% block content %}{% endblock %}
     </div>
   </main>
-  <footer></footer>
-  <script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script>
-  <script type="text/javascript" src="/js/lib/vue.js"></script>
-  <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
-  <script>
-    var dates = {{JSON.stringify(dates)}};
-  // $('.collapsible').collapsible({});
-  //添加active类
-  $(document).ready(function(){
-    $(".side-nav.fixed li a").each(function(i,e){
-      if(e.href == location.href) $(e).parents("li").addClass("active")
-                                      .parents("li.bold").find(".collapsible-header").click();
-    });
-  });
-  </script>
-  {% block endScript %}{% endblock %}
-  <div id="cup">
-    <div style="z-index: 1002; display: block; opacity: 0.5;" id="materialize-lean-overlay-4" class="lean-overlay"></div>
 
-    <div class="valign-wrapper" id="loading">
-      <div class="preloader-wrapper big active">
-        <div class="spinner-layer spinner-blue">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div>
-          <div class="gap-patch">
-            <div class="circle"></div>
-          </div>
-          <div class="circle-clipper right">
-            <div class="circle"></div>
-          </div>
+<footer class="page-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12">
+        <h5 class="white-text">说明</h5>
+        <p class="grey-text text-lighten-4">个人娱乐/练手项目，曲线图每小时01分更新一次</p>
+        <p class="grey-text text-lighten-4">由于b萌票仓api太过混乱，需要手动修正的地方太多，票仓图已放弃</p>
+      </div>
+      <div class="col l4 offset-l2 s12">
+        <h5 class="white-text">相关链接</h5>
+        <ul>
+          <li><a class="grey-text text-lighten-3" target="_blank" href="https://github.com/iMyon/charts4bmoe">源代码</a></li>
+          <li><a class="grey-text text-lighten-3" target="_blank" href="https://github.com/iMyon/charts4bmoe/issues/new">问题反馈</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+      © 2015 Myon&ltmyon.cn@gmail.com&gt;
+      <a class="grey-text text-lighten-4 right" href="https://github.com/iMyon/charts4bmoe/LICENSE">MIT LICENCE</a>
+    </div>
+  </div>
+</footer>
+<div id="cup">
+  <div style="z-index: 1002; display: block; opacity: 0.5;" id="materialize-lean-overlay-4" class="lean-overlay"></div>
+
+  <div class="valign-wrapper" id="loading">
+    <div class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-blue">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
         </div>
-
-        <div class="spinner-layer spinner-red">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div>
-          <div class="gap-patch">
-            <div class="circle"></div>
-          </div>
-          <div class="circle-clipper right">
-            <div class="circle"></div>
-          </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
         </div>
-
-        <div class="spinner-layer spinner-yellow">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div>
-          <div class="gap-patch">
-            <div class="circle"></div>
-          </div>
-          <div class="circle-clipper right">
-            <div class="circle"></div>
-          </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
         </div>
+      </div>
 
-        <div class="spinner-layer spinner-green">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div>
-          <div class="gap-patch">
-            <div class="circle"></div>
-          </div>
-          <div class="circle-clipper right">
-            <div class="circle"></div>
-          </div>
+      <div class="spinner-layer spinner-red">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer spinner-yellow">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer spinner-green">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+
+<script type="text/javascript" src="/js/lib/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="/js/lib/vue.js"></script>
+<script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
+<script>
+  var dates = {{JSON.stringify(dates)}};
+// $('.collapsible').collapsible({});
+//添加active类
+$(document).ready(function(){
+  $(".side-nav.fixed li a").each(function(i,e){
+    if(e.href == location.href) $(e).parents("li").addClass("active")
+      .parents("li.bold").find(".collapsible-header").click();
+  });
+  $.getJSON("/public/avatar.json", function(res){
+    avatarVm.avatars = res;
+    avatarVm.avatar_url = res.normal;
+  })
+});
+//avatar
+var avatarVm = new Vue({
+  el: "header nav.top-nav",
+  data:{
+    avatars:{},
+    avatar_url:""
+  },
+  methods:{
+    avatarClick:function(){
+      this.avatar_url = this.avatar_url==this.avatars.click?this.avatars.normal:this.avatars.click;
+    },
+    avatarHover:function(){
+      setTimeout(function(){
+        if(avatarVm.avatars.hover) avatarVm.avatar_url = avatarVm.avatars.hover;
+      },500);
+    },
+    avatarHoverout: function(){
+      setTimeout(function(){
+        avatarVm.avatar_url = avatarVm.avatars.normal;
+      },500);
+    }
+  }
+});
+</script>
+{% block endScript %}{% endblock %}
+
 </body>
 
 </html>

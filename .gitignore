@@ -37,3 +37,5 @@ node_modules
 public/notice.json
 bg.png
 bg.jpg
+static/img/avatar*
+public/avatar.json

@@ -9,7 +9,16 @@
 
 html,
 body {
-    height: 100%;
+    /*height: 100%;*/
+}
+/*footer固定在底部*/
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+main{
+  flex: 1 1 auto;
 }
 
 body:after {
@@ -192,4 +201,42 @@ tbody.count {
 tbody.count td:first-child::before {
     content: counter(sectioncounter);
     counter-increment: sectioncounter;
+}
+
+/*modal*/
+.date-unit span{
+  cursor: pointer;
+}
+.rest span,.date-unit span{
+  font-size: 20px;
+}
+.week{
+  font-size: 20px;
+  font-family: bold;
+}
+.modal h4 {
+  font-size: 30px;
+}
+.modal-footer .btn-flat{
+  font-size: 20px;
+}
+#modal-bangumi .collection a.collection-item{
+  font-size: 18px;
+}
+.date-selected{
+  color: #ee6e73;
+}
+.bangumi-selected{
+  background: #26a69a !important;
+  color: #fff !important;
+}
+
+/*avatar*/
+.avatar:hover{
+  transform: scale(1.2);
+  transition: all 0.2s ease-out 0s;
+  cursor: pointer;
+}
+.avatar{
+  transition: all 0.2s ease-out 0s;
 }

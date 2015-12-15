@@ -113,7 +113,12 @@ files.forEach(function(item) {
       if(k == "male" || k=="female"){
         //写入组信息
         data[k].forEach(function(e){
-          e.members.forEach(function(e1){
+          //本战排名修正（b萌这破api）
+          e.members.sort(function(a,b){
+            return b.votes_count - a.votes_count;
+          })
+          .forEach(function(e1, index){
+            e1.rank = index+1;
             e1.group = e.name;
             e1.winner = e.winner;
           });
@@ -163,12 +168,16 @@ bangumis.forEach(function(bgm){
     if(rd.stage != 1) return false;
     return rd.bangumi == bgm && rd.stat == 3;
   }).length;
+  var failAll = rankData.filter(function(rd){
+    return rd.bangumi == bgm && rd.stat == 3;
+  }).length;
   var total = suc + wait + fail;
   campInfo.push({
     bangumi: bgm,
     total: total,
     suc: suc,
     wait: wait,
+    alive: total-failAll,
     fail: fail
   });
 });
