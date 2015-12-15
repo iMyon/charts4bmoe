@@ -19,7 +19,7 @@
     </tr>
   </thead>
   <tbody class="count">
-    <tr v-for="data in datas | sortBy data.alive">
+    <tr v-for="data in datas | orderBy 'alive' -1">
       <td></td>
       <td>
         <a target="_blank" href="/api/data/rank?format=table&bangumi={{encodeURIComponent(data.bangumi)}}">{{data.bangumi}}</a>
