@@ -12,7 +12,7 @@
       <th>id</th>
     </tr>
   </thead>
-  <tbody v-show="data&&data.length">
+  <tbody v-show="datas&&datas.length" style="display:none;">
     <template v-for="role in datas">
       <template v-for="data in role.data">
         <tr>
