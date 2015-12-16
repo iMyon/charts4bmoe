@@ -15,6 +15,9 @@
   <header>
     <nav class="top-nav">
       <div class="container">
+        <a class="button-collapse top-nav full hide-on-large-only" data-activates="nav-left" href="#">
+          <i class="mdi-navigation-menu"></i>
+        </a>
         <div class="nav-wrapper">
           <a class="page-title">{{title}}</a>
           {% raw %}
@@ -26,7 +29,7 @@
       </div>
     </nav>
     {% raw %}
-    <ul class="side-nav fixed  hide-on-med-and-down" id="nav-left" style="width: 240px;">
+    <ul class="side-nav fixed" id="nav-left" style="width: 240px;">
       <li class="logo">
         <a class="brand-logo header" href="/#" id="logo-container">
             
@@ -175,8 +178,8 @@
 <script type="text/javascript" src="/js/lib/vue.js"></script>
 <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
 <script>
-  var dates = {{JSON.stringify(dates)}};
-// $('.collapsible').collapsible({});
+var dates = {{JSON.stringify(dates)}};
+$(".button-collapse").sideNav();
 //添加active类
 $(document).ready(function(){
   $(".side-nav.fixed li a").each(function(i,e){

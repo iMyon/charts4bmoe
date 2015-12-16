@@ -7,9 +7,11 @@
   }
 }
 
-html,
 body {
-    /*height: 100%;*/
+  height: 100%;
+  min-width: 1200px;
+}
+#main-content{
 }
 /*footer固定在底部*/
 body {
@@ -136,10 +138,13 @@ div.notice:hover {
 
 /*materializecss modify*/
 
-header,
-main,
-footer {
+header,main,footer {
     padding-left: 240px;
+}
+@media only screen and (max-width: 992px) {
+  header, main, footer {
+    padding-left: 0;
+  }
 }
 #nav-left{
   z-index: 1003;
