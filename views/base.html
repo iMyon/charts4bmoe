@@ -22,7 +22,9 @@
           <a class="page-title">{{title}}</a>
           {% raw %}
           <a @click="avatarClick" @mouseover="avatarHover" @mouseout="avatarHoverout">
-            <img v-show="!!avatar_url" :src="avatar_url" class="avatar right circle responsive-img" style="height:65px;">
+            <img v-show="!!avatars.message && !!avatar_url" :src="avatar_url" class="tooltipped avatar right circle responsive-img" style="height:65px;"
+              data-position="left" data-delay="50" :data-tooltip="message">
+            <img v-else="!!avatar_url" :src="avatar_url" class="avatar right circle responsive-img" style="height:65px;">
           </a>
           {% endraw %}
         </div>
@@ -196,13 +198,15 @@ var avatarVm = new Vue({
   el: "header nav.top-nav",
   data:{
     avatars:{},
-    avatar_url:""
+    avatar_url:"",
+    message:""
   },
   methods:{
     avatarClick:function(){
       this.avatar_url = this.avatar_url==this.avatars.click?this.avatars.normal:this.avatars.click;
     },
     avatarHover:function(){
+      if(this.avatars.message) this.message = this.avatars.message[Math.floor(Math.random()*this.avatars.message.length)];
       setTimeout(function(){
         if(avatarVm.avatars.hover) avatarVm.avatar_url = avatarVm.avatars.hover;
       },500);
