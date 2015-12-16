@@ -18,7 +18,7 @@
       <th>淘汰率</th>
     </tr>
   </thead>
-  <tbody class="count">
+  <tbody class="count" v-show="data&&data.length">
     <tr v-for="data in datas | orderBy 'alive' -1">
       <td></td>
       <td>

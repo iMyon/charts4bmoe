@@ -17,8 +17,8 @@
       <th>日期</th>
     </tr>
   </thead>
-  <tbody class="count">
-    <tr v-for="data in datas.rankData">
+  <tbody class="count" v-show="data&&data.length">
+    <tr v-for="data in datas.rankData" >
       <td></td>
       <td>
         <i v-if="datas.failList[[data.name, data.bangumi].join(' @')]" class="material-icons grey-text">error</i>
