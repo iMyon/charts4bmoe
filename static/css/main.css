@@ -245,3 +245,15 @@ tbody.count td:first-child::before {
 .avatar{
   transition: all 0.2s ease-out 0s;
 }
+
+/*logo*/
+.logo img{
+  width: 200px;
+}
+.side-nav li.logo{
+  height: 80px;
+  padding-left: 0px;
+}
+.logo a,.logo,.logo li{
+  background: none !important;
+}

@@ -34,7 +34,7 @@
     <ul class="side-nav fixed" id="nav-left" style="width: 240px;">
       <li class="logo">
         <a class="brand-logo header" href="/#" id="logo-container">
-            
+            <img src="" alt="">
         </a>
       </li>
       <li class="bold"><a class="waves-effect waves-teal" href="/">曲线图</a></li>
@@ -189,8 +189,8 @@ $(document).ready(function(){
       .parents("li.bold").find(".collapsible-header").click();
   });
   $.getJSON("/public/avatar.json", function(res){
-    avatarVm.avatars = res;
-    avatarVm.avatar_url = res.normal;
+    avatarVm.avatars = res[0];
+    avatarVm.avatar_url = avatarVm.avatars.normal;
   })
 });
 //avatar
@@ -198,6 +198,7 @@ var avatarVm = new Vue({
   el: "header nav.top-nav",
   data:{
     avatars:{},
+    index: 0,
     avatar_url:"",
     message:""
   },
@@ -206,10 +207,10 @@ var avatarVm = new Vue({
       this.avatar_url = this.avatar_url==this.avatars.click?this.avatars.normal:this.avatars.click;
     },
     avatarHover:function(){
-      if(this.avatars.message) this.message = this.avatars.message[Math.floor(Math.random()*this.avatars.message.length)];
+      if(this.avatars.message) this.message = this.avatars.message[this.index++%this.avatars.message.length];
       setTimeout(function(){
         if(avatarVm.avatars.hover) avatarVm.avatar_url = avatarVm.avatars.hover;
-      },500);
+      },200);
     },
     avatarHoverout: function(){
       setTimeout(function(){
