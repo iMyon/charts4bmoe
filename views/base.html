@@ -21,7 +21,7 @@
         <div class="nav-wrapper">
           <a class="page-title">{{title}}</a>
           {% raw %}
-          <a v-if="!!avatar_url" @click="avatarClick" @mouseover="avatarHover" @mouseout="avatarHoverout">
+          <a v-show="!!avatar_url" @click="avatarClick" @mouseover="avatarHover" @mouseout="avatarHoverout">
             <img v-show="!!avatars.message" :src="avatar_url" class="tooltipped avatar right circle responsive-img" style="height:65px;"
               data-position="left" data-delay="50" :data-tooltip="message">
             <img v-else :src="avatar_url" class="avatar right circle responsive-img" style="height:65px;">
@@ -70,6 +70,16 @@
                 <li><a href="/api/data/rank?format=table&stat=1&sex=1&stage=3">燃组晋级</a></li>
                 <li><a href="/api/data/rank?format=table&stat=3&sex=0&stage=3">萌组淘汰</a></li>
                 <li><a href="/api/data/rank?format=table&stat=3&sex=1&stage=3">燃组淘汰</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">32强赛</a>
+            <div class="collapsible-body" style="">
+              <ul>
+                <li><a href="/api/data/rank?format=table&stat=1&sex=0&stage=4">萌组晋级</a></li>
+                <li><a href="/api/data/rank?format=table&stat=1&sex=1&stage=4">燃组晋级</a></li>
+                <li><a href="/api/data/rank?format=table&stat=3&sex=0&stage=4">萌组淘汰</a></li>
+                <li><a href="/api/data/rank?format=table&stat=3&sex=1&stage=4">燃组淘汰</a></li>
               </ul>
             </div>
           </li>
@@ -204,12 +214,12 @@ var avatarVm = new Vue({
   },
   methods:{
     avatarClick:function(){
-      this.avatar_url = this.avatar_url==this.avatars.click?this.avatars.normal:this.avatars.click;
+      if(!!this.avatars.hover) this.avatar_url = this.avatar_url==this.avatars.click?this.avatars.normal:this.avatars.click;
     },
     avatarHover:function(){
       if(this.avatars.message) this.message = this.avatars.message[this.index++%this.avatars.message.length];
       setTimeout(function(){
-        if(avatarVm.avatars.hover) avatarVm.avatar_url = avatarVm.avatars.hover;
+        if(!!avatarVm.avatars.hover) avatarVm.avatar_url = avatarVm.avatars.hover;
       },200);
     },
     avatarHoverout: function(){
