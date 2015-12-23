@@ -39,6 +39,9 @@ files.forEach(function(item) {
   {date: "15-12-17",count: 5000},
   {date: "15-12-19",count: 5200},
   {date: "15-12-20",count: 6000},
+  {date: "15-12-21",count: 6000},
+  {date: "15-12-22",count: 6000},
+  {date: "15-12-23",count: 8000},
   {date: "15-11-18",count: 8000}
   ];
   var sumVote = 10000;  //初始一万票
