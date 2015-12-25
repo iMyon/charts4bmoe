@@ -22,7 +22,7 @@
         <div class="nav-wrapper">
           <a class="page-title">{{title}}</a>
           {% raw %}
-          <a v-show="!!avatar_url" @click="avatarClick" @mouseover="avatarHover" @mouseout="avatarHoverout">
+          <a :href="avatars.href" target="_blank" v-show="!!avatar_url" @click="avatarClick" @mouseover="avatarHover" @mouseout="avatarHoverout">
             <img v-show="!!avatars.message" :src="avatar_url" class="tooltipped avatar right circle responsive-img" style="height:65px;"
               data-position="left" data-delay="50" :data-tooltip="message">
             <img v-else :src="avatar_url" class="avatar right circle responsive-img" style="height:65px;">
