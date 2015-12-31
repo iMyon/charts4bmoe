@@ -12,7 +12,7 @@ app.use(compress());
 app.use(bodyParser.json());
 app.disable('x-powered-by');
 
-var bmoePath = "/home/Myon/bmoe/";
+var bmoePath = "../";
 var dataPath = path.join(bmoePath, "data");
 var voteDataPath = path.join(bmoePath, "voteData");
 
