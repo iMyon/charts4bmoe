@@ -64,8 +64,21 @@ app.get('/', function(req, res){
     bangumis:bangumis
   });
 });
+/*
+得票数据原始文件列表
+*/
 app.get('/data/', function(req, res){
   var files = fs.readdirSync(dataPath);
+  res.render('data', {
+    title: "数据备份",
+    files:files
+  });
+});
+/*
+投票数据文件列表
+ */
+app.get('/voteData/', function(req, res){
+  var files = fs.readdirSync(voteDataPath);
   res.render('data', {
     title: "数据备份",
     files:files
@@ -212,16 +225,6 @@ app.get('/api/data/camp', function(req, res){
     res.send(resStr);
   }
   
-});
-/*
-投票数据文件列表
- */
-app.get('/voteData/', function(req, res){
-  var files = fs.readdirSync(voteDataPath);
-  res.render('data', {
-    title: "数据备份",
-    files:files
-  });
 });
 
 /**
