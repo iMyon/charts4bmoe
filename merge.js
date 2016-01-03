@@ -97,7 +97,7 @@ files.forEach(function(item) {
       var r_data = war.find(function(e){ return e.id==role.id;});
       if(r_data === undefined){
         var warChunk = {};
-        if(role.group !== undefined) warChunk.group = role.group;
+        if(role.group !== undefined && role.group !== null) warChunk.group = role.group;
         warChunk.id = role.id;
         warChunk.name = role.name;
         warChunk.bangumi = role.bangumi;

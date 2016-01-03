@@ -51,7 +51,8 @@ app.get('/', function(req, res){
   var dates = [];
   var i=0;
   while(true){
-    var d = new Date(new Date()-24*60*60*1000*i++);
+    //2016-1-3结束日期
+    var d = new Date(new Date(2016, 0, 3)-24*60*60*1000*i++);
     var bday = (""+d.getFullYear()).slice(2)+"-"+prefixZero(2, d.getMonth()+1)+"-"+prefixZero(2, d.getDate());
     if(yasumiDate.indexOf(bday) != -1) continue;
     if(bday>="15-10-31") dates.push(bday);
