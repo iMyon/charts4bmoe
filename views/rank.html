@@ -5,7 +5,6 @@
   <thead>
     <tr>
       <th>序号</th>
-      <th>存活状态</th>
       <th>名字</th>
       <th>阶段</th>
       <th>得票数</th>
@@ -20,10 +19,6 @@
   <tbody class="count" v-show="datas&&datas.length" style="display:none;">
     <tr v-for="data in datas.rankData" >
       <td></td>
-      <td>
-        <i v-if="datas.failList[[data.name, data.bangumi].join(' @')]" class="material-icons grey-text">error</i>
-        <i v-else class="material-icons  teal-text text-lighten-1">done</i>
-      </td>
       <td v-if="datas.roleLinks[[data.name, data.bangumi].join(' @')]">
         <a target="_blank" href="{{datas.roleLinks[[data.name, data.bangumi].join(' @')]}}">{{data.name}}</a>
       </td>

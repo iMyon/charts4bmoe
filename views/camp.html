@@ -8,8 +8,6 @@
       <th>序号</th>
       <th>动画</th>
       <th>参与人数</th>
-      <th>当前存活人数</th>
-      <th>存活率</th>
       <th>海选晋级</th>
       <th>进入复活赛</th>
       <th>海选淘汰人数</th>
@@ -19,14 +17,12 @@
     </tr>
   </thead>
   <tbody class="count" v-show="datas&&datas.length" style="display:none;">
-    <tr v-for="data in datas | orderBy 'alive' -1">
+    <tr v-for="data in datas">
       <td></td>
       <td>
         <a target="_blank" href="/api/data/rank?format=table&bangumi={{encodeURIComponent(data.bangumi)}}">{{data.bangumi}}</a>
       </td>
       <td>{{data.total}}</td>
-      <td>{{data.alive}}</td>
-      <td>{{(data.alive / data.total * 100).toFixed(2)}}%</td>
       <td>{{data.suc}}</td>
       <td>{{data.wait}}</td>
       <td>{{data.fail}}</td>

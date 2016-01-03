@@ -9,7 +9,7 @@ var war;                  //比赛数据（json获取
 var voteData;             //投票数据（json获取
 var requestDatas = [];    //保存每次请求数据避免重复请求
 var totalVoteData;        //面票总数
-var stageMap = ["", "海选", "复活赛", "128强", "32强", "16强", "8强", "半决赛", "三四位决赛", "决赛"];
+var stageMap = ["", "海选", "复活赛", "本战128强", "本战32强", "本战16强", "本战8强", "半决赛", "三四位决赛", "决赛"];
 //echars属性：显示数值点
 var itemStyle_show = {
   emphasis: {
