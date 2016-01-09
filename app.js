@@ -49,6 +49,7 @@ app.get('/', function(req, res){
       bangumis.push(role.bangumi);
   });
   var dates = [];
+  dates.push("16-01-09");
   var i=0;
   while(true){
     //2016-1-3结束日期

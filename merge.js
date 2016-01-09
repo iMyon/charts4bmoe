@@ -43,7 +43,8 @@ files.forEach(function(item) {
       else if(voteDay<="15-12-30") role.stage = 6;  //8强
       else if(voteDay<="16-01-01") role.stage = 7;  //半决赛
       else if(voteDay<="16-01-02") role.stage = 8;  //三四名决赛
-      else role.stage = 9;                          //决赛
+      else if(voteDay == "16-01-03") role.stage = 9;//决赛
+      else if(voteDay == "16-01-09") role.stage = 10;//表演赛
       
       if(AnimateGroup[role.bangumi] !== undefined) role.bangumi = AnimateGroup[role.bangumi];
       
