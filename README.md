@@ -125,7 +125,7 @@ token   |   领票数
 ### 3./api/data/rank  
 #### 描述  
 获取排名数据  
-####请求方法  
+#### 请求方法  
 GET  
 #### 参数  
 Reuqired    |   Name   |  Type  |  description
