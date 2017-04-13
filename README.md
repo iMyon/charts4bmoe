@@ -1,6 +1,6 @@
-#charts4bmoe
+# charts4bmoe
 [Bilibili Moe曲线图](http://bmoe.uuzsama.me/)  
-###说明  
+### 说明  
 * 数据从b站接口抓取，每小时01分更新曲线  
 * 11月7日之后有完整数据，之前数据不完整
 * 由于b站票仓api有点混乱，不保证票仓数据完全正确
@@ -23,22 +23,22 @@
 
 ------------------------------------------------------------
 
-###安装部署
+### 安装部署
     git clone https://github.com/iMyon/charts4bmoe
     cd charts4bmoe
     npm install
     node app.js
 浏览器打开`http://127.0.0.1:2333/`  
 需要nodejs环境支持  
-##对外API接口说明  
-###1./api/data/role  
-####描述  
+## 对外API接口说明  
+### 1./api/data/role  
+#### 描述  
 获取人物得票数据
 
-####请求方法
+#### 请求方法
 Get
 
-####参数  
+#### 参数  
 Reuqired    |   Name   |  Type  |  description
 ------------|----------|--------|-----------------
 optional    |date      |string  |日期
@@ -49,10 +49,10 @@ optional    |stage     |int     |比赛阶段 1:海选 2:复活 3:128强 4:32强
 optional    |format    |string  |数据格式，默认json，table为使用网页表格显示
 optional    |id        |int     |人物标识id
 
-####返回参数  
+#### 返回参数  
 返回角色数据数组
 
-####请求样例  
+#### 请求样例  
 GET     http://bmoe.uuzsama.me/api/data/role?date=15-11-14&name=岩泽雅美  
 返回json：
 
@@ -73,18 +73,18 @@ GET     http://bmoe.uuzsama.me/api/data/role?date=15-11-14&name=岩泽雅美
 }]
 ```
 
-###2./api/data/ballot  
-####描述  
+### 2./api/data/ballot  
+#### 描述  
 获取领票数据  
-####请求方法  
+#### 请求方法  
 GET  
-####参数  
+#### 参数  
 Reuqired    |   Name   |  Type  |  description
 ------------|----------|--------|-----------------
 optional    |date      |string  |日期
 optional    |format    |string  |数据格式，默认json，table为使用网页表格显示
 
-####请求样例  
+#### 请求样例  
 GET     http://bmoe.uuzsama.me/api/data/ballot?date=15-11-19  
 返回json：  
 ```js
@@ -114,7 +114,7 @@ GET     http://bmoe.uuzsama.me/api/data/ballot?date=15-11-19
 
 ```
 
-####返回参数说明  
+#### 返回参数说明  
 Name    |   Description
 --------|-----------------------
 date    |   日期
@@ -122,12 +122,12 @@ time    |   时间
 total   |   总发票数
 token   |   领票数
 
-###3./api/data/rank  
-####描述  
+### 3./api/data/rank  
+#### 描述  
 获取排名数据  
 ####请求方法  
 GET  
-####参数  
+#### 参数  
 Reuqired    |   Name   |  Type  |  description
 ------------|----------|--------|-----------------
 optional    |date      |string  |日期
@@ -140,7 +140,7 @@ optional    |id        |int     |人物标识id
 optional    |rank      |int     |名次
 optional    |stat      |int     |晋级状态： 1晋级 2复活 3淘汰
 
-####请求样例  
+#### 请求样例  
 GET     http://bmoe.uuzsama.me/api/data/rank?bangumi=凭物语  
 返回json：  
 ```js
@@ -157,18 +157,18 @@ GET     http://bmoe.uuzsama.me/api/data/rank?bangumi=凭物语
 
 ```
 
-###4./api/data/camp  
-####描述  
+### 4./api/data/camp  
+#### 描述  
 获取排名数据  
-####请求方法  
+#### 请求方法  
 GET  
-####参数  
+#### 参数  
 Reuqired    |   Name   |  Type  |  description
 ------------|----------|--------|-----------------
 optional    |bangumi   |string  |动画名称
 optional    |format    |string  |数据格式，默认json，table为使用网页表格显示
 
-####请求样例  
+#### 请求样例  
 GET     http://bmoe.uuzsama.me/api/data/camp?bangumi=%E5%88%80%E5%89%91%E7%A5%9E%E5%9F%9F%20%E7%AC%AC%E4%BA%8C%E5%AD%A3  
 返回json：  
 ```js
@@ -176,7 +176,7 @@ GET     http://bmoe.uuzsama.me/api/data/camp?bangumi=%E5%88%80%E5%89%91%E7%A5%9E
 
 ```
 
-####返回参数说明  
+#### 返回参数说明  
 Name    |   Description
 --------|-----------------------
 bangumi |   动画名次
